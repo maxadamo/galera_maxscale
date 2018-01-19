@@ -1,8 +1,7 @@
 ## Preamble
 
-First of all this is an unconventional Puppet module.
-MaxScale (with Keepalived) setup consists of standard puppet classes.  
-However, configuration management might not be the proper way to handle Galera cluster, hence it contains a script (`galera_wizard.py`) to handle the cluster status (bootrap and join nodes).
+This module will setup and bootstrap Galera cluster.  The subsequent management of the cluster is done through the script `galera_wizard.yp`. 
+MaxScale is setup with Keepalived. 
 
 
 ## Compatibility
@@ -10,6 +9,11 @@ However, configuration management might not be the proper way to handle Galera c
 - it's tested against CentOS 7 and MariaDB 10.2
 - it makes use of extrabackup-v2 for the initial State Transfer (I still need to test the new `mariabackup`, but with the other tools, the donor node is unavailable during the initial transfer).
 
+## ToDo
+
+- add the ability to change root password
+- test it on Ubuntu LTS
+- test better ipv4 only
 
 ## Usage
 
