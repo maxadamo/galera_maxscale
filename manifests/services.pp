@@ -1,9 +1,9 @@
 
-# == Class: galera::services
+# == Class: galera_maxscale::services
 #
 # This Class manages services
 #
-class galera::services {
+class galera_maxscale::services {
 
   service { 'xinetd':
     ensure     => running,

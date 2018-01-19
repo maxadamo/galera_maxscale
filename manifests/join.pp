@@ -1,17 +1,17 @@
 
-# == Class: galera::join
+# == Class: galera_maxscale::join
 #
 # This Class manages services
 #
-class galera::join (
-  $monitor_password  = $::galera::params::monitor_password,
-  $root_password     = $::galera::params::root_password,
-  $sst_password      = $::galera::params::sst_password,
-  $maxscale_password = $::galera::params::maxscale_password,
-  $galera_hosts      = $::galera::params::galera_hosts,
-  $maxscale_hosts    = $::galera::params::maxscale_hosts,
-  $maxscale_vip      = $::galera::params::maxscale_vip,
-  ) inherits galera::params {
+class galera_maxscale::join (
+  $monitor_password  = $::galera_maxscale::params::monitor_password,
+  $root_password     = $::galera_maxscale::params::root_password,
+  $sst_password      = $::galera_maxscale::params::sst_password,
+  $maxscale_password = $::galera_maxscale::params::maxscale_password,
+  $galera_hosts      = $::galera_maxscale::params::galera_hosts,
+  $maxscale_hosts    = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
+  ) inherits galera_maxscale::params {
 
   $joined_file = '/root/.JOINED'
 
@@ -29,7 +29,7 @@ class galera::join (
   $joined_exists = inline_template('<% if File.exist?(@joined_file) -%>true<% end -%>')
 
   if ($joined_exists) {
-    galera::create_user {
+    galera_maxscale::create_user {
       'sstuser':
         galera_hosts   => $galera_hosts,
         maxscale_hosts => $maxscale_hosts,
@@ -44,7 +44,7 @@ class galera::join (
         dbpass         => $monitor_password;
     }
     if $maxscale_password {
-      galera::create_user { 'maxscale':
+      galera_maxscale::create_user { 'maxscale':
         galera_hosts   => $galera_hosts,
         maxscale_hosts => $maxscale_hosts,
         maxscale_vip   => $maxscale_vip,

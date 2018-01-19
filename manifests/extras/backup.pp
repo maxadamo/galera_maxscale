@@ -1,13 +1,13 @@
-# == Class: galera::extras::backup
+# == Class: galera_maxscale::extras::backup
 #
 # WIP: BROKEN. Don't use it!
 #
 # This Class will setup a daily hot-backup
 #
 #
-class galera::extras::backup (
-  $daily_hotbackup     = $::galera::params::daily_hotbackup,
-  $galera_cluster_name = $::galera::params::galera_cluster_name,
+class galera_maxscale::extras::backup (
+  $daily_hotbackup     = $::galera_maxscale::params::daily_hotbackup,
+  $galera_cluster_name = $::galera_maxscale::params::galera_cluster_name,
   ) {
 
   # Create directory tree for backup and mount it
@@ -22,7 +22,7 @@ class galera::extras::backup (
 
     mount { '/mnt/galera_backup':
       ensure   => mounted,
-      device   => "${galera::my_backup_device}:/vol/prod_${galera::my_site}_galera_backup",
+      device   => "${galera_maxscale::my_backup_device}:/vol/prod_${galera_maxscale::my_site}_galera_backup",
       fstype   => 'nfs',
       options  => 'noatime',
       remounts => true,

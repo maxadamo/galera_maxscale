@@ -1,12 +1,12 @@
-# == Class: galera::maxscale::maxscale
+# == Class: galera_maxscale::maxscale::maxscale
 #
-class galera::maxscale::maxscale (
-  $galera_hosts      = $::galera::params::galera_hosts,
-  $maxscale_hosts    = $::galera::params::maxscale_hosts,
-  $maxscale_vip      = $::galera::params::maxscale_vip,
-  $maxscale_password = $::galera::params::maxscale_password,
-  $trusted_networks  = $::galera::params::trusted_networks
-  ) inherits galera::params {
+class galera_maxscale::maxscale::maxscale (
+  $galera_hosts      = $::galera_maxscale::params::galera_hosts,
+  $maxscale_hosts    = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
+  $maxscale_password = $::galera_maxscale::params::maxscale_password,
+  $trusted_networks  = $::galera_maxscale::params::trusted_networks
+  ) inherits galera_maxscale::params {
 
   $maxscale_key_first = inline_template('<% @maxscale_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
   $vip_key = inline_template('<% @maxscale_vip.each do |key, value| %><%= key %><% end -%>')
@@ -17,12 +17,12 @@ class galera::maxscale::maxscale (
     $ipv6_true = undef
   }
 
-  class { '::galera::maxscale::keepalived':
+  class { '::galera_maxscale::maxscale::keepalived':
     maxscale_hosts => $maxscale_hosts,
     maxscale_vip   => $maxscale_vip;
   }
 
-  class { '::galera::firewall':
+  class { '::galera_maxscale::firewall':
     manage_ipv6      => $ipv6_true,
     galera_hosts     => $galera_hosts,
     maxscale_hosts   => $maxscale_hosts,

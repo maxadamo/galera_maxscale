@@ -19,44 +19,44 @@
 #
 # 2018-Jan-15: Massimiliano Adamo <maxadamo@gmail.com>
 #
-class galera (
+class galera_maxscale (
 
-  $all_pkgs                     = $::galera::params::all_pkgs,
-  $backup_compress              = $::galera::params::backup_compress,
-  $backup_retention             = $::galera::params::backup_retention,
-  $daily_hotbackup              = $::galera::params::daily_hotbackup,
-  $datadir                      = $::galera::params::datadir,
-  $galera_cluster_name          = $::galera::params::galera_cluster_name,
-  $galera_hosts                 = $::galera::params::galera_hosts,
-  $galera_pkgs                  = $::galera::params::galera_pkgs,
-  $galera_total_memory_usage    = $::galera::params::galera_total_memory_usage,
-  $galera_version               = $::galera::params::galera_version,
-  $innodb_buffer_pool_instances = $::galera::params::innodb_buffer_pool_instances,
-  $innodb_flush_method          = $::galera::params::innodb_flush_method,
-  $innodb_io_capacity           = $::galera::params::innodb_io_capacity,
-  $innodb_log_file_size         = $::galera::params::innodb_log_file_size,
-  $logdir                       = $::galera::params::logdir,
-  $lv_size                      = $::galera::params::lv_size,
-  $manage_firewall              = $::galera::params::manage_firewall,
-  $manage_lvm                   = $::galera::params::manage_lvm,
-  $manage_repo                  = $::galera::params::manage_repo,
-  $max_connections              = $::galera::params::max_connections,
-  $maxscale_hosts               = $::galera::params::maxscale_hosts,
-  $maxscale_vip                 = $::galera::params::maxscale_vip,
-  $maxscale_password            = $::galera::params::maxscale_password,
-  $monitor_password             = $::galera::params::monitor_password,
-  $monitor_username             = $::galera::params::monitor_username,
-  $other_pkgs                   = $::galera::params::other_pkgs,
-  $query_cache                  = $::galera::params::query_cache,
-  $root_password                = $::galera::params::root_password,
-  $slow_query_time              = $::galera::params::slow_query_time,
-  $sst_password                 = $::galera::params::sst_password,
-  $thread_cache_size            = $::galera::params::thread_cache_size,
-  $tmpdir                       = $::galera::params::tmpdir,
-  $trusted_networks             = $::galera::params::trusted_networks,
-  $version                      = $::galera::params::version,
+  $all_pkgs                     = $::galera_maxscale::params::all_pkgs,
+  $backup_compress              = $::galera_maxscale::params::backup_compress,
+  $backup_retention             = $::galera_maxscale::params::backup_retention,
+  $daily_hotbackup              = $::galera_maxscale::params::daily_hotbackup,
+  $datadir                      = $::galera_maxscale::params::datadir,
+  $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
+  $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
+  $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
+  $galera_total_memory_usage    = $::galera_maxscale::params::galera_total_memory_usage,
+  $galera_version               = $::galera_maxscale::params::galera_version,
+  $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
+  $innodb_flush_method          = $::galera_maxscale::params::innodb_flush_method,
+  $innodb_io_capacity           = $::galera_maxscale::params::innodb_io_capacity,
+  $innodb_log_file_size         = $::galera_maxscale::params::innodb_log_file_size,
+  $logdir                       = $::galera_maxscale::params::logdir,
+  $lv_size                      = $::galera_maxscale::params::lv_size,
+  $manage_firewall              = $::galera_maxscale::params::manage_firewall,
+  $manage_lvm                   = $::galera_maxscale::params::manage_lvm,
+  $manage_repo                  = $::galera_maxscale::params::manage_repo,
+  $max_connections              = $::galera_maxscale::params::max_connections,
+  $maxscale_hosts               = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip                 = $::galera_maxscale::params::maxscale_vip,
+  $maxscale_password            = $::galera_maxscale::params::maxscale_password,
+  $monitor_password             = $::galera_maxscale::params::monitor_password,
+  $monitor_username             = $::galera_maxscale::params::monitor_username,
+  $other_pkgs                   = $::galera_maxscale::params::other_pkgs,
+  $query_cache                  = $::galera_maxscale::params::query_cache,
+  $root_password                = $::galera_maxscale::params::root_password,
+  $slow_query_time              = $::galera_maxscale::params::slow_query_time,
+  $sst_password                 = $::galera_maxscale::params::sst_password,
+  $thread_cache_size            = $::galera_maxscale::params::thread_cache_size,
+  $tmpdir                       = $::galera_maxscale::params::tmpdir,
+  $trusted_networks             = $::galera_maxscale::params::trusted_networks,
+  $version                      = $::galera_maxscale::params::version,
 
-) inherits galera::params {
+) inherits galera_maxscale::params {
 
   $cluster_size = inline_template('<%= @galera_hosts.keys.count %>')
   $cluster_size_odd = inline_template('<% if @galera_hosts.keys.count.to_i.odd? -%>true<% end -%>')
@@ -70,19 +70,19 @@ class galera (
   if $manage_lvm and $lv_size == undef { fail('manage_lvm is true but lv_size is undef') }
   if $manage_lvm == undef and $lv_size { fail('manage_lvm is undeef but lv_size is defined') }
 
-  class { 'galera::repo':
+  class { 'galera_maxscale::repo':
     manage_repo => $manage_repo;
   }
-  class { 'galera::install':
+  class { 'galera_maxscale::install':
     galera_pkgs => $galera_pkgs,
     other_pkgs  => $other_pkgs;
   }
 
-  class { 'galera::lvm': lv_size => $lv_size; }
+  class { 'galera_maxscale::lvm': lv_size => $lv_size; }
 
-  class { 'galera::services':; }
+  class { 'galera_maxscale::services':; }
 
-  class { 'galera::files':
+  class { 'galera_maxscale::files':
     backup_compress              => $backup_compress,
     backup_retention             => $backup_retention,
     datadir                      => $datadir,
@@ -112,14 +112,14 @@ class galera (
   }
 
   if $manage_firewall {
-    class { 'galera::firewall':
+    class { 'galera_maxscale::firewall':
       manage_ipv6      => $ipv6_true,
       galera_hosts     => $galera_hosts,
       trusted_networks => $trusted_networks;
     }
   }
 
-  class { '::galera::join':
+  class { '::galera_maxscale::join':
     monitor_password  => $monitor_password,
     root_password     => $root_password,
     sst_password      => $monitor_password,
@@ -129,6 +129,6 @@ class galera (
     maxscale_vip      => $maxscale_vip;
   }
 
-  include ::galera::extras::backup
+  include ::galera_maxscale::extras::backup
 
 }

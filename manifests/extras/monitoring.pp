@@ -1,8 +1,8 @@
-# == Class: galera::extras::monitoring
+# == Class: galera_maxscale::extras::monitoring
 #
 # Monitoring Class
 #
-class galera::extras::monitoring (
+class galera_maxscale::extras::monitoring (
   $user  = undef,
   $group = undef,
 ) {

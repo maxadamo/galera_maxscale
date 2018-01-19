@@ -1,8 +1,8 @@
-# == Class: galera::repo inherits galera
+# == Class: galera_maxscale::repo inherits galera
 #
-class galera::repo (
-  $manage_repo = $::galera::params::manage_repo
-  ) inherits galera {
+class galera_maxscale::repo (
+  $manage_repo = $::galera_maxscale::params::manage_repo
+  ) inherits galera_maxscale::params {
 
   if ($manage_repo) {
 
@@ -11,7 +11,7 @@ class galera::repo (
         rpmkey { '1BB943DB':
           ensure => present,
           source => 'http://yum.mariadb.org/RPM-GPG-KEY-MariaDB',
-          before => Class['::galera::install'];
+          before => Class['::galera_maxscale::install'];
         }
         yumrepo { 'MariaDB':
           baseurl    => 'http://yum.mariadb.org/10.2/centos7-amd64',

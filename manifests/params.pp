@@ -1,8 +1,8 @@
-# == Class: galera::params
+# == Class: galera_maxscale::params
 #
 # Galera Parameters
 #
-class galera::params {
+class galera_maxscale::params {
 
   $backup_compress = false
   $backup_retention = 3

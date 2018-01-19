@@ -1,9 +1,9 @@
-# == Class: galera::maxscale::keepalived
+# == Class: galera_maxscale::maxscale::keepalived
 #
-class galera::maxscale::keepalived (
-  $maxscale_hosts = $::galera::params::maxscale_hosts,
-  $maxscale_vip   = $::galera::params::maxscale_vip,
-  ) inherits galera::params {
+class galera_maxscale::maxscale::keepalived (
+  $maxscale_hosts = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip   = $::galera_maxscale::params::maxscale_vip,
+  ) inherits galera_maxscale::params {
 
   $vip_key = inline_template('<% @maxscale_vip.each do |key, value| %><%= key %><% end -%>')
   $maxscale_key_first = inline_template('<% @maxscale_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')

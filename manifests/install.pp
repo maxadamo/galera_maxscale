@@ -1,22 +1,22 @@
-# == Class: galera::install
+# == Class: galera_maxscale::install
 #
 # This Class installs all the packages
 #
-class galera::install (
-  $galera_pkgs = $::galera::galera_pkgs,
-  $other_pkgs  = $::galera::other_pkgs
-  ) inherits galera::params {
+class galera_maxscale::install (
+  $galera_pkgs = $::galera_maxscale::galera_pkgs,
+  $other_pkgs  = $::galera_maxscale::other_pkgs
+  ) inherits galera_maxscale::params {
 
   package {
     $other_pkgs:
       ensure => latest;
     'MariaDB-shared':
-      ensure  => $galera::version;
+      ensure  => $galera_maxscale::version;
     $galera_pkgs:
-      ensure  => $galera::version,
+      ensure  => $galera_maxscale::version,
       require => Package['MariaDB-shared'];
     'galera':
-      ensure  => $galera::galera_version;
+      ensure  => $galera_maxscale::galera_version;
   }
 
 }

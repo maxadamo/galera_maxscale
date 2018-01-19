@@ -1,9 +1,9 @@
-# == Class: galera::lvm
+# == Class: galera_maxscale::lvm
 #
-class galera::lvm (
-  $manage_lvm = $::galera::params::manage_lvm,
-  $lv_size = $::galera::params::lv_size
-  ) inherits galera::params {
+class galera_maxscale::lvm (
+  $manage_lvm = $::galera_maxscale::params::manage_lvm,
+  $lv_size = $::galera_maxscale::params::lv_size
+  ) inherits galera_maxscale::params {
 
   if ($lv_size and $manage_lvm) {
     logical_volume { 'lv_galera':

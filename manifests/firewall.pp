@@ -1,15 +1,15 @@
-# == Class: galera::firewall
+# == Class: galera_maxscale::firewall
 #
 # sets firewall up
 # We set inbound traffic only through the application manifest
 #
-class galera::firewall (
+class galera_maxscale::firewall (
   $manage_ipv6      = undef,
-  $galera_hosts     = $::galera::params::galera_hosts,
-  $maxscale_hosts   = $::galera::params::maxscale_hosts,
-  $maxscale_vip     = $::galera::params::maxscale_vip,
-  $trusted_networks = $::galera::params::trusted_networks
-  ) inherits galera::params {
+  $galera_hosts     = $::galera_maxscale::params::galera_hosts,
+  $maxscale_hosts   = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip     = $::galera_maxscale::params::maxscale_vip,
+  $trusted_networks = $::galera_maxscale::params::trusted_networks
+  ) inherits galera_maxscale::params {
 
   ['iptables', 'ip6tables'].each | String $myprovider | {
     firewall { "200 Allow outbound Galera ports (v4/v6) for ${myprovider}":

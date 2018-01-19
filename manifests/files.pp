@@ -1,29 +1,29 @@
 
-# == Class: galera::files
+# == Class: galera_maxscale::files
 #
 # This Class provides files
 #
-class galera::files (
-  $backup_compress              = $::galera::params::backup_compress,
-  $backup_retention             = $::galera::params::backup_retention,
-  $datadir                      = $::galera::params::datadir,
-  $galera_cluster_name          = $::galera::params::galera_cluster_name,
-  $innodb_buffer_pool_instances = $::galera::params::innodb_buffer_pool_instances,
-  $innodb_flush_method          = $::galera::params::innodb_flush_method,
-  $innodb_io_capacity           = $::galera::params::innodb_io_capacity,
-  $innodb_log_file_size         = $::galera::params::innodb_log_file_size,
-  $logdir                       = $::galera::params::logdir,
-  $max_connections              = $::galera::params::max_connections,
-  $monitor_password             = $::galera::params::monitor_password,
-  $monitor_username             = $::galera::params::monitor_username,
-  $galera_hosts                 = $::galera::params::galera_hosts,
-  $query_cache                  = $::galera::params::query_cache,
-  $root_password                = $::galera::params::root_password,
-  $sst_password                 = $::galera::params::sst_password,
-  $thread_cache_size            = $::galera::params::thread_cache_size,
-  $tmpdir                       = $::galera::params::tmpdir,
-  $slow_query_time              = $::galera::params::slow_query_time,
-  ) inherits galera {
+class galera_maxscale::files (
+  $backup_compress              = $::galera_maxscale::params::backup_compress,
+  $backup_retention             = $::galera_maxscale::params::backup_retention,
+  $datadir                      = $::galera_maxscale::params::datadir,
+  $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
+  $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
+  $innodb_flush_method          = $::galera_maxscale::params::innodb_flush_method,
+  $innodb_io_capacity           = $::galera_maxscale::params::innodb_io_capacity,
+  $innodb_log_file_size         = $::galera_maxscale::params::innodb_log_file_size,
+  $logdir                       = $::galera_maxscale::params::logdir,
+  $max_connections              = $::galera_maxscale::params::max_connections,
+  $monitor_password             = $::galera_maxscale::params::monitor_password,
+  $monitor_username             = $::galera_maxscale::params::monitor_username,
+  $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
+  $query_cache                  = $::galera_maxscale::params::query_cache,
+  $root_password                = $::galera_maxscale::params::root_password,
+  $sst_password                 = $::galera_maxscale::params::sst_password,
+  $thread_cache_size            = $::galera_maxscale::params::thread_cache_size,
+  $tmpdir                       = $::galera_maxscale::params::tmpdir,
+  $slow_query_time              = $::galera_maxscale::params::slow_query_time,
+  ) inherits galera_maxscale::params {
 
   if ! defined( File['/root/bin'] ) {
     file { '/root/bin':
