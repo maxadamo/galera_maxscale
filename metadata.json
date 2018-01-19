@@ -1,0 +1,15 @@
+{
+  "name": "maxadamo-galera_maxscale",
+  "version": "0.1.0",
+  "author": "maxadamo",
+  "summary": "Galera and MaxScale Cluster",
+  "license": "GPLv3",
+  "source": "https://github.com/maxadamo/galera_maxscale",
+  "project_page": "https://github.com/maxadamo/galera_maxscale",
+  "issues_url": "https://github.com/maxadamo/galera_maxscale",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
