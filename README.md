@@ -1,19 +1,94 @@
-## Preamble
+# galera_maxscale
 
-This module will setup and bootstrap Galera cluster.  The subsequent management of the cluster is done through the script `galera_wizard.yp`. 
-MaxScale is setup with Keepalived. 
+#### Table of Contents
+
+1. [Description](#description)
+1. [Setup - The basics of getting started with galera_maxscale](#setup)
+    * [What galera_maxscale affects](#what-galera_maxscale-affects)
+    * [Setup requirements](#setup-requirements)
+    * [Beginning with galera_maxscale](#beginning-with-galera_maxscale)
+1. [Usage - Configuration options and additional functionality](#usage)
+1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+1. [Limitations - OS compatibility, etc.](#limitations)
+1. [Development - Guide for contributing to the module](#development)
+
+## Description
+
+This module sets up and bootstrap Galera cluster and MaxScale Proxy. 
+The subsequent management of the Galera cluster is demanded to the script `galera_wizard.yp`. 
+MaxScale Proxy will set up on 2 nodes with Keepalived
 
 
-## Compatibility
+## Setup
 
-- it's tested against CentOS 7 and MariaDB 10.2
-- it makes use of extrabackup-v2 for the initial State Transfer (I still need to test the new `mariabackup`, but with the other tools, the donor node is unavailable during the initial transfer).
+### What galera_maxscale affects **OPTIONAL**
 
-## ToDo
+If it's obvious what your module touches, you can skip this section. For
+example, folks can probably figure out that your mysql_instance module affects
+their MySQL instances.
 
-- add the ability to change root password
-- test it on Ubuntu LTS
-- test better ipv4 only
+If there's more that they should know about, though, this is the place to mention:
+
+* A list of files, packages, services, or operations that the module will alter,
+  impact, or execute.
+* Dependencies that your module automatically installs.
+* Warnings or other important notices.
+
+### Setup Requirements **OPTIONAL**
+
+If your module requires anything extra before setting up (pluginsync enabled,
+etc.), mention it here.
+
+If your most recent release breaks compatibility or requires particular steps
+for upgrading, you might want to include an additional "Upgrading" section
+here.
+
+### Beginning with galera_maxscale
+
+To setup a galera cluster:
+
+```puppet
+class { 'galera':
+  root_password    => $root_password,
+  sst_password     => $sst_password,
+  monitor_password => $monitor_password,
+  galera_hosts     => $galera_hosts,
+  trusted_networks => $trusted_networks,
+  lv_size          => $lv_size;
+}
+```
+
+To setup MaxScale:
+```puppet
+class { 'galera::maxscale::maxscale':
+  trusted_networks => $trusted_networks,
+  maxscale_hosts   => $maxscale_hosts,
+  maxscale_vip     => $maxscale_vip,
+  galera_hosts     => $galera_hosts;
+}
+```
+
+Once you have run puppet on every node, you can manage or check the cluster using the script:
+```sh
+[root@test-galera01 ~]# galera_wizard.py -h
+usage: galera_wizard.py [-h] [-cg] [-dr] [-je] [-be] [-jn] [-bn]
+
+Use this script to bootstrap, join nodes within a Galera Cluster
+----------------------------------------------------------------
+  Avoid joining more than one node at once!
+
+optional arguments:
+  -h, --help                 show this help message and exit
+  -cg, --check-galera        check if all nodes are healthy
+  -dr, --dry-run             show SQL statements to run on this cluster
+  -je, --join-existing       join existing Cluster
+  -be, --bootstrap-existing  bootstrap existing Cluster
+  -jn, --join-new            join existing Cluster
+  -bn, --bootstrap-new       bootstrap new Cluster
+  -f, --force                force bootstrap new or join new Cluster
+
+Author: Massimiliano Adamo <maxadamo@gmail.com>
+```
 
 ## Usage
 
@@ -46,7 +121,7 @@ maxscale_vip:
     ipv6: '2001:123:4::70'
 ```
 
-If you don't use ipv6, just skip the ipv6 key as following:
+If you don't use ipv6, just skip the `ipv6` keys as following:
 ```yaml
 galera_hosts:
   test-galera01.example.net:
@@ -89,23 +164,20 @@ class { 'galera::maxscale::maxscale':
 }
 ```
 
-Once you have run puppet, you can connect to the nodes and you the tool:
-```sh
-[root@test-galera01 ~]# galera_wizard.py -h
-usage: galera_wizard.py [-h] [-cg] [-dr] [-je] [-be] [-jn] [-bn]
+## Reference
 
-Use this script to bootstrap, join nodes within a Galera Cluster
-----------------------------------------------------------------
-  Avoid joining more than one node at once!
 
-optional arguments:
-  -h, --help                 show this help message and exit
-  -cg, --check-galera        check if all nodes are healthy
-  -dr, --dry-run             show SQL statements to run on this cluster
-  -je, --join-existing       join existing Cluster
-  -be, --bootstrap-existing  bootstrap existing Cluster
-  -jn, --join-new            join existing Cluster
-  -bn, --bootstrap-new       bootstrap new Cluster
 
-Author: Massimiliano Adamo <maxadamo@gmail.com>
-```
+## Limitations
+
+- not fully tested on ipv4 only
+- keepalived is missing configuration for ipv6
+- init.pp is missing the full list of parameters
+- not tested yet on Ubuntu
+
+
+## Development
+
+Feel free to make pull requests and/or open issues on [my GitHub Repository](https://github.com/maxadamo/galera_maxscale) 
+
+## Release Notes/Contributors/Etc. **Optional**
