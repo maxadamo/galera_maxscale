@@ -1,0 +1,42 @@
+
+# == Define: galera::create_user
+#
+define galera::create_user (
+  $dbpass,
+  $galera_hosts,
+  $maxscale_hosts,
+  $maxscale_vip,
+  $dbuser = $name
+  ) {
+
+  if $dbuser == 'maxscale' {
+    $_host_list = deep_merge($galera_hosts, $maxscale_hosts, $maxscale_vip)
+    $privileges = ['SELECT', 'SHOW DATABASES', 'REPLICATION CLIENT']
+    $table = '*.*'
+  } elsif $dbuser == 'sstuser' {
+    $_host_list = $galera_hosts
+    $privileges = ['PROCESS', 'SELECT', 'RELOAD', 'LOCK TABLES', 'REPLICATION CLIENT']
+    $table = '*.*'
+  } elsif $dbuser == 'monitor' {
+    $_host_list = $galera_hosts
+    $privileges = ['UPDATE']
+    $table = 'test.monitor'
+  }
+
+  $host_list = keys($_host_list)
+
+  $host_list.each | String $peer | {
+    mysql_user { "${dbuser}@${peer}":
+      ensure        => present,
+      password_hash => mysql_password($dbpass),
+      provider      => 'mysql';
+    }
+    -> mysql_grant { "${dbuser}@${peer}/${table}":
+      ensure     => present,
+      user       => "${dbuser}@${peer}",
+      table      => $table,
+      privileges => $privileges;
+    }
+  }
+
+}
