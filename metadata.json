@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "author": "maxadamo",
   "summary": "Galera and MaxScale Cluster",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "source": "https://github.com/maxadamo/galera_maxscale",
   "project_page": "https://github.com/maxadamo/galera_maxscale",
   "issues_url": "https://github.com/maxadamo/galera_maxscale",
