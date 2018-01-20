@@ -52,10 +52,12 @@ class galera_maxscale::maxscale::maxscale (
 
   # we need a fake exec common with galera nodes to let
   # the firewall run before the script
+  $joined_file = '/root/.JOINED'
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':
-      command => 'echo',
-      path    => '/usr/bin:/usr/sbin:/bin';
+      command => "touch ${joined_file}",
+      path    => '/usr/bin:/bin',
+      creates => $joined_file;
     }
   }
 

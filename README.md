@@ -4,8 +4,6 @@
 
 1. [Description](#description)
 1. [Setup - The basics of getting started with galera_maxscale](#setup)
-    * [What galera_maxscale affects](#what-galera_maxscale-affects)
-    * [Setup requirements](#setup-requirements)
     * [Beginning with galera_maxscale](#beginning-with-galera_maxscale)
 1. [Usage - Configuration options and additional functionality](#usage)
 1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -26,7 +24,7 @@ MaxScale Proxy will set up on 2 nodes with Keepalived
 To setup a galera cluster:
 
 ```puppet
-class { 'galera':
+class { '::galera_maxscale':
   root_password    => $root_password,
   sst_password     => $sst_password,
   monitor_password => $monitor_password,
@@ -38,7 +36,7 @@ class { 'galera':
 
 To setup MaxScale:
 ```puppet
-class { 'galera::maxscale::maxscale':
+class { '::galera_maxscale::maxscale::maxscale':
   trusted_networks => $trusted_networks,
   maxscale_hosts   => $maxscale_hosts,
   maxscale_vip     => $maxscale_vip,
@@ -70,7 +68,7 @@ Author: Massimiliano Adamo <maxadamo@gmail.com>
 
 ## Usage
 
-The module will fail with an even number of nodes, and with a number of nodes lower than 3.
+The module will fail on Galera with an even number of nodes and with a number of nodes lower than 3.
 
 To setup a Galera Cluster (and optionally a MaxScale cluster with Keepalived) we need a hash. If you use hiera it will be like this:
 
@@ -119,28 +117,6 @@ trusted_networks:
 ... and so on ...
 ```
 
-To setup a galera cluster:
-
-```puppet
-class { 'galera':
-  root_password    => $root_password,
-  sst_password     => $sst_password,
-  monitor_password => $monitor_password,
-  galera_hosts     => $galera_hosts,
-  trusted_networks => $trusted_networks,
-  lv_size          => $lv_size;
-}
-```
-
-To setup MaxScale:
-```puppet
-class { 'galera::maxscale::maxscale':
-  trusted_networks => $trusted_networks,
-  maxscale_hosts   => $maxscale_hosts,
-  maxscale_vip     => $maxscale_vip,
-  galera_hosts     => $galera_hosts;
-}
-```
 
 ## Reference
 
@@ -149,9 +125,10 @@ class { 'galera::maxscale::maxscale':
 ## Limitations
 
 - not fully tested on ipv4 only
-- keepalived is missing configuration for ipv6
-- init.pp is missing the full list of parameters
+- keepalived missing configuration for ipv6
+- init.pp missing the full list of parameters
 - not tested yet on Ubuntu
+- initial state transfer is supported only through Percona Xtrabackup. I see no reason to support `mysqldump` and `rsync` since the donor would not be available during the transfer. I'll investigate soon how `mariabackup` works. 
 
 
 ## Development
