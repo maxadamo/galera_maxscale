@@ -15,21 +15,7 @@ class galera_maxscale::maxscale::keepalived (
   }
 
   include ::keepalived
-
-  if ($manage_ipv6) {
-    $virtual_ipaddress = [
-      "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
-      "${maxscale_vip[$vip_key]['ipv6']}/${maxscale_vip[$vip_key]['ipv6_subnet']}"
-    ]
-  } else {
-    $virtual_ipaddress = [
-      "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}"
-    ]
-  }
-
-  class { '::galera_maxscale::maxscale::firewall':
-    peer_ip => $peer_ip;
-  }
+  class { '::galera_maxscale::maxscale::firewall': peer_ip => $peer_ip; }
 
   keepalived::vrrp::script { 'check_maxscale':
     script   => 'killall -0 maxscale',
@@ -37,17 +23,34 @@ class galera_maxscale::maxscale::keepalived (
     weight   => '2';
   }
 
-  keepalived::vrrp::instance { 'MaxScale':
-    interface         => 'eth0',
-    state             => 'BACKUP',
-    virtual_router_id => '50',
-    unicast_source_ip => $::ipaddress,
-    unicast_peers     => [$peer_ip],
-    priority          => '100',
-    auth_type         => 'PASS',
-    auth_pass         => 'secret',
-    virtual_ipaddress => $virtual_ipaddress,
-    track_script      => 'check_maxscale';
+  if ($manage_ipv6) {
+    keepalived::vrrp::instance { 'MaxScale':
+      interface                  => 'eth0',
+      state                      => 'BACKUP',
+      virtual_router_id          => '50',
+      unicast_source_ip          => $::ipaddress,
+      unicast_peers              => [$peer_ip],
+      priority                   => '100',
+      auth_type                  => 'PASS',
+      auth_pass                  => 'secret',
+      virtual_ipaddress          => "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
+      virtual_ipaddress_excluded => "${maxscale_vip[$vip_key]['ipv6']}/${maxscale_vip[$vip_key]['ipv6_subnet']}",
+      track_script               => 'check_maxscale';
+    }
+  } else {
+    keepalived::vrrp::instance { 'MaxScale':
+      interface         => 'eth0',
+      state             => 'BACKUP',
+      virtual_router_id => '50',
+      unicast_source_ip => $::ipaddress,
+      unicast_peers     => [$peer_ip],
+      priority          => '100',
+      auth_type         => 'PASS',
+      auth_pass         => 'secret',
+      virtual_ipaddress => "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
+      track_script      => 'check_maxscale';
+    }
   }
+
 
 }
