@@ -10,7 +10,7 @@ class galera_maxscale::params {
   $datadir = '/var/lib/mysql'
   $galera_cluster_name = "${::environment}_${::hostgroup}"
   $galera_pkgs = ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server']
-  $galera_total_memory_usage = '0.7'
+  $innodb_buffer_pool_size = '0.7'
   $galera_version = 'latest'
   $innodb_buffer_pool_instances = 1
   $innodb_flush_method = 'O_DIRECT'
@@ -18,7 +18,7 @@ class galera_maxscale::params {
   $innodb_log_file_size = '512M'
   $logdir = undef
   $lv_size = undef
-  $manage_lvm = true
+  $manage_lvm = undef
   $manage_firewall = true
   $manage_repo = true
   $max_connections = 1024
@@ -30,9 +30,7 @@ class galera_maxscale::params {
     'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
     'MySQL-python', 'xinetd', 'qpress', 'nc', 'socat'
   ]
-  $query_cache = undef
   $root_password = undef
-  $slow_query_time = undef
   $sst_password = undef
   $thread_cache_size = 16
   $tmpdir = undef

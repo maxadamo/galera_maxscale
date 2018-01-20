@@ -8,11 +8,104 @@
 #
 # === Parameters & Variables
 #
-# WIP
+# [*backup_compress*] <Bool>
+#   WIP: not yet in use
+#
+# [*backup_retention*] <String>
+#   WIP: not yet in use
+#
+# [*daily_hotbackup*] <Bool>
+#   WIP: not yet in use
+#
+# [*datadir*] <String>
+#   default: /var/lib/mysql (is there a reason to change it? Check LVM Support below)
+#
+# [*galera_cluster_name*] <String>
+#   default: ${::environment}_${::hostgroup} (if you don't have $::hostgroup I'll throw a fail)
+#
+# [*galera_hosts*] <Hash>
+#   list of hosts, ipv4 (optionally ipv6) belonging to the cluster: not less than 3, not even.
+#   check examples on README.md
+#
+# [*galera_pkgs*] <Array>
+#   Galera packages list
+#
+# [*innodb_buffer_pool_size*] <String-number>
+#   default: 0.7 => 70% of memory is assigned to this MySQL parameter
+#
+# [*galera_version*] <String>
+#   default: latest
+#
+# [*innodb_buffer_pool_instances*] <String-number>
+#   default: 1
+#
+# [*innodb_flush_method*] <String>
+#   default: O_DIRECT
+#
+# [*innodb_io_capacity*] <Int>
+#   default: 200
+#
+# [*innodb_log_file_size*] <String>
+#   default: 512M
+#
+# [*logdir*] <String>
+#   default: undef
+#
+# [*lv_size*] <String-number>
+#   default: undef => number of GB. It requires that 'manage_lvm' is set to true
+#
+# [*manage_firewall*] <Bool>
+#   default: true => Strongly recommended. It requires puppetlabs/firewall
+#
+# [*manage_lvm*] <Bool>
+#   default: false => creates and mount a volume on the datadir. I encourage its use.
+#
+# [*manage_repo*] <Bool>
+#   default: true => please check repo.pp to understand what repos are neeeded
+#
+# [*max_connections*] <Int>
+#   default: 1024
+#
+# [*maxscale_hosts*] <Hash>
+#   list of hosts, ipv4 (optionally ipv6) belonging to MaxScale cluster.
+#   Currently only 2 hosts are supported. Check examples on README.md
+#
+# [*maxscale_vip*] <Hash>
+#   host, ipv4 (optionally ipv6) for the VIP
+#
+# [*maxscale_password*] <String>
+#   maxscale user password
+#
+# [*monitor_password*] <String>
+#   maxscale monitor password
+#
+# [*monitor_username*] <String>
+#   default: monitor
+#
+# [*other_pkgs*] <Array>
+#   list of packages needed by MariaDB Galera
+#
+# [*root_password*]
+#   MySQL root password
+#
+# [*sst_password*]
+#   SST user password
+#
+# [*thread_cache_size*] <Int>
+#   default: 16
+#
+# [*tmpdir*] <String>
+#   default: undef
+#
+# [*trusted_networks*] <Array>
+#   default: undef => List of IPv4 and/or IPv6 host and or networks.
+#            It's used by iptables to determine from where to allow access to MySQL
+#
+# [*version*] <String>
+#   default: latest
 #
 # === ToDo
 #
-# - List all parameters
 # - Add root password change
 #
 # === Authors
@@ -29,7 +122,7 @@ class galera_maxscale (
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
   $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
   $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
-  $galera_total_memory_usage    = $::galera_maxscale::params::galera_total_memory_usage,
+  $innodb_buffer_pool_size      = $::galera_maxscale::params::innodb_buffer_pool_size,
   $galera_version               = $::galera_maxscale::params::galera_version,
   $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
   $innodb_flush_method          = $::galera_maxscale::params::innodb_flush_method,
@@ -66,6 +159,8 @@ class galera_maxscale (
   unless $root_password { fail('parameter "root_password" is missing') }
   unless $sst_password { fail('parameter "sst_password" is missing') }
   unless $monitor_password { fail('parameter "monitor_password" is missing') }
+  if $::hostgroup { fail("'galera_cluster_name' parameter relies on \$::hostgroup which is not set on this system.\
+ Please set yourself this parameter.") }
 
   if $manage_lvm and $lv_size == undef { fail('manage_lvm is true but lv_size is undef') }
   if $manage_lvm == undef and $lv_size { fail('manage_lvm is undeef but lv_size is defined') }

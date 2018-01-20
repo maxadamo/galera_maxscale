@@ -12,8 +12,8 @@
 
 ## Description
 
-This module sets up and bootstrap Galera cluster and MaxScale Proxy. 
-The subsequent management of the Galera cluster is demanded to the script `galera_wizard.yp`. 
+This module sets up and bootstrap Galera cluster and MaxScale Proxy.
+The subsequent management of the Galera cluster is demanded to the script `galera_wizard.yp`.
 MaxScale Proxy will set up on 2 nodes with Keepalived
 
 
@@ -124,16 +124,14 @@ trusted_networks:
 
 ## Limitations
 
-- not fully tested on ipv4 only
-- I added `ipv6` to keepalived but it's still not working
-- init.pp missing the full list of parameters
+- not tested on ipv4 only
 - not tested yet on Ubuntu
-- initial state transfer is supported only through Percona Xtrabackup. I see no reason to support `mysqldump` and `rsync` since the donor would not be available during the transfer. I'll investigate soon how `mariabackup` works. 
-- manage major/minor versions properly
+- initial state transfer is supported only through Percona Xtrabackup (I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer. I'll investigate soon how `mariabackup` works).
+- handle major/minor versions properly
 
 
 ## Development
 
-Feel free to make pull requests and/or open issues on [my GitHub Repository](https://github.com/maxadamo/galera_maxscale) 
+Feel free to make pull requests and/or open issues on [my GitHub Repository](https://github.com/maxadamo/galera_maxscale)
 
 ## Release Notes/Contributors/Etc. **Optional**

@@ -27,7 +27,7 @@ log-error=error.log
 #log-output=FILE
 #relay-log=relay-bin
 ## INNODB OPTIONS
-innodb-buffer-pool-size=<%= (@memorysize_mb.to_f * @galera_total_memory_usage.to_f ).floor %>M
+innodb-buffer-pool-size=<%= (@memorysize_mb.to_f * @innodb_buffer_pool_size.to_f ).floor %>M
 innodb-flush-log-at-trx-commit=2
 innodb-file-per-table=1
 innodb-data-file-path = ibdata1:100M:autoextend
