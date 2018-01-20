@@ -159,8 +159,8 @@ class galera_maxscale (
   unless $root_password { fail('parameter "root_password" is missing') }
   unless $sst_password { fail('parameter "sst_password" is missing') }
   unless $monitor_password { fail('parameter "monitor_password" is missing') }
-  if $::hostgroup { fail("'galera_cluster_name' parameter relies on \$::hostgroup which is not set on this system.\
- Please set yourself this parameter.") }
+  unless $::hostgroup { fail("'galera_cluster_name' parameter relies on \$::hostgroup which is not set on this system.\
+ Please set yourself the parameter 'galera_cluster_name'.") }
 
   if $manage_lvm and $lv_size == undef { fail('manage_lvm is true but lv_size is undef') }
   if $manage_lvm == undef and $lv_size { fail('manage_lvm is undeef but lv_size is defined') }
