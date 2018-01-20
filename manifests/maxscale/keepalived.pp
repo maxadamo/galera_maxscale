@@ -34,7 +34,7 @@ class galera_maxscale::maxscale::keepalived (
       auth_type                  => 'PASS',
       auth_pass                  => 'secret',
       virtual_ipaddress          => "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
-      virtual_ipaddress_excluded => "${maxscale_vip[$vip_key]['ipv6']}/${maxscale_vip[$vip_key]['ipv6_subnet']}",
+      virtual_ipaddress_excluded => ["${maxscale_vip[$vip_key]['ipv6']}/${maxscale_vip[$vip_key]['ipv6_subnet']}"],
       track_script               => 'check_maxscale';
     }
   } else {
