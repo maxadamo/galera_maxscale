@@ -50,4 +50,13 @@ class galera_maxscale::maxscale::maxscale (
     notify  => Service['maxscale'];
   }
 
+  # we need a fake exec common with galera nodes to let
+  # the firewall run before the script
+  unless defined(Exec['bootstrap_or_join']) {
+    exec { 'bootstrap_or_join':
+      command => 'echo',
+      path    => '/usr/bin:/usr/sbin:/bin';
+    }
+  }
+
 }

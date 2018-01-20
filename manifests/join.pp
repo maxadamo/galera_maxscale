@@ -15,15 +15,17 @@ class galera_maxscale::join (
 
   $joined_file = '/root/.JOINED'
 
-  exec { 'bootstrap_or_join':
-    command => 'galera_wizard.py -bn -f || galera_wizard.py -jn -f',
-    path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-    creates => $joined_file,
-    returns => [0,1],
-    require => [
-      File['/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf'],
-      Package['galera']
-    ];
+  unless defined(Exec['bootstrap_or_join']) {
+    exec { 'bootstrap_or_join':
+      command => 'galera_wizard.py -bn -f || galera_wizard.py -jn -f',
+      path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+      creates => $joined_file,
+      returns => [0,1],
+      require => [
+        File['/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf'],
+        Package['galera']
+      ];
+    }
   }
 
   $joined_exists = inline_template('<% if File.exist?(@joined_file) -%>true<% end -%>')
