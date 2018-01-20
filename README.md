@@ -129,6 +129,7 @@ trusted_networks:
 - init.pp missing the full list of parameters
 - not tested yet on Ubuntu
 - initial state transfer is supported only through Percona Xtrabackup. I see no reason to support `mysqldump` and `rsync` since the donor would not be available during the transfer. I'll investigate soon how `mariabackup` works. 
+- manage major/minor versions properly
 
 
 ## Development

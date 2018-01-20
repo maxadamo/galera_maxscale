@@ -18,6 +18,7 @@ class galera_maxscale::maxscale::maxscale (
   }
 
   class { '::galera_maxscale::maxscale::keepalived':
+    manage_ipv6    => $ipv6_true,
     maxscale_hosts => $maxscale_hosts,
     maxscale_vip   => $maxscale_vip;
   }

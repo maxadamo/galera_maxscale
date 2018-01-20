@@ -3,6 +3,7 @@
 class galera_maxscale::maxscale::keepalived (
   $maxscale_hosts = $::galera_maxscale::params::maxscale_hosts,
   $maxscale_vip   = $::galera_maxscale::params::maxscale_vip,
+  $manage_ipv6    = undef
   ) inherits galera_maxscale::params {
 
   $vip_key = inline_template('<% @maxscale_vip.each do |key, value| %><%= key %><% end -%>')
@@ -11,6 +12,17 @@ class galera_maxscale::maxscale::keepalived (
   $peer_ip = $::fqdn ? {
     $maxscale_key_first  => $maxscale_hosts[$maxscale_key_second]['ipv4'],
     $maxscale_key_second => $maxscale_hosts[$maxscale_key_first]['ipv4'],
+  }
+
+  if ($manage_ipv6) {
+    $virtual_ipaddress = [
+      "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
+      "${maxscale_vip[$vip_key]['ipv6']}/${maxscale_vip[$vip_key]['ipv6_subnet']}"
+    ]
+  } else {
+    $virtual_ipaddress = [
+      "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}"
+    ]
   }
 
   include ::keepalived
@@ -30,7 +42,7 @@ class galera_maxscale::maxscale::keepalived (
     priority          => '100',
     auth_type         => 'PASS',
     auth_pass         => 'secret',
-    virtual_ipaddress => "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
+    virtual_ipaddress => $virtual_ipaddress,
     track_script      => 'check_maxscale';
   }
 
