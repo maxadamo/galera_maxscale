@@ -125,7 +125,7 @@ trusted_networks:
 ## Limitations
 
 - not fully tested on ipv4 only
-- keepalived missing configuration for ipv6
+- I added `ipv6` to keepalived but it's still not working
 - init.pp missing the full list of parameters
 - not tested yet on Ubuntu
 - initial state transfer is supported only through Percona Xtrabackup. I see no reason to support `mysqldump` and `rsync` since the donor would not be available during the transfer. I'll investigate soon how `mariabackup` works. 

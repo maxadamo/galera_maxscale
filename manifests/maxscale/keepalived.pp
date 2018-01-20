@@ -14,6 +14,8 @@ class galera_maxscale::maxscale::keepalived (
     $maxscale_key_second => $maxscale_hosts[$maxscale_key_first]['ipv4'],
   }
 
+  include ::keepalived
+
   if ($manage_ipv6) {
     $virtual_ipaddress = [
       "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
@@ -25,7 +27,9 @@ class galera_maxscale::maxscale::keepalived (
     ]
   }
 
-  include ::keepalived
+  class { '::galera_maxscale::maxscale::firewall':
+    peer_ip => $peer_ip;
+  }
 
   keepalived::vrrp::script { 'check_maxscale':
     script   => 'killall -0 maxscale',
