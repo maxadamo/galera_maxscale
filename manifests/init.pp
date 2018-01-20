@@ -163,7 +163,7 @@ class galera_maxscale (
  Please set yourself the parameter 'galera_cluster_name'.") }
 
   if $manage_lvm and $lv_size == undef { fail('manage_lvm is true but lv_size is undef') }
-  if $manage_lvm == undef and $lv_size { fail('manage_lvm is undeef but lv_size is defined') }
+  if $manage_lvm == undef and $lv_size { fail('manage_lvm is undef but lv_size is defined') }
 
   class { 'galera_maxscale::repo':
     manage_repo => $manage_repo;
