@@ -124,7 +124,8 @@ trusted_networks:
 
 ## Limitations
 
-- not tested on ipv4 only
+- **important:** not tested on ipv4 only
+- **important:** changing MySQL root password is not yet supported. I'll implement it ASAP. For the time being don't do it with `puppetlabs/mysql` or manually: it must be done in conjunction with Galera configurations. 
 - not tested yet on Ubuntu
 - initial state transfer is supported only through Percona Xtrabackup (I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer. I'll investigate soon how `mariabackup` works).
 - handle major/minor versions properly
