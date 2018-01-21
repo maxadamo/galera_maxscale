@@ -17,18 +17,17 @@ class galera_maxscale::maxscale::maxscale (
     $ipv6_true = undef
   }
 
-  class { '::galera_maxscale::maxscale::keepalived':
-    manage_ipv6    => $ipv6_true,
-    maxscale_hosts => $maxscale_hosts,
-    maxscale_vip   => $maxscale_vip;
-  }
-
-  class { '::galera_maxscale::firewall':
-    manage_ipv6      => $ipv6_true,
-    galera_hosts     => $galera_hosts,
-    maxscale_hosts   => $maxscale_hosts,
-    maxscale_vip     => $maxscale_vip,
-    trusted_networks => $trusted_networks;
+  class {
+    '::galera_maxscale::maxscale::keepalived':
+      manage_ipv6    => $ipv6_true,
+      maxscale_hosts => $maxscale_hosts,
+      maxscale_vip   => $maxscale_vip;
+    '::galera_maxscale::firewall':
+      manage_ipv6      => $ipv6_true,
+      galera_hosts     => $galera_hosts,
+      maxscale_hosts   => $maxscale_hosts,
+      maxscale_vip     => $maxscale_vip,
+      trusted_networks => $trusted_networks;
   }
 
   package { 'maxscale': ensure => installed; }
@@ -52,7 +51,7 @@ class galera_maxscale::maxscale::maxscale (
   }
 
   # we need a fake exec common with galera nodes to let
-  # the firewall run before the script
+  # galera use the `before` statement in the firewall
   $joined_file = '/root/.JOINED'
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':
