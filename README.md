@@ -14,7 +14,7 @@
 
 This module sets up and bootstrap Galera cluster and MaxScale Proxy.
 The subsequent management of the Galera cluster is demanded to the script `galera_wizard.yp`.
-MaxScale Proxy will be set up on 2 nodes with Keepalived. 
+MaxScale Proxy will be set up on 2 nodes with Keepalived.
 You need, _at least_, 5 servers and 6 ipv4 (and optionally 6 ipv6).
 **Please** read at (actual) **limitations** in the paragraph below.
 
@@ -30,11 +30,12 @@ class { '::galera_maxscale':
   root_password    => $root_password,
   sst_password     => $sst_password,
   monitor_password => $monitor_password,
-  maxscale_hosts    => $maxscale_hosts,
-  maxscale_vip      => $maxscale_hosts,
+  maxscale_hosts   => $maxscale_hosts,
+  maxscale_vip     => $maxscale_hosts,
   galera_hosts     => $galera_hosts,
   trusted_networks => $trusted_networks,
   manage_lvm       => true,
+  vg_name          => 'rootvg',
   lv_size          => $lv_size;
 }
 ```
@@ -102,7 +103,7 @@ maxscale_vip:
     ipv6: '2001:123:4::70'
 ```
 
-If you don't use ipv6, just skip the `ipv6` keys as following:
+If you do not use ipv6, just skip the `ipv6` keys as following:
 ```yaml
 galera_hosts:
   test-galera01.example.net:
@@ -132,9 +133,9 @@ trusted_networks:
 since the module it is still at an early stagem there are quite few limitations:
 - **important:** MariaDB MaxScale reporisotry is not implemented (you need to install the RPM manually aotherwise the module will fail)
 - **important:** not tested on ipv4 only
-- **important:** changing MySQL root password is not yet supported. I'll implement it ASAP. For the time being don't do it with `puppetlabs/mysql` or manually: it must be done in conjunction with Galera configurations (changing SST and Monitor password is possible). 
+- **important:** changing MySQL root password is not yet supported. I will implement it ASAP. For the time being do not do it with `puppetlabs/mysql` or manually: it should be done in conjunction with Galera configurations (changing SST and Monitor password is possible).
 - not tested yet on Ubuntu
-- initial state transfer is supported only through Percona Xtrabackup (on average DBs I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer). I'll investigate how `mariabackup` works.
+- initial state transfer is supported only through Percona Xtrabackup (on average DBs I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer). I will investigate how `mariabackup` works.
 - handle major/minor versions properly
 
 
