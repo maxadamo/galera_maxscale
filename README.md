@@ -124,10 +124,12 @@ trusted_networks:
 
 ## Limitations
 
+since it is still at early stage with this module there are quite few limitations:
+- **important:** MariaDB MaxScale repo needs is not implemented (you need to install it manually aotherwise this module will fail)
 - **important:** not tested on ipv4 only
-- **important:** changing MySQL root password is not yet supported. I'll implement it ASAP. For the time being don't do it with `puppetlabs/mysql` or manually: it must be done in conjunction with Galera configurations. 
+- **important:** changing MySQL root password is not yet supported. I'll implement it ASAP. For the time being don't do it with `puppetlabs/mysql` or manually: it must be done in conjunction with Galera configurations.
 - not tested yet on Ubuntu
-- initial state transfer is supported only through Percona Xtrabackup (I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer. I'll investigate soon how `mariabackup` works).
+- initial state transfer is supported only through Percona Xtrabackup (on average DBs I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer. I'll investigate how `mariabackup` works).
 - handle major/minor versions properly
 
 
