@@ -3,16 +3,21 @@
 class galera_maxscale::maxscale::firewall ($peer_ip) {
 
   firewall {
-    '200 Allow inbound multicast':
+    default:
       action => accept,
-      proto  => 'vrrp',
+      proto  => 'vrrp';
+    "200 Allow VRRP inbound from ${peer_ip}":
       chain  => 'INPUT',
       source => $peer_ip;
-    '200 Allow outbound multicast':
-      action      => accept,
-      chain       => 'OUTPUT',
-      proto       => 'vrrp',
+    '200 Allow VRRP inbound to multicast':
+      chain       => 'INPUT',
       destination => '224.0.0.0/8';
+    '200 Allow VRRP outbound to multicast':
+      chain       => 'OUTPUT',
+      destination => '224.0.0.0/8';
+    "200 Allow VRRP outbound to ${peer_ip}":
+      chain       => 'OUTPUT',
+      destination => $peer_ip;
   }
 
 }
