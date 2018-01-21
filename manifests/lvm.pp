@@ -2,23 +2,25 @@
 #
 class galera_maxscale::lvm (
   $manage_lvm = $::galera_maxscale::params::manage_lvm,
-  $lv_size = $::galera_maxscale::params::lv_size
+  $lv_size = $::galera_maxscale::params::lv_size,
+  $vg_name = $::galera_maxscale::params::vg_name,
+  $datadir = $::galera_maxscale::params::datadir
   ) inherits galera_maxscale::params {
 
-  if ($lv_size and $manage_lvm) {
+  if ($lv_size and $manage_lvm and $vg_name) {
     logical_volume { 'lv_galera':
       ensure       => present,
-      volume_group => 'rootvg',
+      volume_group => $vg_name,
       size         => "${lv_size}G",
     }
 
-    filesystem { '/dev/mapper/rootvg-lv_galera':
+    filesystem { "/dev/mapper/${vg_name}-lv_galera":
       ensure  => present,
       fs_type => 'ext4',
       require => Logical_volume['lv_galera']
     }
 
-    file { '/var/lib/mysql':
+    file { $datadir:
       ensure  => directory,
       mode    => '0755',
       owner   => mysql,
@@ -26,22 +28,22 @@ class galera_maxscale::lvm (
       require => Package['MariaDB-server'];
     }
 
-    mount { '/var/lib/mysql':
+    mount { $datadir:
       ensure  => mounted,
       fstype  => 'ext4',
       atboot  => true,
-      device  => '/dev/mapper/rootvg-lv_galera',
+      device  => "/dev/mapper/${vg_name}-lv_galera",
       require => [
-        File['/var/lib/mysql'],
-        Filesystem['/dev/mapper/rootvg-lv_galera']
+        File[$datadir],
+        Filesystem["/dev/mapper/${vg_name}-lv_galera"]
       ],
       notify  => Exec['fix_permissions'];
     }
 
-    exec { 'fix_permissions':
-      command     => 'chown -R mysql:mysql /var/lib/mysql',
-      path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-      refreshonly => true;
+    exec { 'fix_datadir_permissions':
+      command => "chown mysql:mysql ${datadir}",
+      path    => '/usr/bin:/usr/sbin:/bin',
+      unless  => 'stat -c "%U%G" /etc/grafana/|grep "mysqlmysql"';
     }
   }
 

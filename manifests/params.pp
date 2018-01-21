@@ -36,6 +36,7 @@ class galera_maxscale::params {
   $tmpdir = undef
   $trusted_networks = undef
   $version = 'latest'
+  $vg_name = undef
 
   # MaxScale configuration
   $maxscale_hosts = undef

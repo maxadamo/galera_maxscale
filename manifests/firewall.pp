@@ -11,17 +11,6 @@ class galera_maxscale::firewall (
   $trusted_networks = $::galera_maxscale::params::trusted_networks
   ) inherits galera_maxscale::params {
 
-  ['iptables', 'ip6tables'].each | String $myprovider | {
-    firewall { "200 Allow outbound Galera ports (v4/v6) for ${myprovider}":
-      chain    => 'OUTPUT',
-      dport    => [3306, 9200],
-      proto    => tcp,
-      action   => accept,
-      provider => $myprovider,
-      before   => Exec['bootstrap_or_join'];
-    }
-  }
-
   $trusted_networks.each | String $source | {
     if ':' in $source { $provider = 'ip6tables' } else { $provider = 'iptables' }
     firewall { "200 Allow inbound Galera ports 3306, 9200 from ${source} for ${provider}":
@@ -54,6 +43,16 @@ class galera_maxscale::firewall (
   }
 
   if $manage_ipv6 {
+    ['iptables', 'ip6tables'].each | String $myprovider | {
+      firewall { "200 Allow outbound Galera ports (v4/v6) for ${myprovider}":
+        chain    => 'OUTPUT',
+        dport    => [3306, 9200],
+        proto    => tcp,
+        action   => accept,
+        provider => $myprovider,
+        before   => Exec['bootstrap_or_join'];
+      }
+    }
     $galera_hosts.each | $name, $node | {
       firewall {
         default:
@@ -131,6 +130,16 @@ class galera_maxscale::firewall (
           provider    => 'ip6tables';
       }
     }
+  } else {
+    firewall { '200 Allow outbound Galera ports for IPv4':
+      chain    => 'OUTPUT',
+      dport    => [3306, 9200],
+      proto    => tcp,
+      action   => accept,
+      provider => 'iptables',
+      before   => Exec['bootstrap_or_join'];
+    }
   }
+
 
 }

@@ -11,7 +11,7 @@ class galera_maxscale::extras::backup (
   ) {
 
   # Create directory tree for backup and mount it
-  if $daily_hotbackup {
+  if ($daily_hotbackup) {
     file {
       '/mnt/galera_backup':
         ensure => directory;

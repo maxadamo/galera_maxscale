@@ -10,20 +10,20 @@ define galera_maxscale::create_user (
   ) {
 
   if $dbuser == 'maxscale' {
-    $_host_list = deep_merge($galera_hosts, $maxscale_hosts, $maxscale_vip)
+    $host_hash = deep_merge($galera_hosts, $maxscale_hosts, $maxscale_vip)
     $privileges = ['SELECT', 'SHOW DATABASES', 'REPLICATION CLIENT']
     $table = '*.*'
   } elsif $dbuser == 'sstuser' {
-    $_host_list = $galera_hosts
+    $host_hash = $galera_hosts
     $privileges = ['PROCESS', 'SELECT', 'RELOAD', 'LOCK TABLES', 'REPLICATION CLIENT']
     $table = '*.*'
   } elsif $dbuser == 'monitor' {
-    $_host_list = $galera_hosts
+    $host_hash = $galera_hosts
     $privileges = ['UPDATE']
     $table = 'test.monitor'
   }
 
-  $host_list = keys($_host_list)
+  $host_list = keys($host_hash)
 
   $host_list.each | String $peer | {
     mysql_user { "${dbuser}@${peer}":

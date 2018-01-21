@@ -148,6 +148,7 @@ class galera_maxscale (
   $tmpdir                       = $::galera_maxscale::params::tmpdir,
   $trusted_networks             = $::galera_maxscale::params::trusted_networks,
   $version                      = $::galera_maxscale::params::version,
+  $vg_name                      = $::galera_maxscale::params::vg_name,
 
 ) inherits galera_maxscale::params {
 
@@ -163,6 +164,7 @@ class galera_maxscale (
  Please set yourself the parameter 'galera_cluster_name'.") }
 
   if $manage_lvm and $lv_size == undef { fail('manage_lvm is true but lv_size is undef') }
+  if $manage_lvm and $vg_name == undef { fail('manage_lvm is true but vg_name is undef') }
   if $manage_lvm == undef and $lv_size { fail('manage_lvm is undef but lv_size is defined') }
 
   class { 'galera_maxscale::repo':

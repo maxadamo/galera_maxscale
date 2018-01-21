@@ -25,7 +25,7 @@ class galera_maxscale::files (
   $slow_query_time              = $::galera_maxscale::params::slow_query_time,
   ) inherits galera_maxscale::params {
 
-  if ! defined( File['/root/bin'] ) {
+  unless defined( File['/root/bin'] ) {
     file { '/root/bin':
       ensure => directory,
       mode   => '0755';
@@ -34,10 +34,11 @@ class galera_maxscale::files (
 
   file {
     default:
-      ensure => file,
-      mode   => '0644',
-      owner  => 'root',
-      group  => 'root';
+      ensure  => file,
+      mode    => '0644',
+      owner   => 'root',
+      group   => 'root',
+      require => FIle['/root/bin'];
     '/usr/bin/galera_wizard.py':
       mode   => '0755',
       source => "puppet:///modules/${module_name}/galera_wizard.py";
