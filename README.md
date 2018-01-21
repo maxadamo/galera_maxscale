@@ -14,7 +14,8 @@
 
 This module sets up and bootstrap Galera cluster and MaxScale Proxy.
 The subsequent management of the Galera cluster is demanded to the script `galera_wizard.yp`.
-MaxScale Proxy will set up on 2 nodes with Keepalived
+MaxScale Proxy will set up on 2 nodes with Keepalived.
+**Please** read at (actual) **limitations** paragraph below.
 
 
 ## Setup
