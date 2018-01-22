@@ -70,8 +70,8 @@ class galera_maxscale::maxscale::maxscale (
       creates => $joined_file;
     }
   }
-  unless defined(Exec['join_esisting']) {
-    exec { 'join_esisting':
+  unless defined(Exec['join_existing']) {
+    exec { 'join_existing':
       command => "touch ${joined_file}",
       path    => '/usr/bin:/bin',
       creates => $joined_file;
