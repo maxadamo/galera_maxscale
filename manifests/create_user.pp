@@ -27,14 +27,14 @@ define galera_maxscale::create_user (
   $host_list = concat($_host_list, 'localhost')
 
   $host_list.each | String $peer | {
-    mysql_user { "${dbuser}@${peer}":
+    mysql_user { "${dbuser}@${galera_hosts[peer][ipv4]}":
       ensure        => present,
       password_hash => mysql_password($dbpass),
       provider      => 'mysql';
     }
-    -> mysql_grant { "${dbuser}@${peer}/${table}":
+    -> mysql_grant { "${dbuser}@${galera_hosts[peer][ipv4]}/${table}":
       ensure     => present,
-      user       => "${dbuser}@${peer}",
+      user       => "${dbuser}@${galera_hosts[peer][ipv4]}",
       password   => $dbpass,
       table      => $table,
       privileges => $privileges;
