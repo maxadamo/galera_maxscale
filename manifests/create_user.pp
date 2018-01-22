@@ -34,12 +34,19 @@ define galera_maxscale::create_user (
         password_hash => mysql_password($dbpass),
         provider      => 'mysql';
     }
-    mysql_grant { "${dbuser}@${host_ips['ipv4']}/${table}":
-      ensure     => present,
-      user       => "${dbuser}@${host_ips['ipv4']}",
-      table      => $table,
-      privileges => $privileges,
-      require    => Mysql_user["${dbuser}@${host_ips['ipv4']}"];
+    mysql_grant {
+      "${dbuser}@${host_ips['ipv4']}/${table}":
+        ensure     => present,
+        user       => "${dbuser}@${host_ips['ipv4']}",
+        table      => $table,
+        privileges => $privileges,
+        require    => Mysql_user["${dbuser}@${host_ips['ipv4']}"];
+      "${dbuser}@${host_name}/${table}":
+        ensure     => present,
+        user       => "${dbuser}@${host_name}",
+        table      => $table,
+        privileges => $privileges,
+        require    => Mysql_user["${dbuser}@${host_name}"];
     }
   }
 
