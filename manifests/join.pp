@@ -28,7 +28,7 @@ class galera_maxscale::join (
     }
   }
 
-  if ($::galera_status != '200') {
+  if ($::galera_joined_exist and $::galera_status != '200') {
     exec { 'join_esisting':
       command => 'galera_wizard.py -je',
       path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
