@@ -20,7 +20,7 @@ class galera_maxscale::firewall (
       proto    => tcp,
       action   => accept,
       provider => $provider,
-      before   => Exec['bootstrap_or_join', 'join_esisting'];
+      before   => Exec['bootstrap_or_join', 'join_existing'];
     }
   }
 
@@ -30,7 +30,7 @@ class galera_maxscale::firewall (
         dport  => [4444, 4567, 4568],
         proto  => tcp,
         action => accept,
-        before => Exec['bootstrap_or_join', 'join_esisting'];
+        before => Exec['bootstrap_or_join', 'join_existing'];
       "200 Allow outbound Galera ports ipv4 to ${name}":
         chain       => 'OUTPUT',
         destination => $node['ipv4'],
@@ -50,7 +50,7 @@ class galera_maxscale::firewall (
         proto    => tcp,
         action   => accept,
         provider => $myprovider,
-        before   => Exec['bootstrap_or_join', 'join_esisting'];
+        before   => Exec['bootstrap_or_join', 'join_existing'];
       }
     }
     $galera_hosts.each | $name, $node | {
@@ -59,7 +59,7 @@ class galera_maxscale::firewall (
           dport  => [4444, 4567, 4568],
           proto  => tcp,
           action => accept,
-          before => Exec['bootstrap_or_join', 'join_esisting'];
+          before => Exec['bootstrap_or_join', 'join_existing'];
         "200 Allow outbound Galera ports ipv6 to ${name}":
           chain       => 'OUTPUT',
           destination => $node['ipv6'],
@@ -80,7 +80,7 @@ class galera_maxscale::firewall (
         action => accept,
         proto  => tcp,
         dport  => '1-65535',
-        before => Exec['bootstrap_or_join', 'join_esisting'];
+        before => Exec['bootstrap_or_join', 'join_existing'];
       "200 Allow inbound tcp ipv4 from ${name}":
         chain    => 'INPUT',
         source   => $node['ipv4'],
@@ -109,7 +109,7 @@ class galera_maxscale::firewall (
           action => accept,
           proto  => tcp,
           dport  => '1-65535',
-          before => Exec['bootstrap_or_join', 'join_esisting'];
+          before => Exec['bootstrap_or_join', 'join_existing'];
         "200 Allow inbound tcp ipv6 from ${name}":
           chain    => 'INPUT',
           source   => $node['ipv6'],
@@ -137,7 +137,7 @@ class galera_maxscale::firewall (
       proto    => tcp,
       action   => accept,
       provider => 'iptables',
-      before   => Exec['bootstrap_or_join', 'join_esisting'];
+      before   => Exec['bootstrap_or_join', 'join_existing'];
     }
   }
 

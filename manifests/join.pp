@@ -29,14 +29,27 @@ class galera_maxscale::join (
   }
 
   if ($::galera_joined_exist and $::galera_status != '200') {
-    exec { 'join_esisting':
-      command => 'galera_wizard.py -je',
-      path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-      returns => [0,1],
-      require => [
-        File['/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf'],
-        Package['galera']
-      ];
+    unless defined(Exec['join_existing']) {
+      exec { 'join_existing':
+        command => 'galera_wizard.py -je',
+        path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+        returns => [0,1],
+        require => [
+          File[
+            '/usr/bin/galera_wizard.py', '/root/galera_params.py',
+            '/root/.my.cnf', '/etc/my.cnf.d/server.cnf',
+            '/etc/my.cnf.d/client.cnf'
+          ],
+          Package['galera']
+        ];
+      }
+    }
+  } else {
+    unless defined(Exec['join_existing']) {
+      exec { 'join_existing':
+        command => 'echo',
+        path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin';
+      }
     }
   }
 
