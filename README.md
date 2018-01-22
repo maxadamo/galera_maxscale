@@ -134,7 +134,6 @@ trusted_networks:
 ## Limitations
 
 since the module it is still at an early stagem there are quite few limitations:
-- **important:** MariaDB MaxScale reporisotry is not implemented (you need to install the RPM manually otherwise the module will fail)
 - **important:** not tested on ipv4 only
 - not working yet on Ubuntu
 - handle major/minor versions properly
