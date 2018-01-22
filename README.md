@@ -13,9 +13,13 @@
 ## Description
 
 This module sets up and bootstrap Galera cluster and MaxScale Proxy.
-The subsequent management of the Galera cluster is demanded to the script `galera_wizard.yp`.
-MaxScale Proxy will be set up on 2 nodes with Keepalived.
-You need, _at least_, 5 servers and 6 ipv4 (and optionally 6 ipv6).
+The status of the cluster is checked at run time thgough the facter `galera_status` and puppet will attempt to re-join the nodein case of failure.
+If puppet fails to recover a node you can use the script `galera_wizard.yp` provided with this module.
+MaxScale Proxy will be set up on 2 nodes (no more, no less) with Keepalived.
+Therefore, you need, _at least_, 5 servers and 6 ipv4 (and optionally 6 ipv6).
+
+Initial state transfer is supported only through Percona XtraBackup (on average DBs I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer: see [Galera Documentation](http://galeracluster.com/documentation-webpages/sst.html)).
+
 **Please** read at (actual) **limitations** in the paragraph below.
 
 
@@ -130,11 +134,9 @@ trusted_networks:
 ## Limitations
 
 since the module it is still at an early stagem there are quite few limitations:
-- **important:** MariaDB MaxScale reporisotry is not implemented (you need to install the RPM manually aotherwise the module will fail)
+- **important:** MariaDB MaxScale reporisotry is not implemented (you need to install the RPM manually otherwise the module will fail)
 - **important:** not tested on ipv4 only
-- not tested yet on Ubuntu
-- cluster status check needs to be improved: I need to write a facter the check HTTP status 200 against clustercheck
-- initial state transfer is supported only through Percona Xtrabackup (on average DBs I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer). I will investigate how `mariabackup` works.
+- not working yet on Ubuntu
 - handle major/minor versions properly
 
 
