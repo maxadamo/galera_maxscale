@@ -23,8 +23,7 @@ define galera_maxscale::create_user (
     $table = 'test.monitor'
   }
 
-  $_host_list = keys($host_hash)
-  $host_list = concat($_host_list, 'localhost')
+  $host_list = keys($host_hash)
 
   $host_list.each | String $peer | {
     mysql_user { "${dbuser}@${galera_hosts[peer][ipv4]}":
