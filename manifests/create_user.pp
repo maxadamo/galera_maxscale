@@ -23,18 +23,15 @@ define galera_maxscale::create_user (
     $table = 'test.monitor'
   }
 
-  $host_list = keys($host_hash)
-
-  $host_list.each | String $peer | {
-    mysql_user { "${dbuser}@${galera_hosts[peer][ipv4]}":
+  $galera_hosts.each | $host_name, $host_ips | {
+    mysql_user { "${dbuser}@${host_ips['ipv4']}":
       ensure        => present,
       password_hash => mysql_password($dbpass),
       provider      => 'mysql';
     }
-    -> mysql_grant { "${dbuser}@${galera_hosts[peer][ipv4]}/${table}":
+    -> mysql_grant { "${dbuser}@${host_ips['ipv4']}/${table}":
       ensure     => present,
-      user       => "${dbuser}@${galera_hosts[peer][ipv4]}",
-      password   => $dbpass,
+      user       => "${dbuser}@${host_ips['ipv4']}",
       table      => $table,
       privileges => $privileges;
     }

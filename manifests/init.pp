@@ -219,7 +219,7 @@ class galera_maxscale (
   class { '::galera_maxscale::join':
     monitor_password  => $monitor_password,
     root_password     => $root_password,
-    sst_password      => $monitor_password,
+    sst_password      => $sst_password,
     maxscale_password => $maxscale_password,
     galera_hosts      => $galera_hosts,
     maxscale_hosts    => $maxscale_hosts,
