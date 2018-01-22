@@ -269,6 +269,7 @@ def checkwsrep(sqlhost):
 
 def try_joining(how, datadirectory):
     """If we have nodes try Joining the cluster"""
+    kill_mysql()
     if how == "new":
         if os.path.isfile('/root/.my.cnf'):
             os.rename('/root/.my.cnf', '/root/.my.cnf.bak')

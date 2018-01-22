@@ -34,13 +34,11 @@ class galera_maxscale::join (
         galera_hosts   => $galera_hosts,
         maxscale_hosts => $maxscale_hosts,
         maxscale_vip   => $maxscale_vip,
-        require        => Exec['bootstrap_or_join'],
         dbpass         => $sst_password;
       'monitor':
         galera_hosts   => $galera_hosts,
         maxscale_hosts => $maxscale_hosts,
         maxscale_vip   => $maxscale_vip,
-        require        => Exec['bootstrap_or_join'],
         dbpass         => $monitor_password;
     }
     if $maxscale_password {
@@ -48,7 +46,6 @@ class galera_maxscale::join (
         galera_hosts   => $galera_hosts,
         maxscale_hosts => $maxscale_hosts,
         maxscale_vip   => $maxscale_vip,
-        require        => Exec['bootstrap_or_join'],
         dbpass         => $maxscale_password;
       }
     }
