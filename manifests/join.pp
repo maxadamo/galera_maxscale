@@ -28,7 +28,7 @@ class galera_maxscale::join (
     }
   }
 
-  if ($::galera_joined_exists) {
+  if ($::galera_joined_exist) {
     galera_maxscale::create_user {
       'sstuser':
         galera_hosts   => $galera_hosts,
