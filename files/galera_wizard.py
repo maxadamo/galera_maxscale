@@ -426,7 +426,10 @@ class Cluster(object):
                 ALL_NODES.append("localhost")
                 for creditem in CREDENTIALS:
                     create_users(creditem)
-                os.mknod("/root/.JOINED")
+                try:
+                    os.mknod("/root/.JOINED")
+                except OSError:
+                    pass
                 print ""
 
     def joincluster(self):
@@ -450,7 +453,10 @@ class Cluster(object):
             else:
                 print ''
         try_joining(self.manner, self.datadir)
-        os.mknod("/root/.JOINED")
+        try:
+            os.mknod("/root/.JOINED")
+        except OSError:
+            pass
 
     def checkonly(self):
         """runs a cluster check"""
