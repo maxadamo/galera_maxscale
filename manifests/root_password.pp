@@ -7,9 +7,10 @@
 #
 define galera_maxscale::root_password () {
 
+  $root_cnf = '/root/.my.cnf'
   $root_password = $name
-  $pw_change_cmd = "mysqladmin -u root --\$(grep 'password=') password ${root_password}"
-  $old_pw_check = "mysql -u root --password=\$(grep 'password=') -e \"select 1 from dual\""
+  $pw_change_cmd = "mysqladmin -u root --\$(grep 'password=' ${root_cnf}) password ${root_password}"
+  $old_pw_check = "mysql -u root --password=\$(grep 'password=' ${root_cnf}) -e \"select 1 from dual\""
   $new_pw_check = "mysql -u root --password=${root_password} -e \"select 1 from dual\""
 
   if ($::galera_rootcnf_exist and $::galera_joined_exist) {
@@ -17,7 +18,7 @@ define galera_maxscale::root_password () {
       command => "${old_pw_check} && ${pw_change_cmd}",
       path    => '/usr/bin:/usr/sbin:/bin',
       unless  => $new_pw_check,
-      before  => File['/root/.my.cnf'];
+      before  => File[$root_cnf];
     }
   }
 
