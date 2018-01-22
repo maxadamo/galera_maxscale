@@ -1,6 +1,7 @@
 Facter.add('galera_status') do
   setcode do
     begin
+      require 'socket'
       Socket.tcp('localhost', 9200, connect_timeout: 1) {}
     rescue
       http_status = 'UNKNOWN'

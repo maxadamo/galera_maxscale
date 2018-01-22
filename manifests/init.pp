@@ -154,6 +154,8 @@ class galera_maxscale (
 
   if $::galera_status == '200' {
     $msg = "HTTP/1.1 ${::galera_status}: the node is healthy and belongs to the cluster ${galera_cluster_name}"
+  } elsif $::galera_status == 'UNKNOWN' {
+    $msg = "HTTP/1.1 ${::galera_status}: could not determine the status of the cluster. Most likely xinetd is not running yet"
   } else {
     $msg = "HTTP/1.1 ${::galera_status}: the node is disconnected from the cluster ${galera_cluster_name}"
   }
