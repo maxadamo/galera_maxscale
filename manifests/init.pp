@@ -152,6 +152,7 @@ class galera_maxscale (
 
 ) inherits galera_maxscale::params {
 
+  # checking cluster status through the facter galera_status
   if $::galera_status == '200' {
     $msg = "HTTP/1.1 ${::galera_status}: the node is healthy and belongs to the cluster ${galera_cluster_name}"
   } elsif $::galera_status == 'UNKNOWN' {

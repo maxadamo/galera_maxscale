@@ -13,7 +13,7 @@
 ## Description
 
 This module sets up and bootstrap Galera cluster and MaxScale Proxy.
-The status of the cluster is checked at run time thgough the facter `galera_status` and puppet will attempt to re-join the nodein case of failure.
+The status of the cluster is checked at run time through the facter `galera_status` and puppet will attempt to re-join the nodein case of failure.
 If puppet fails to recover a node you can use the script `galera_wizard.yp` provided with this module.
 MaxScale Proxy will be set up on 2 nodes (no more, no less) with Keepalived.
 Therefore, you need, _at least_, 5 servers and 6 ipv4 (and optionally 6 ipv6).

@@ -5,7 +5,8 @@ class galera_maxscale::maxscale::maxscale (
   $maxscale_hosts    = $::galera_maxscale::params::maxscale_hosts,
   $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
   $maxscale_password = $::galera_maxscale::params::maxscale_password,
-  $trusted_networks  = $::galera_maxscale::params::trusted_networks
+  $trusted_networks  = $::galera_maxscale::params::trusted_networks,
+  $manage_repo       = $::galera_maxscale::params::manage_repo
   ) inherits galera_maxscale::params {
 
   $maxscale_key_first = inline_template('<% @maxscale_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
@@ -19,6 +20,8 @@ class galera_maxscale::maxscale::maxscale (
 
   class {
     '::galera_maxscale::maxscale::keepalived':
+      manager_repo => $manage_repo;
+    '::galera_maxscale::maxscale::keepalived':
       manage_ipv6    => $ipv6_true,
       maxscale_hosts => $maxscale_hosts,
       maxscale_vip   => $maxscale_vip;
@@ -30,7 +33,14 @@ class galera_maxscale::maxscale::maxscale (
       trusted_networks => $trusted_networks;
   }
 
-  package { 'maxscale': ensure => installed; }
+  if ($manage_repo) {
+    package { 'maxscale':
+      ensure  => installed,
+      require => Yumrepo['MaxScale'];
+    }
+  } else {
+    package { 'maxscale': ensure => installed; }
+  }
 
   service { 'maxscale':
     ensure     => running,
@@ -50,8 +60,8 @@ class galera_maxscale::maxscale::maxscale (
     notify  => Service['maxscale'];
   }
 
-  # we need a fake exec common with galera nodes to let
-  # galera use the `before` statement in the firewall
+  # we need a fake exec in common with galera nodes to let
+  # galera use the `before` statement in the same firewall
   $joined_file = '/root/.JOINED'
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':
