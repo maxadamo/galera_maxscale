@@ -152,6 +152,13 @@ class galera_maxscale (
 
 ) inherits galera_maxscale::params {
 
+  if $::galera_status == '200' {
+    $msg = "HTTP/1.1 ${::galera_status}: the node is healthy and belongs to cluster ${galera_cluster_name}"
+  } else {
+    $msg = "HTTP/1.1 ${::galera_status}: the node is disconnected from the cluster ${galera_cluster_name}"
+  }
+  notify { 'Cluster status': message => $msg; }
+
   $cluster_size = inline_template('<%= @galera_hosts.keys.count %>')
   $cluster_size_odd = inline_template('<% if @galera_hosts.keys.count.to_i.odd? -%>true<% end -%>')
 
