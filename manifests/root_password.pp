@@ -7,31 +7,17 @@
 #
 define galera_maxscale::root_password () {
 
-  $root_cnf_exist = inline_template("<% if File.exist?('/root/.my.cnf') -%>yes<% else %>no<% end -%>")
+  $root_password = $name
+  $pw_change_cmd = "mysqladmin -u root --\$(grep 'password=') password ${root_password}"
+  $old_pw_check = "mysql -u root --password=\$(grep 'password=') -e \"select 1 from dual\""
+  $new_pw_check = "mysql -u root --password=${root_password} -e \"select 1 from dual\""
 
-  if $root_cnf_exist == 'yes' {
-
-    $root_password = $name
-    $old_password = inline_template("<%= File.open('/root/.my.cnf').grep(/password=/)[0].chomp %>")
-    $pw_change_cmd = "mysqladmin -u root --password=${old_password} password ${root_password}"
-    $old_pw_check = "mysql -u root --password=${old_password} -e \"select 1 from dual\""
-    $new_pw_check = "mysql -u root --password=${root_password} -e \"select 1 from dual\""
-
-    if $root_password != $old_password {
-      exec {
-        'change_root_password':
-          command => $pw_change_cmd,
-          path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-          unless  => $old_pw_check,
-          onlyif  => 'test -f /root/.my.cnf',
-          notify  => Exec['check_root_password'],
-          before  => File['/root/.my.mcf'];
-        'check_new_password':
-          command     => $new_pw_check,
-          path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-          refreshonly => true;
-      }
-    }
+  exec { 'change_root_password':
+    command => $pw_change_cmd,
+    path    => '/usr/bin:/usr/sbin:/bin',
+    unless  => $new_pw_check,
+    onlyif  => 'test -f /root/.my.cnf',
+    before  => File['/root/.my.mcf'];
   }
 
 }
