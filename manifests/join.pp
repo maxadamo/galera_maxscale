@@ -47,8 +47,9 @@ class galera_maxscale::join (
   } else {
     unless defined(Exec['join_existing']) {
       exec { 'join_existing':
-        command => 'echo',
-        path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin';
+        command     => 'echo',
+        path        => '/usr/bin:/bin',
+        refreshonly => true;
       }
     }
   }
