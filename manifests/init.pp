@@ -180,6 +180,8 @@ class galera_maxscale (
     other_pkgs  => $other_pkgs;
   }
 
+  galera_maxscale::root_password { $root_password:; }
+
   class { 'galera_maxscale::lvm': lv_size => $lv_size; }
 
   class { 'galera_maxscale::services':; }
