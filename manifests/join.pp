@@ -28,9 +28,7 @@ class galera_maxscale::join (
     }
   }
 
-  $joined_exists = inline_template('<% if File.exist?(@joined_file) -%>true<% end -%>')
-
-  if ($joined_exists) {
+  if ($::galera_joined_exists) {
     galera_maxscale::create_user {
       'sstuser':
         galera_hosts   => $galera_hosts,

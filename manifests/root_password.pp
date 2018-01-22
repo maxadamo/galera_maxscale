@@ -12,12 +12,13 @@ define galera_maxscale::root_password () {
   $old_pw_check = "mysql -u root --password=\$(grep 'password=') -e \"select 1 from dual\""
   $new_pw_check = "mysql -u root --password=${root_password} -e \"select 1 from dual\""
 
-  exec { 'change_root_password':
-    command => $pw_change_cmd,
-    path    => '/usr/bin:/usr/sbin:/bin',
-    unless  => $new_pw_check,
-    onlyif  => 'test -f /root/.my.cnf',
-    before  => File['/root/.my.mcf'];
+  if ($::galera_rootcnf_exist and $::galera_joined_exist) {
+    exec { 'change_root_password':
+      command => "${old_pw_check} && ${pw_change_cmd}",
+      path    => '/usr/bin:/usr/sbin:/bin',
+      unless  => $new_pw_check,
+      before  => File['/root/.my.mcf'];
+    }
   }
 
 }
