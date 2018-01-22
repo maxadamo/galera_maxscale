@@ -35,6 +35,7 @@ define galera_maxscale::create_user (
     -> mysql_grant { "${dbuser}@${peer}/${table}":
       ensure     => present,
       user       => "${dbuser}@${peer}",
+      password   => $dbpass,
       table      => $table,
       privileges => $privileges;
     }
