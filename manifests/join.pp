@@ -28,7 +28,19 @@ class galera_maxscale::join (
     }
   }
 
-  if ($::galera_joined_exist) {
+  if ($::galera_status != '200') {
+    exec { 'join_esisting':
+      command => 'galera_wizard.py -je',
+      path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+      returns => [0,1],
+      require => [
+        File['/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf'],
+        Package['galera']
+      ];
+    }
+  }
+
+  if ($::galera_joined_exist and $::galera_status == '200') {
     galera_maxscale::create_user {
       'sstuser':
         galera_hosts   => $galera_hosts,
