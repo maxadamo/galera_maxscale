@@ -160,12 +160,17 @@ class galera_maxscale (
   unless $root_password { fail('parameter "root_password" is missing') }
   unless $sst_password { fail('parameter "sst_password" is missing') }
   unless $monitor_password { fail('parameter "monitor_password" is missing') }
-  unless $::hostgroup { fail("'galera_cluster_name' parameter relies on \$::hostgroup which is not set on this system.\
- Please set yourself the parameter 'galera_cluster_name'.") }
 
   if $manage_lvm and $lv_size == undef { fail('manage_lvm is true but lv_size is undef') }
   if $manage_lvm and $vg_name == undef { fail('manage_lvm is true but vg_name is undef') }
   if $manage_lvm == undef and $lv_size { fail('manage_lvm is undef but lv_size is defined') }
+
+  $galera_first_key = inline_template('<% @galera_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
+  if has_key($galera_hosts[$galera_first_key], 'ipv6') {
+    $ipv6_true = true
+  } else {
+    $ipv6_true = undef
+  }
 
   class { 'galera_maxscale::repo':
     manage_repo => $manage_repo;
@@ -199,13 +204,6 @@ class galera_maxscale (
     tmpdir                       => $tmpdir,
     thread_cache_size            => $thread_cache_size,
     slow_query_time              => $slow_query_time,
-  }
-
-  $galera_first_key = inline_template('<% @galera_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
-  if has_key($galera_hosts[$galera_first_key], 'ipv6') {
-    $ipv6_true = true
-  } else {
-    $ipv6_true = undef
   }
 
   if $manage_firewall {

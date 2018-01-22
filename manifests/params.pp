@@ -8,7 +8,7 @@ class galera_maxscale::params {
   $backup_retention = 3
   $daily_hotbackup = undef
   $datadir = '/var/lib/mysql'
-  $galera_cluster_name = "${::environment}_${::hostgroup}"
+  $galera_cluster_name = "${::environment}_galera"
   $galera_pkgs = ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server']
   $innodb_buffer_pool_size = '0.7'
   $galera_version = 'latest'
