@@ -17,7 +17,7 @@ define galera_maxscale::root_password () {
       command => "${old_pw_check} && ${pw_change_cmd}",
       path    => '/usr/bin:/usr/sbin:/bin',
       unless  => $new_pw_check,
-      before  => File['/root/.my.mcf'];
+      before  => File['/root/.my.cnf'];
     }
   }
 
