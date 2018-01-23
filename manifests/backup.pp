@@ -26,7 +26,7 @@ class galera_maxscale::backup (
     # Crontab entry to run daily backups only on the second node
     if $::fqdn == (inline_template('<%= @nodes.sort[1] %>')) {
       notify { '2nd node of the cluster: setting up daily hot-backup': }
-      cron::tab { "${galera_cluster_name}-${::hostname}-backup-script":
+      cron { "${galera_cluster_name}-${::hostname}-backup-script":
         command => '/root/bin/hotbackup.sh',
         user    => 'root',
         hour    => fqdn_rand(7),
