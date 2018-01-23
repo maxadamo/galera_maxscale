@@ -192,6 +192,7 @@ class galera_maxscale (
   class {
     '::galera_maxscale::files':
       backup_compress              => $backup_compress,
+      backup_dir                   => $backup_dir,
       backup_retention             => $backup_retention,
       datadir                      => $datadir,
       galera_cluster_name          => $galera_cluster_name,
