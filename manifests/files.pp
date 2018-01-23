@@ -7,7 +7,6 @@ class galera_maxscale::files (
   $backup_compress              = $::galera_maxscale::params::backup_compress,
   $backup_dir                   = $::galera_maxscale::params::backup_dir,
   $backup_retention             = $::galera_maxscale::params::backup_retention,
-  $datadir                      = $::galera_maxscale::params::datadir,
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
   $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
   $innodb_flush_method          = $::galera_maxscale::params::innodb_flush_method,

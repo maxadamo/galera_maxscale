@@ -21,9 +21,6 @@
 # [*daily_hotbackup*] <Bool>
 #   WIP: not yet in use
 #
-# [*datadir*] <String>
-#   default: /var/lib/mysql (is there a reason to change it? Check LVM Support below)
-#
 # [*galera_cluster_name*] <String>
 #   default: ${::environment}_${::hostgroup} (if you don't have $::hostgroup I'll throw a fail)
 #
@@ -62,7 +59,7 @@
 #   default: true => Strongly recommended. It requires puppetlabs/firewall
 #
 # [*manage_lvm*] <Bool>
-#   default: false => creates and mount a volume on the datadir. I encourage its use.
+#   default: false => creates and mount a volume on /var/lib/mysql. I encourage its use.
 #
 # [*manage_repo*] <Bool>
 #   default: true => please check repo.pp to understand what repos are neeeded
@@ -123,7 +120,6 @@ class galera_maxscale (
   $backup_dir                   = $::galera_maxscale::params::backup_dir,
   $backup_retention             = $::galera_maxscale::params::backup_retention,
   $daily_hotbackup              = $::galera_maxscale::params::daily_hotbackup,
-  $datadir                      = $::galera_maxscale::params::datadir,
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
   $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
   $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
@@ -194,7 +190,6 @@ class galera_maxscale (
       backup_compress              => $backup_compress,
       backup_dir                   => $backup_dir,
       backup_retention             => $backup_retention,
-      datadir                      => $datadir,
       galera_cluster_name          => $galera_cluster_name,
       galera_hosts                 => $galera_hosts,
       innodb_buffer_pool_instances => $innodb_buffer_pool_instances,
