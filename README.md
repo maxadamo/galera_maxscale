@@ -24,6 +24,8 @@ Therefore:
 Initial State Snapshot Transfer is supported only through Percona XtraBackup (on average DBs I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer: see [Galera Documentation](http://galeracluster.com/documentation-webpages/sst.html)).
 The backup provided with this modules is indeed poor, but it can be considered as an example if you really want to use Percona XtraBackup.
 
+**When bootstrapping, you should avoid running puppet on all the nodes at same time.** 
+
 Read at (actual) **limitations** in the paragraph below.
 
 
@@ -122,7 +124,7 @@ galera_hosts:
 ... and so on ..
 ```
 
-you need an array of trusted networks/hosts (a list of ipv4/ipv6 networks/hosts allowed to connect to Galera socket):
+you need an array of trusted networks/hosts (a list of ipv4/ipv6 networks/hosts allowed to connect to MySQL socket):
 ```yaml
 trusted_networks:
   - 192.168.0.1/24
