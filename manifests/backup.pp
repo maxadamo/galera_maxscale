@@ -14,7 +14,7 @@ class galera_maxscale::backup (
 
   # Create directory tree for backup and mount it
   if ($daily_hotbackup) {
-    unless Defined(File[$backup_dir]) {
+    if !Defined(File[$backup_dir]) {
       file { $backup_dir:
         ensure => directory,
         before => File["${backup_dir}/${galera_cluster_name}"];
