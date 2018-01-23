@@ -14,14 +14,10 @@ class galera_maxscale::backup (
 
   # Create directory tree for backup and mount it
   if ($daily_hotbackup) {
-    if !Defined(File[$backup_dir]) {
-      file { $backup_dir:
-        ensure => directory,
-        before => File["${backup_dir}/${galera_cluster_name}"];
-      }
-    }
-    file { "${backup_dir}/${galera_cluster_name}":
-      ensure  => directory;
+    exec { 'make_backup_dir':
+      command => "mkdir -p ${backup_dir}/${galera_cluster_name}",
+      path    => '/usr/bin:/usr/sbin:/bin',
+      unless  => "test -d ${backup_dir}/${galera_cluster_name}"
     }
 
     # Crontab entry to run daily backups only on the second node
