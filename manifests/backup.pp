@@ -9,7 +9,7 @@
 class galera_maxscale::backup (
   $daily_hotbackup     = $::galera_maxscale::params::daily_hotbackup,
   $galera_cluster_name = $::galera_maxscale::params::galera_cluster_name,
-  $backup_dir          = $::galera_maxscale::params::galera_cluster_name,
+  $backup_dir          = $::galera_maxscale::params::backup_dir,
   ) {
 
   # Create directory tree for backup and mount it
