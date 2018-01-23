@@ -13,7 +13,7 @@ class galera_maxscale::join (
   $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
   ) inherits galera_maxscale::params {
 
-  $joined_file = '/root/.JOINED'
+  $joined_file = '/var/lib/mysql/gvwstate.dat'
 
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':

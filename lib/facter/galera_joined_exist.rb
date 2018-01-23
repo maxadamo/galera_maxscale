@@ -1,7 +1,6 @@
 Facter.add('galera_joined_exist') do
   setcode do
-    file_name = '/root/.JOINED'
-    if File.file?(file_name)
+    if File.file?('/var/lib/mysql/gvwstate.dat')
       true
     else
       false

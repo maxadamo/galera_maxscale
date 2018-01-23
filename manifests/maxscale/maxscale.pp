@@ -62,19 +62,18 @@ class galera_maxscale::maxscale::maxscale (
 
   # we need a fake exec in common with galera nodes to let
   # galera use the `before` statement in the same firewall
-  $joined_file = '/root/.JOINED'
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':
-      command => "touch ${joined_file}",
-      path    => '/usr/bin:/bin',
-      creates => $joined_file;
+      command     => 'echo',
+      path        => '/usr/bin:/bin',
+      refreshonly => true;
     }
   }
   unless defined(Exec['join_existing']) {
     exec { 'join_existing':
-      command => "touch ${joined_file}",
-      path    => '/usr/bin:/bin',
-      creates => $joined_file;
+      command     => 'echo',
+      path        => '/usr/bin:/bin',
+      refreshonly => true;
     }
   }
 

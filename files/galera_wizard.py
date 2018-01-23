@@ -62,7 +62,7 @@ for item in OTHER_NODES:
     OTHER_WSREP.append(item)
 
 
-def ask_confirmation(msg):
+def ask(msg):
     """ Ask user confirmation """
     while True:
         print msg
@@ -415,7 +415,7 @@ class Cluster(object):
             os.sys.exit(1)
         else:
             if self.mode == "new" and not self.force:
-                ask_confirmation('\nThis operation will destroy the local data')
+                ask('\nThis operation will destroy the local data')
                 print "\ninitializing mysql tables ...\n"
                 initialize_mysql(self.datadir)
             elif self.mode == "new" and self.force:
@@ -427,10 +427,6 @@ class Cluster(object):
                 ALL_NODES.append("localhost")
                 for creditem in CREDENTIALS:
                     create_users(creditem)
-                try:
-                    os.mknod("/root/.JOINED")
-                except OSError:
-                    pass
                 print ""
 
     def joincluster(self):
@@ -445,7 +441,7 @@ class Cluster(object):
                 checkwsrep(wsrephost)
         if LASTCHECK_NODES:
             if self.mode == "new" and not self.force:
-                ask_confirmation('\nThis operation will destroy the local data')
+                ask('\nThis operation will destroy the local data')
                 print "\ninitializing mysql tables ...\n"
                 initialize_mysql(self.datadir)
             elif self.mode == "new" and self.force:
@@ -454,10 +450,6 @@ class Cluster(object):
             else:
                 print ''
         try_joining(self.manner, self.datadir)
-        try:
-            os.mknod("/root/.JOINED")
-        except OSError:
-            pass
 
     def checkonly(self):
         """runs a cluster check"""
