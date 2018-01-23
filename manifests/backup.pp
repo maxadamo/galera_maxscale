@@ -7,6 +7,7 @@
 #
 #
 class galera_maxscale::backup (
+  $galera_hosts        = $::galera_maxscale::params::galera_hosts,
   $daily_hotbackup     = $::galera_maxscale::params::daily_hotbackup,
   $galera_cluster_name = $::galera_maxscale::params::galera_cluster_name,
   $backup_dir          = $::galera_maxscale::params::backup_dir,
@@ -19,6 +20,8 @@ class galera_maxscale::backup (
       path    => '/usr/bin:/usr/sbin:/bin',
       unless  => "test -d ${backup_dir}/${galera_cluster_name}"
     }
+
+    $nodes = key($galera_hosts)
 
     # Crontab entry to run daily backups only on the second node
     if $::fqdn == (inline_template('<%= @nodes.sort[1] %>')) {

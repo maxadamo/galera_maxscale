@@ -223,6 +223,7 @@ class galera_maxscale (
       maxscale_hosts    => $maxscale_hosts,
       maxscale_vip      => $maxscale_vip;
     '::galera_maxscale::backup':
+      galera_hosts        => $galera_hosts,
       daily_hotbackup     => $daily_hotbackup,
       galera_cluster_name => $galera_cluster_name,
       backup_dir          => $backup_dir;
