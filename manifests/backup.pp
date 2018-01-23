@@ -21,7 +21,7 @@ class galera_maxscale::backup (
       unless  => "test -d ${backup_dir}/${galera_cluster_name}"
     }
 
-    $nodes = key($galera_hosts)
+    $nodes = keys($galera_hosts)
 
     # Crontab entry to run daily backups only on the second node
     if $::fqdn == (inline_template('<%= @nodes.sort[1] %>')) {
