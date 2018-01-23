@@ -5,6 +5,7 @@
 #
 class galera_maxscale::files (
   $backup_compress              = $::galera_maxscale::params::backup_compress,
+  $backup_dir                   = $::galera_maxscale::params::backup_dir,
   $backup_retention             = $::galera_maxscale::params::backup_retention,
   $datadir                      = $::galera_maxscale::params::datadir,
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
@@ -52,7 +53,7 @@ class galera_maxscale::files (
       notify  => Service['xinetd'];
     '/root/.my.cnf':
       mode    => '0660',
-      content => template("${module_name}/my.cnf.erb"),
+      content => template("${module_name}/root_my.cnf.erb"),
       notify  => Service['xinetd'];
     '/etc/sysconfig/clustercheck':
       notify  => Service['xinetd'],
@@ -65,9 +66,9 @@ class galera_maxscale::files (
       source => "puppet:///modules/${module_name}/galerachk",
       notify => Service['xinetd'];
     '/etc/my.cnf.d/client.cnf':
-      content => template("${module_name}/client.cnf.erb");
+      source => "puppet:///modules/${module_name}/client.cnf";
     '/etc/my.cnf.d/mysql-clients.cnf':
-      content => template("${module_name}/mysql-clients.cnf.erb");
+      source => "puppet:///modules/${module_name}/mysql-clients.cnf";
     '/etc/my.cnf.d/server.cnf':
       mode    => '0640',
       content => template("${module_name}/server.cnf.erb");

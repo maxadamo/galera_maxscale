@@ -4,7 +4,7 @@
 #
 
 [mysql]
-prompt="\u@<%= @hostname %> [DB: \d]> "
+prompt="\u@\h [DB: \d]> "
 
 [mysql_upgrade]
 

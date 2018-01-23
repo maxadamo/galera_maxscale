@@ -9,10 +9,14 @@
 # === Parameters & Variables
 #
 # [*backup_compress*] <Bool>
-#   WIP: not yet in use
+#   default: false (whether to compress or not backup)
 #
-# [*backup_retention*] <String>
-#   WIP: not yet in use
+# [*backup_retention*] <Int>
+#   default: 3 (number of day to save the backups)
+#
+# [*backup_dir*] <String>
+#   default: '/mnt/galera' (the directory where we store the backups. You are responsible for
+#            creating sufficient space, a volume, mount a network share on the mount point)
 #
 # [*daily_hotbackup*] <Bool>
 #   WIP: not yet in use
@@ -116,6 +120,7 @@ class galera_maxscale (
 
   $all_pkgs                     = $::galera_maxscale::params::all_pkgs,
   $backup_compress              = $::galera_maxscale::params::backup_compress,
+  $backup_dir                   = $::galera_maxscale::params::backup_dir,
   $backup_retention             = $::galera_maxscale::params::backup_retention,
   $daily_hotbackup              = $::galera_maxscale::params::daily_hotbackup,
   $datadir                      = $::galera_maxscale::params::datadir,
@@ -182,40 +187,49 @@ class galera_maxscale (
     $ipv6_true = undef
   }
 
-  class { 'galera_maxscale::repo':
-    manage_repo => $manage_repo;
-  }
-  class { 'galera_maxscale::install':
-    galera_pkgs => $galera_pkgs,
-    other_pkgs  => $other_pkgs;
-  }
-
   galera_maxscale::root_password { $root_password:; }
 
-  class { 'galera_maxscale::lvm': lv_size => $lv_size; }
-
-  class { 'galera_maxscale::services':; }
-
-  class { 'galera_maxscale::files':
-    backup_compress              => $backup_compress,
-    backup_retention             => $backup_retention,
-    datadir                      => $datadir,
-    galera_cluster_name          => $galera_cluster_name,
-    galera_hosts                 => $galera_hosts,
-    innodb_buffer_pool_instances => $innodb_buffer_pool_instances,
-    innodb_flush_method          => $innodb_flush_method,
-    innodb_io_capacity           => $innodb_io_capacity,
-    innodb_log_file_size         => $innodb_log_file_size,
-    logdir                       => $logdir,
-    max_connections              => $max_connections,
-    monitor_password             => $monitor_password,
-    monitor_username             => $monitor_username,
-    query_cache                  => $query_cache,
-    root_password                => $root_password,
-    sst_password                 => $sst_password,
-    tmpdir                       => $tmpdir,
-    thread_cache_size            => $thread_cache_size,
-    slow_query_time              => $slow_query_time,
+  class {
+    '::galera_maxscale::files':
+      backup_compress              => $backup_compress,
+      backup_retention             => $backup_retention,
+      datadir                      => $datadir,
+      galera_cluster_name          => $galera_cluster_name,
+      galera_hosts                 => $galera_hosts,
+      innodb_buffer_pool_instances => $innodb_buffer_pool_instances,
+      innodb_flush_method          => $innodb_flush_method,
+      innodb_io_capacity           => $innodb_io_capacity,
+      innodb_log_file_size         => $innodb_log_file_size,
+      logdir                       => $logdir,
+      max_connections              => $max_connections,
+      monitor_password             => $monitor_password,
+      monitor_username             => $monitor_username,
+      query_cache                  => $query_cache,
+      root_password                => $root_password,
+      sst_password                 => $sst_password,
+      tmpdir                       => $tmpdir,
+      thread_cache_size            => $thread_cache_size,
+      slow_query_time              => $slow_query_time;
+    '::galera_maxscale::install':
+      galera_pkgs => $galera_pkgs,
+      other_pkgs  => $other_pkgs;
+    '::galera_maxscale::join':
+      monitor_password  => $monitor_password,
+      root_password     => $root_password,
+      sst_password      => $sst_password,
+      maxscale_password => $maxscale_password,
+      galera_hosts      => $galera_hosts,
+      maxscale_hosts    => $maxscale_hosts,
+      maxscale_vip      => $maxscale_vip;
+    '::galera_maxscale::backup':
+      daily_hotbackup     => $daily_hotbackup,
+      galera_cluster_name => $galera_cluster_name,
+      backup_dir          => $backup_dir;
+    '::galera_maxscale::repo':
+      manage_repo => $manage_repo;
+    '::galera_maxscale::lvm':
+      lv_size => $lv_size;
+    '::galera_maxscale::services':;
   }
 
   if $manage_firewall {
@@ -225,17 +239,5 @@ class galera_maxscale (
       trusted_networks => $trusted_networks;
     }
   }
-
-  class { '::galera_maxscale::join':
-    monitor_password  => $monitor_password,
-    root_password     => $root_password,
-    sst_password      => $sst_password,
-    maxscale_password => $maxscale_password,
-    galera_hosts      => $galera_hosts,
-    maxscale_hosts    => $maxscale_hosts,
-    maxscale_vip      => $maxscale_vip;
-  }
-
-  include ::galera_maxscale::extras::backup
 
 }

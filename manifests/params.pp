@@ -6,6 +6,7 @@ class galera_maxscale::params {
 
   $backup_compress = false
   $backup_retention = 3
+  $backup_dir = '/mnt/galera'
   $daily_hotbackup = undef
   $datadir = '/var/lib/mysql'
   $galera_cluster_name = "${::environment}_galera"
