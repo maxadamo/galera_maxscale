@@ -42,7 +42,7 @@ class galera_maxscale::lvm (
     exec { 'fix_datadir_permissions':
       command => 'chown mysql:mysql /var/lib/mysql',
       path    => '/usr/bin:/usr/sbin:/bin',
-      unless  => 'stat -c "%U%G" /etc/grafana/|grep "mysqlmysql"';
+      unless  => 'stat -c "%U%G" /var/lib/mysql/|grep "mysqlmysql"';
     }
   }
 
