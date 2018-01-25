@@ -9,7 +9,10 @@ class galera_maxscale::params {
   $backup_dir = '/mnt/galera'
   $daily_hotbackup = undef
   $galera_cluster_name = "${::environment}_galera"
-  $galera_pkgs = ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server']
+  $galera_pkgs = $::osfamily ? {
+    'RedHat' => ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server']
+    'Debian' => ['mariadb-client', 'mariadb-common', 'mariadb-server'],
+  }
   $innodb_buffer_pool_size = '0.7'
   $galera_version = 'latest'
   $http_proxy = undef # example: 'http://proxy.example.net:8080'
@@ -34,7 +37,7 @@ class galera_maxscale::params {
     ],
     'Debian' => [
       'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-      'python-mysqldb', 'xinetd', 'qpress', 'nc', 'socat'
+      'python-mysqldb', 'xinetd', 'qpress', 'netcat-openbsd', 'socat'
     ],
   }
   $root_password = undef
