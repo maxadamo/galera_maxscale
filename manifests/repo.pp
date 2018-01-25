@@ -42,18 +42,19 @@ class galera_maxscale::repo (
       }
       'Ubuntu': {
         apt::key {
-          default:
-            server  => 'hkp://keyserver.ubuntu.com:80',
-            options => $options;
           'mariadb_10_2':
-            id     => '177F4010FE56CA3336300305F1656F24C74CD1D8',
-            before => [
+            id      => '177F4010FE56CA3336300305F1656F24C74CD1D8',
+            server  => 'hkp://keyserver.ubuntu.com:80',
+            options => $options,
+            before  => [
               Apt::Source['percona_release'],
               Class['::galera_maxscale::install']
             ];
           'percona_release':
-            id     => '430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A',
-            before => [
+            id      => '430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A',
+            source  => 'https://www.percona.com/downloads/RPM-GPG-KEY-percona',
+            options => $options,
+            before  => [
               Apt::Source['percona_release'],
               Class['::galera_maxscale::install']
             ];
