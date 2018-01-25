@@ -27,10 +27,16 @@ class galera_maxscale::params {
   $monitor_password = undef
   $monitor_username = 'monitor'
   $galera_hosts = undef
-  $other_pkgs = [
-    'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-    'MySQL-python', 'xinetd', 'qpress', 'nc', 'socat'
-  ]
+  $other_pkgs = $::osfamily ? {
+    'RedHat' => [
+      'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
+      'MySQL-python', 'xinetd', 'qpress', 'nc', 'socat'
+    ],
+    'Debian' => [
+      'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
+      'python-mysqldb', 'xinetd', 'qpress', 'nc', 'socat'
+    ],
+  }
   $root_password = undef
   $sst_password = undef
   $thread_cache_size = 16
