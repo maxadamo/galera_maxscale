@@ -10,7 +10,7 @@ class galera_maxscale::params {
   $daily_hotbackup = undef
   $galera_cluster_name = "${::environment}_galera"
   $galera_pkgs = $::osfamily ? {
-    'RedHat' => ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server']
+    'RedHat' => ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server'],
     'Debian' => ['mariadb-client', 'mariadb-common', 'mariadb-server'],
   }
   $innodb_buffer_pool_size = '0.7'
