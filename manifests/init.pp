@@ -229,6 +229,7 @@ class galera_maxscale (
       galera_cluster_name => $galera_cluster_name,
       backup_dir          => $backup_dir;
     '::galera_maxscale::repo':
+      http_proxy  => $http_proxy,
       manage_repo => $manage_repo;
     '::galera_maxscale::lvm':
       lv_size => $lv_size;
