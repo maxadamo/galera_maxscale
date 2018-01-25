@@ -51,10 +51,16 @@ class galera_maxscale::repo (
             options => $options;
           'mariadb_10_2':
             id     => '177F4010FE56CA3336300305F1656F24C74CD1D8',
-            before => Apt::Source['mariadb_10_2'];
+            before => [
+              Apt::Source['percona_release'],
+              Class['::galera_maxscale::install']
+            ];
           'percona_release':
             id     => '430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A',
-            before => Apt::Source['percona_release'];
+            before => [
+              Apt::Source['percona_release'],
+              Class['::galera_maxscale::install']
+            ];
         }
         apt::source {
           default:
