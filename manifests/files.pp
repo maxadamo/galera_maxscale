@@ -71,10 +71,10 @@ class galera_maxscale::files (
       notify => Service['xinetd'];
     '/etc/my.cnf.d/client.cnf':
       source => "puppet:///modules/${module_name}/client.cnf",
-      notify  => Package[$galera_pkgs];
+      notify => Package[$galera_pkgs];
     '/etc/my.cnf.d/mysql-clients.cnf':
       source => "puppet:///modules/${module_name}/mysql-clients.cnf",
-      notify  => Package[$galera_pkgs];
+      notify => Package[$galera_pkgs];
     '/etc/my.cnf.d/server.cnf':
       mode    => '0640',
       content => template("${module_name}/server.cnf.erb"),
