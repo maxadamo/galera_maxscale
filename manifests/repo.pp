@@ -41,10 +41,6 @@ class galera_maxscale::repo (
         }
       }
       'Ubuntu': {
-        exec { 'wake_me_up_before_run':
-          command     => '/usr/bin/apt-get update',
-          refreshonly => true,
-        }
         apt::key {
           default:
             server  => 'keyserver.ubuntu.com',
@@ -69,7 +65,7 @@ class galera_maxscale::repo (
               'src' => true,
               'deb' => true,
             },
-            notify  => Exec['wake_me_up_before_run'];
+            notify  => Exec['apt_update'];
           'percona_release':
             location => 'http://repo.percona.com/apt',
             release  => $::lsbdistcodename;
