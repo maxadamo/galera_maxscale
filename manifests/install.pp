@@ -31,7 +31,7 @@ class galera_maxscale::install (
           ensure  => $galera_maxscale::galera_version;
       }
     }
-    'default': {
+    default: {
       fail("${::operatingsystem} not yet supported")
     }
   }
