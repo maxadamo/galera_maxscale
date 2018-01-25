@@ -36,5 +36,4 @@ class galera_maxscale::install (
     }
   }
 
-
 }
