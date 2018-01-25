@@ -27,7 +27,7 @@ class galera_maxscale::install (
           ensure => latest;
         $galera_pkgs:
           ensure  => $galera_maxscale::version;
-        'galera':
+        'galera-3':
           ensure  => $galera_maxscale::galera_version;
       }
     }
