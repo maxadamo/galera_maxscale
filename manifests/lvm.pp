@@ -36,7 +36,7 @@ class galera_maxscale::lvm (
         File['/var/lib/mysql'],
         Filesystem["/dev/mapper/${vg_name}-lv_galera"]
       ],
-      notify  => Exec['fix_permissions'];
+      notify  => Exec['fix_datadir_permissions'];
     }
 
     exec { 'fix_datadir_permissions':
