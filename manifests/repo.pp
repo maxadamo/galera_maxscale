@@ -42,12 +42,6 @@ class galera_maxscale::repo (
           command     => '/usr/bin/apt-get update',
           refreshonly => true,
         }
-        package { 'percona-release':
-          ensure   => installed,
-          provider => 'dpkg',
-          source   => "https://repo.percona.com/apt/percona-release_0.1-4.${::codename}_all.deb",
-          notify   => Exec['wake_me_up_before_run'];
-        }
         apt::key {
           default:
             server  => 'keyserver.ubuntu.com',
