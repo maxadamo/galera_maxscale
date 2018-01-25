@@ -15,6 +15,11 @@ class galera_maxscale::join (
 
   $joined_file = '/var/lib/mysql/gvwstate.dat'
 
+  $galera_package = $::osfamily ? {
+    'RedHat' => 'galera',
+    'Debian' => 'galera-3',
+  }
+
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':
       command => 'galera_wizard.py -bn -f || galera_wizard.py -jn -f',
@@ -23,7 +28,7 @@ class galera_maxscale::join (
       returns => [0,1],
       require => [
         File['/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf'],
-        Package['galera']
+        Package[$galera_package]
       ];
     }
   }
@@ -40,7 +45,7 @@ class galera_maxscale::join (
             '/root/.my.cnf', '/etc/my.cnf.d/server.cnf',
             '/etc/my.cnf.d/client.cnf'
           ],
-          Package['galera']
+          Package[$galera_package]
         ];
       }
     }
