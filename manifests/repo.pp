@@ -1,10 +1,13 @@
 # == Class: galera_maxscale::repo inherits galera
 #
 class galera_maxscale::repo (
+  $http_proxy  = $::galera_maxscale::params::http_proxy,
   $manage_repo = $::galera_maxscale::params::manage_repo
   ) inherits galera_maxscale::params {
 
   if ($manage_repo) {
+
+    if ($http_proxy) { $options = "http-proxy=${http_proxy}" } else { $options = undef }
 
     case $::operatingsystem {
       'RedHat', 'CentOS': {
@@ -45,7 +48,7 @@ class galera_maxscale::repo (
         apt::key {
           default:
             server  => 'keyserver.ubuntu.com',
-            options => 'http-proxy="http://proxy.geant.net:8080"';
+            options => $options;
           'mariadb_10_2':
             id     => '177F4010FE56CA3336300305F1656F24C74CD1D8',
             before => Apt::Source['mariadb_10_2'];

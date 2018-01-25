@@ -123,6 +123,7 @@ class galera_maxscale (
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
   $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
   $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
+  $http_proxy                   = $::galera_maxscale::params::http_proxy,
   $innodb_buffer_pool_size      = $::galera_maxscale::params::innodb_buffer_pool_size,
   $galera_version               = $::galera_maxscale::params::galera_version,
   $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,

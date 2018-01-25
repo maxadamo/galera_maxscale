@@ -30,6 +30,7 @@ class galera_maxscale::params {
     'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
     'MySQL-python', 'xinetd', 'qpress', 'nc', 'socat'
   ]
+  $http_proxy = undef # example: 
   $root_password = undef
   $sst_password = undef
   $thread_cache_size = 16
