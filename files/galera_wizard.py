@@ -109,11 +109,11 @@ def check_install():
     if pkg_manager == "apt":
         import apt
         cache = apt.Cache()
-        if 'mariadb-galera-server' in cache.keys():
-            if cache['mariadb-galera-server'].is_installed:
+        if 'galera-3' in cache.keys():
+            if cache['galera-3'].is_installed:
                 return "mariadb"
         else:
-            print "mariadb is not installed on {}".format(socket.getfqdn())
+            print "galera-3 is not installed on {}".format(socket.getfqdn())
             sys.exit(1)
     elif pkg_manager == "yum":
         import yum
