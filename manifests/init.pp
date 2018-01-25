@@ -37,6 +37,10 @@
 # [*galera_version*] <String>
 #   default: latest
 #
+# [*http_proxy*] <String>
+#   default: undef  http proxy used for instance by gpg key
+#   Example: 'http://proxy.example.net:8080'
+#
 # [*innodb_buffer_pool_instances*] <String-number>
 #   default: 1
 #

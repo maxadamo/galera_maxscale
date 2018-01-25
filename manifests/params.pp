@@ -12,6 +12,7 @@ class galera_maxscale::params {
   $galera_pkgs = ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server']
   $innodb_buffer_pool_size = '0.7'
   $galera_version = 'latest'
+  $http_proxy = undef # example: 'http://proxy.example.net:8080'
   $innodb_buffer_pool_instances = 1
   $innodb_flush_method = 'O_DIRECT'
   $innodb_io_capacity = 200
@@ -30,7 +31,6 @@ class galera_maxscale::params {
     'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
     'MySQL-python', 'xinetd', 'qpress', 'nc', 'socat'
   ]
-  $http_proxy = undef # example: 
   $root_password = undef
   $sst_password = undef
   $thread_cache_size = 16
