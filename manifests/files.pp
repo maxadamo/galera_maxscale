@@ -8,6 +8,7 @@ class galera_maxscale::files (
   $backup_dir                   = $::galera_maxscale::params::backup_dir,
   $backup_retention             = $::galera_maxscale::params::backup_retention,
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
+  $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
   $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
   $innodb_flush_method          = $::galera_maxscale::params::innodb_flush_method,
   $innodb_io_capacity           = $::galera_maxscale::params::innodb_io_capacity,
@@ -16,7 +17,6 @@ class galera_maxscale::files (
   $max_connections              = $::galera_maxscale::params::max_connections,
   $monitor_password             = $::galera_maxscale::params::monitor_password,
   $monitor_username             = $::galera_maxscale::params::monitor_username,
-  $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
   $query_cache                  = $::galera_maxscale::params::query_cache,
   $root_password                = $::galera_maxscale::params::root_password,
   $sst_password                 = $::galera_maxscale::params::sst_password,
@@ -58,7 +58,7 @@ class galera_maxscale::files (
     '/root/.my.cnf':
       mode    => '0660',
       content => template("${module_name}/root_my.cnf.erb"),
-      notify  => Service['xinetd'];
+      notify  => [Service['xinetd'], Package[$galera_pkgs]];
     $config_default:
       notify  => Service['xinetd'],
       content => template("${module_name}/clustercheck_config.erb");
@@ -70,12 +70,15 @@ class galera_maxscale::files (
       source => "puppet:///modules/${module_name}/galerachk",
       notify => Service['xinetd'];
     '/etc/my.cnf.d/client.cnf':
-      source => "puppet:///modules/${module_name}/client.cnf";
+      source => "puppet:///modules/${module_name}/client.cnf",
+      notify  => Package[$galera_pkgs];
     '/etc/my.cnf.d/mysql-clients.cnf':
-      source => "puppet:///modules/${module_name}/mysql-clients.cnf";
+      source => "puppet:///modules/${module_name}/mysql-clients.cnf",
+      notify  => Package[$galera_pkgs];
     '/etc/my.cnf.d/server.cnf':
       mode    => '0640',
-      content => template("${module_name}/server.cnf.erb");
+      content => template("${module_name}/server.cnf.erb"),
+      notify  => Package[$galera_pkgs];
   }
 
 }

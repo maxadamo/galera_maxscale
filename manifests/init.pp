@@ -197,6 +197,7 @@ class galera_maxscale (
       backup_retention             => $backup_retention,
       galera_cluster_name          => $galera_cluster_name,
       galera_hosts                 => $galera_hosts,
+      galera_pkgs                  => $galera_pkgs,
       innodb_buffer_pool_instances => $innodb_buffer_pool_instances,
       innodb_flush_method          => $innodb_flush_method,
       innodb_io_capacity           => $innodb_io_capacity,
