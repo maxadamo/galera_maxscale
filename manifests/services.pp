@@ -13,4 +13,22 @@ class galera_maxscale::services {
     require    => Package['xinetd'];
   }
 
+  case $::osfamily {
+    'RedHat': {
+      if $::lsbmajdistrelease == '7' {
+        service { 'mariadb':
+          ensure   => stopped,
+          provider => 'systemd',
+          enable   => false;
+        }
+      }
+    }
+    'Debian': {
+      # code
+    }
+    default: {
+      # code
+    }
+  }
+
 }
