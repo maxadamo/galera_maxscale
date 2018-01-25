@@ -59,7 +59,8 @@ class galera_maxscale::files (
     '/root/.my.cnf':
       mode    => '0660',
       content => template("${module_name}/root_my.cnf.erb"),
-      notify  => [Service['xinetd'], Package[$galera_pkgs]];
+      notify  => Service['xinetd'],
+      require => Package[$galera_pkgs];
     $config_default:
       notify  => Service['xinetd'],
       content => template("${module_name}/clustercheck_config.erb");
@@ -71,15 +72,15 @@ class galera_maxscale::files (
       source => "puppet:///modules/${module_name}/galerachk",
       notify => Service['xinetd'];
     '/etc/my.cnf.d/client.cnf':
-      source => "puppet:///modules/${module_name}/client.cnf",
-      notify => Package[$galera_pkgs];
+      source  => "puppet:///modules/${module_name}/client.cnf",
+      require => Package[$galera_pkgs];
     '/etc/my.cnf.d/mysql-clients.cnf':
-      source => "puppet:///modules/${module_name}/mysql-clients.cnf",
-      notify => Package[$galera_pkgs];
+      source  => "puppet:///modules/${module_name}/mysql-clients.cnf",
+      require => Package[$galera_pkgs];
     '/etc/my.cnf.d/server.cnf':
       mode    => '0640',
       content => template("${module_name}/server.cnf.erb"),
-      notify  => Package[$galera_pkgs];
+      require => Package[$galera_pkgs];
   }
 
 }
