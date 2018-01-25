@@ -4,7 +4,7 @@ class galera_maxscale::maxscale::repo ($manage_repo) {
 
   if ($manage_repo) {
 
-    case $::osfamily {
+    case $::operatingsystem {
       'RedHat', 'CentOS': {
         rpmkey { '28C12247':
           ensure => present,
