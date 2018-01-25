@@ -32,6 +32,11 @@ class galera_maxscale::files (
     }
   }
 
+  $config_default = $::osfamily ? {
+    'RedHat' => '/etc/sysconfig/clustercheck',
+    'Debian' => '/etc/default/clustercheck',
+  }
+
   file {
     default:
       ensure  => file,
@@ -54,13 +59,13 @@ class galera_maxscale::files (
       mode    => '0660',
       content => template("${module_name}/root_my.cnf.erb"),
       notify  => Service['xinetd'];
-    '/etc/sysconfig/clustercheck':
+    $config_default:
       notify  => Service['xinetd'],
-      content => template("${module_name}/clustercheck.erb");
+      content => template("${module_name}/clustercheck_config.erb");
     '/usr/bin/clustercheck':
-      mode   => '0755',
-      source => "puppet:///modules/${module_name}/clustercheck",
-      notify => Service['xinetd'];
+      mode    => '0755',
+      content => template("${module_name}/clustercheck_script.erb"),
+      notify  => Service['xinetd'];
     '/etc/xinetd.d/galerachk':
       source => "puppet:///modules/${module_name}/galerachk",
       notify => Service['xinetd'];
