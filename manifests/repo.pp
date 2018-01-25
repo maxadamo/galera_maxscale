@@ -44,27 +44,39 @@ class galera_maxscale::repo (
         }
         package { 'percona-release':
           ensure   => installed,
-          provider => 'deb',
+          provider => 'dpkg',
           source   => "https://repo.percona.com/apt/percona-release_0.1-4.${::codename}_all.deb",
           notify   => Exec['wake_me_up_before_run'];
         }
-        apt::key { 'mariadb_10_2':
-          id      => '177F4010FE56CA3336300305F1656F24C74CD1D8',
-          server  => 'keyserver.ubuntu.com',
-          options => 'http-proxy="http://proxy.geant.net:8080"',
-          before  => Apt::Source['mariadb_10_2'];
+        apt::key {
+          default:
+            server  => 'keyserver.ubuntu.com',
+            options => 'http-proxy="http://proxy.geant.net:8080"';
+          'mariadb_10_2':
+            id     => '177F4010FE56CA3336300305F1656F24C74CD1D8',
+            before => Apt::Source['mariadb_10_2'];
+          'percona_release':
+            id     => '430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A',
+            before => Apt::Source['percona_release'];
         }
-        apt::source { 'mariadb_10_2':
-          location     => 'http://mirrors.supportex.net/mariadb/repo/10.2/ubuntu',
-          architecture => 'amd64,i386',
-          release      => $::lsbdistcodename,
-          repos        => 'main',
-          include      => {
-            'src' => true,
-            'deb' => true,
-          },
-          notify       => Exec['wake_me_up_before_run'];
+        apt::source {
+          default:
+            repos   => 'main',
+            include => {
+              'src' => true,
+              'deb' => true,
+            },
+            notify  => Exec['wake_me_up_before_run'];
+          'percona_release':
+            location => 'http://repo.percona.com/apt',
+            release  => $::lsbdistcodename;
+          'mariadb_10_2':
+            location     => 'http://mirrors.supportex.net/mariadb/repo/10.2/ubuntu',
+            architecture => 'amd64,i386',
+            release      => $::lsbdistcodename;
         }
+        #deb http://repo.percona.com/apt xenial main
+        #deb-src http://repo.percona.com/apt xenial main
         # MariaDB 10.2 repository list - created 2018-01-25 16:44 UTC
         # http://downloads.mariadb.org/mariadb/repositories/
         # deb [arch=amd64,i386] http://mirrors.supportex.net/mariadb/repo/10.2/ubuntu xenial main
