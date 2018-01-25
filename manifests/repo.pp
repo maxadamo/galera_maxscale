@@ -84,7 +84,7 @@ class galera_maxscale::repo (
       }
 
       default: {
-        fail("${::osfamily} not yet supported")
+        fail("${::operatingsystem} not yet supported")
       }
     }
   }
