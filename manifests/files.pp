@@ -95,13 +95,18 @@ class galera_maxscale::files (
       }
     }
     'Debian': {
-      file { '/etc/mysql/my.cnf':
-        ensure  => file,
-        mode    => '0644',
-        owner   => 'root',
-        group   => 'root',
-        require => Package[$galera_pkgs],
-        content => template("${module_name}/server.cnf.erb");
+      file {
+        default:
+          ensure  => file,
+          mode    => '0644',
+          owner   => 'root',
+          group   => 'root',
+          require => Package[$galera_pkgs];
+        '/etc/mysql/my.cnf':
+          content => template("${module_name}/server.cnf.erb");
+        '/etc/init.d/mysql':
+          mode   => '0755',
+          source => "puppet:///modules/${module_name}/mysql";
       }
     }
     default: {

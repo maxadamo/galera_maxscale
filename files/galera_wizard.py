@@ -185,8 +185,13 @@ def bootstrap_mysql(boot):
     else:
         check_leader()
 
+    if platform.dist()[0] in ['fedora', 'redhat', 'centos']:
+        init_script = "/etc/rc.d/init.d/mysql"
+    elif platform.dist()[0] in ['debian', 'Ubuntu', 'LinuxMint']:
+        init_script = "/etc/init.d/mysql"
+
     try:
-        subprocess.call(["/etc/rc.d/init.d/mysql", "bootstrap"])
+        subprocess.call([init_script, "bootstrap"])
     except Exception as err:
         print "Error bootstrapping the cluster: {}".format(err)
         sys.exit(1)
