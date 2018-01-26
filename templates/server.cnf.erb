@@ -160,3 +160,11 @@ pid-file=mysqld.pid
 log-error=error.log
 basedir=/usr/
 datadir=/var/lib/mysql
+
+<% if @osfamily == 'Debian' -%>
+[client-server]
+#
+# include all files from the config directory
+#
+!includedir /etc/mysql/mariadb.conf.d
+<% end %>

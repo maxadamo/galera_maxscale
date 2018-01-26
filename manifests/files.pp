@@ -33,9 +33,9 @@ class galera_maxscale::files (
     }
   }
 
-  $config_default = $::osfamily ? {
-    'RedHat' => '/etc/sysconfig/clustercheck',
-    'Debian' => '/etc/default/clustercheck',
+  $config_dir = $::osfamily ? {
+    'RedHat' => '/etc/sysconfig',
+    'Debian' => '/etc/default',
   }
 
   file {
@@ -61,7 +61,7 @@ class galera_maxscale::files (
       content => template("${module_name}/root_my.cnf.erb"),
       notify  => Service['xinetd'],
       require => Package[$galera_pkgs];
-    $config_default:
+    "${config_dir}/clustercheck":
       notify  => Service['xinetd'],
       content => template("${module_name}/clustercheck_config.erb");
     '/usr/bin/clustercheck':
@@ -86,7 +86,7 @@ class galera_maxscale::files (
           source  => "puppet:///modules/${module_name}/client.cnf",
           require => Package[$galera_pkgs];
         '/etc/my.cnf.d/mysql-clients.cnf':
-          source  => "puppet:///modules/${module_name}/mysql-clients.cnf",
+          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}",
           require => Package[$galera_pkgs];
         '/etc/my.cnf.d/server.cnf':
           mode    => '0640',
@@ -107,6 +107,8 @@ class galera_maxscale::files (
         '/etc/init.d/mysql':
           mode   => '0755',
           source => "puppet:///modules/${module_name}/mysql";
+        '/etc/mysql/mariadb.conf.d/mysql-clients.cnf':
+          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
       }
     }
     default: {

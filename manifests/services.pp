@@ -24,10 +24,14 @@ class galera_maxscale::services {
       }
     }
     'Debian': {
-      # code
+      service { 'mariadb':
+        ensure   => stopped,
+        provider => 'systemd',
+        enable   => false;
+      }
     }
     default: {
-      # code
+      fail("${::operatingsystem} not yet supported")
     }
   }
 
