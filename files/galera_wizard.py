@@ -321,19 +321,27 @@ def create_monitor_table():
     cnx_local_test = MySQLdb.connect(user='root',
                                      passwd=CREDENTIALS["root"],
                                      host='localhost',
-                                     unix_socket='/var/lib/mysql/mysql.sock',
-                                     db='test')
+                                     unix_socket='/var/lib/mysql/mysql.sock')
     cursor = cnx_local_test.cursor()
+    print "\nCreating DB test is not exist\n"
+    try:
+        cursor.execute("""
+                    CREATE DATABASE IF NOT EXISTS `test`
+                    """)
+    except Exception as e:
+        print "Could not create database test: {}".format(err)
+        sys.exit(1)
     print "\nCreating table for Monitor\n"
     try:
         cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS `monitor` (
+                    USE test;
+                    CREATE TABLE IF NOT EXISTS `test.monitor` (
                         `id` varchar(255) DEFAULT NULL
                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
                     """)
         cnx_local_test.commit()
     except Exception as err:
-        print "Unable to create test table: {}".format(err)
+        print "Could not create test table: {}".format(err)
         sys.exit(1)
     try:
         cursor.execute("""
