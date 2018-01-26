@@ -52,7 +52,7 @@ class galera_maxscale::repo (
               Class['::galera_maxscale::install']
             ];
           'percona_release':
-            id     => '8507EFA5',
+            id     => '4D1BB29D63D98E422B2113B19334A25F8507EFA5',
             before => [
               Apt::Source['percona_release'],
               Class['::galera_maxscale::install']
