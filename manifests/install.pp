@@ -23,6 +23,8 @@ class galera_maxscale::install (
     }
     'Ubuntu': {
       package {
+        default:
+          require => Exec['apt_update'];
         $other_pkgs:
           ensure => latest;
         $galera_pkgs:
