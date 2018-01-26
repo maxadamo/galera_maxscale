@@ -28,7 +28,8 @@ class galera_maxscale::join (
     ],
     'Debian' => [
       '/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf',
-      '/etc/mysql/my.cnf', '/etc/mysql/mariadb.conf.d/mysql-clients.cnf'
+      '/etc/mysql/my.cnf', '/etc/mysql/mariadb.conf.d/mysql-clients.cnf',
+      '/etc/rc.d/mysql'
     ],
   }
 

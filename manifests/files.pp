@@ -104,7 +104,7 @@ class galera_maxscale::files (
           require => Package[$galera_pkgs];
         '/etc/mysql/my.cnf':
           content => template("${module_name}/server.cnf.erb");
-        '/etc/init.d/mysql':
+        '/etc/rc.d/mysql':
           mode   => '0755',
           source => "puppet:///modules/${module_name}/mysql";
         '/etc/mysql/mariadb.conf.d/mysql-clients.cnf':

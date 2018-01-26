@@ -188,7 +188,7 @@ def bootstrap_mysql(boot):
     if platform.dist()[0] in ['fedora', 'redhat', 'centos']:
         init_script = "/etc/rc.d/init.d/mysql"
     elif platform.dist()[0] in ['debian', 'Ubuntu', 'LinuxMint']:
-        init_script = "/etc/init.d/mysql"
+        init_script = "/etc/rc.d/mysql"
 
     try:
         subprocess.call([init_script, "bootstrap"])
@@ -200,6 +200,7 @@ def bootstrap_mysql(boot):
             subprocess.call([
                 "/usr/bin/mysqladmin",
                 "--no-defaults",
+                "--socket=/var/lib/mysql/mysql.sock",
                 "-u", "root", "password",
                 CREDENTIALS["root"]])
         except Exception as err:
@@ -225,6 +226,7 @@ def checkhost(sqlhost):
             cnx_sqlhost = MySQLdb.connect(
                 user='sstuser',
                 passwd=CREDENTIALS["sstuser"],
+                unix_socket='/var/lib/mysql/mysql.sock',
                 host=sqlhost)
         except MySQLdb.Error:
             print "{}Skipping {}: socket is down{}".format(YELLOW, sqlhost, WHITE)
@@ -251,6 +253,7 @@ def checkwsrep(sqlhost):
         try:
             cnx_sqlhost = MySQLdb.connect(user='sstuser',
                                           passwd=CREDENTIALS["sstuser"],
+                                          unix_socket='/var/lib/mysql/mysql.sock',
                                           host=sqlhost)
             cursor = cnx_sqlhost.cursor()
             wsrep_status = cursor.execute("""
@@ -318,6 +321,7 @@ def create_monitor_table():
     cnx_local_test = MySQLdb.connect(user='root',
                                      passwd=CREDENTIALS["root"],
                                      host='localhost',
+                                     unix_socket='/var/lib/mysql/mysql.sock',
                                      db='test')
     cursor = cnx_local_test.cursor()
     print "\nCreating table for Monitor\n"
@@ -347,6 +351,7 @@ def create_users(thisuser):
     """create users root, monitor and SST and delete anonymous"""
     cnx_local = MySQLdb.connect(user='root',
                                 passwd=CREDENTIALS["root"],
+                                unix_socket='/var/lib/mysql/mysql.sock',
                                 host='localhost')
     cursor = cnx_local.cursor()
     try:
