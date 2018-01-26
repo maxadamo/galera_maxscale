@@ -233,9 +233,10 @@ class galera_maxscale (
       http_proxy  => $http_proxy,
       manage_repo => $manage_repo;
     '::galera_maxscale::lvm':
-      manage_lvm => $manage_lvm,
-      vg_name    => $vg_name,
-      lv_size    => $lv_size;
+      manage_lvm  => $manage_lvm,
+      galera_pkgs => $galera_pkgs,
+      vg_name     => $vg_name,
+      lv_size     => $lv_size;
     '::galera_maxscale::services':;
   }
 
