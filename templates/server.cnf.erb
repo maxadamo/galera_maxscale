@@ -71,7 +71,11 @@ gcomm_list = gcomm_list.chomp(",")
 wsrep_cluster_address="<%= gcomm_list -%>"
 
 # Full path to wsrep provider library or 'none'
+<% if @osfamily == 'Debian' -%>
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+<% else -%>
 wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+<% end -%>
 
 # node name
 wsrep_node_address="<%= @ipaddress %>"
