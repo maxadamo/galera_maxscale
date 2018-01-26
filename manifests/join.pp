@@ -11,6 +11,7 @@ class galera_maxscale::join (
   $galera_hosts      = $::galera_maxscale::params::galera_hosts,
   $maxscale_hosts    = $::galera_maxscale::params::maxscale_hosts,
   $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
+  $manage_lvm        = $::galera_maxscale::params::manage_lvm,
   ) inherits galera_maxscale::params {
 
   $joined_file = '/var/lib/mysql/gvwstate.dat'
@@ -20,16 +21,30 @@ class galera_maxscale::join (
     'Debian' => 'galera-3',
   }
 
+  $file_list = $::osfamily ? {
+    'RedHat' => [
+      '/usr/bin/galera_wizard.py', '/root/galera_params.py',
+      '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf'
+    ],
+    'Debian' => [
+      '/usr/bin/galera_wizard.py', '/root/galera_params.py',
+      '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/mysql/my.cnf'
+    ],
+  }
+
+  if ($manage_lvm) {
+    $require_list = [File[$file_list], Package[$galera_package], Mount['/var/lib/mysql']]
+  } else {
+    $require_list = [File[$file_list], Package[$galera_package]]
+  }
+
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':
       command => 'galera_wizard.py -bn -f || galera_wizard.py -jn -f',
       path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
       creates => $joined_file,
       returns => [0,1],
-      require => [
-        File['/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf'],
-        Package[$galera_package]
-      ];
+      require => $require_list;
     }
   }
 
@@ -39,14 +54,7 @@ class galera_maxscale::join (
         command => 'galera_wizard.py -je',
         path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
         returns => [0,1],
-        require => [
-          File[
-            '/usr/bin/galera_wizard.py', '/root/galera_params.py',
-            '/root/.my.cnf', '/etc/my.cnf.d/server.cnf',
-            '/etc/my.cnf.d/client.cnf'
-          ],
-          Package[$galera_package]
-        ];
+        require => $require_list;
       }
     }
   } else {

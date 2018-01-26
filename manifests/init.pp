@@ -222,7 +222,8 @@ class galera_maxscale (
       maxscale_password => $maxscale_password,
       galera_hosts      => $galera_hosts,
       maxscale_hosts    => $maxscale_hosts,
-      maxscale_vip      => $maxscale_vip;
+      maxscale_vip      => $maxscale_vip,
+      manage_lvm        => $manage_lvm;
     '::galera_maxscale::backup':
       galera_hosts        => $galera_hosts,
       daily_hotbackup     => $daily_hotbackup,
