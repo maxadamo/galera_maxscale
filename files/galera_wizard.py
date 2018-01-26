@@ -282,8 +282,14 @@ def try_joining(how, datadirectory):
         if os.path.isfile('/root/.my.cnf'):
             os.rename('/root/.my.cnf', '/root/.my.cnf.bak')
 
+    if platform.dist()[0] in ['fedora', 'redhat', 'centos']:
+        init_script = "/etc/rc.d/init.d/mysql"
+    elif platform.dist()[0] in ['debian', 'Ubuntu', 'LinuxMint']:
+        init_script = "/etc/rc.d/mysql"
+
     if not LASTCHECK_NODES:
-        print "{}There are no hosts available in the Cluster{}".format(RED, WHITE)
+        print "{}There are no nodes available in the Cluster{}".format(
+            RED, WHITE)
         print "\nEither:"
         print "- None of the hosts has the value 'wsrep_ready' to 'ON'"
         print "- None of the host is running the MySQL process\n"
@@ -292,7 +298,7 @@ def try_joining(how, datadirectory):
         print "Gently trying {} to join the cluster".format(LASTCHECK_NODES[0])
         try:
             subprocess.call([
-                "/etc/rc.d/init.d/mysql", "start",
+                init_script, "start",
                 "--wsrep_cluster_address=gcomm://{}".format(LASTCHECK_NODES[0])])
         except Exception:
             print "{}Unable to gently join the cluster{}".format(RED, WHITE)
@@ -301,7 +307,7 @@ def try_joining(how, datadirectory):
                 os.unlink(os.path.join(datadirectory, "grastate.dat"))
                 try:
                     subprocess.call([
-                        "/etc/rc.d/init.d/mysql", "start",
+                        init_script, "start",
                         "--wsrep_cluster_address=gcomm://{}".format(LASTCHECK_NODES[0])])
                 except Exception as err:
                     print "{}Unable to join the cluster{}: {}".format(
