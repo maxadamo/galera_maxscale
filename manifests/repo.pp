@@ -74,14 +74,7 @@ class galera_maxscale::repo (
             architecture => 'amd64,i386',
             release      => $::lsbdistcodename;
         }
-        #deb http://repo.percona.com/apt xenial main
-        #deb-src http://repo.percona.com/apt xenial main
-        # MariaDB 10.2 repository list - created 2018-01-25 16:44 UTC
-        # http://downloads.mariadb.org/mariadb/repositories/
-        # deb [arch=amd64,i386] http://mirrors.supportex.net/mariadb/repo/10.2/ubuntu xenial main
-        # deb-src http://mirrors.supportex.net/mariadb/repo/10.2/ubuntu xenial main
       }
-
       default: {
         fail("${::operatingsystem} not yet supported")
       }
