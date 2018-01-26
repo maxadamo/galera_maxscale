@@ -304,7 +304,8 @@ def try_joining(how, datadirectory):
                         "/etc/rc.d/init.d/mysql", "start",
                         "--wsrep_cluster_address=gcomm://{}".format(LASTCHECK_NODES[0])])
                 except Exception as err:
-                    print "{}Unable to join the cluster{}: {}".format(RED, WHITE, err)
+                    print "{}Unable to join the cluster{}: {}".format(
+                        RED, WHITE, err)
                     sys.exit(1)
                 finally:
                     restore_mycnf()
@@ -318,24 +319,35 @@ def try_joining(how, datadirectory):
 
 def create_monitor_table():
     """create test table for monitor"""
+    print "\nCreating DB test is not exist\n"
     cnx_local_test = MySQLdb.connect(user='root',
                                      passwd=CREDENTIALS["root"],
                                      host='localhost',
                                      unix_socket='/var/lib/mysql/mysql.sock')
     cursor = cnx_local_test.cursor()
-    print "\nCreating DB test is not exist\n"
+
     try:
         cursor.execute("""
                     CREATE DATABASE IF NOT EXISTS `test`
                     """)
-    except Exception as e:
+    except Exception as err:
         print "Could not create database test: {}".format(err)
         sys.exit(1)
-    print "\nCreating table for Monitor\n"
+    else:
+        cnx_local_test.commit()
+        cnx_local_test.close()
+
+    print "Creating table for Monitor\n"
+    cnx_local_test = MySQLdb.connect(user='root',
+                                     passwd=CREDENTIALS["root"],
+                                     host='localhost',
+                                     unix_socket='/var/lib/mysql/mysql.sock',
+                                     db='test')
+    cursor = cnx_local_test.cursor()
+
     try:
         cursor.execute("""
-                    USE test;
-                    CREATE TABLE IF NOT EXISTS `test.monitor` (
+                    CREATE TABLE IF NOT EXISTS `monitor` (
                         `id` varchar(255) DEFAULT NULL
                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
                     """)
@@ -343,13 +355,16 @@ def create_monitor_table():
     except Exception as err:
         print "Could not create test table: {}".format(err)
         sys.exit(1)
+    else:
+        cnx_local_test.commit()
+
     try:
         cursor.execute("""
                     INSERT INTO test.monitor SET id=("placeholder");
                     """)
         cnx_local_test.commit()
-    except Exception:
-        print "Unable to write to test table"
+    except Exception as err:
+        print "Unable to write to test table: {}".format(err)
     finally:
         if cnx_local_test:
             cnx_local_test.close()
@@ -388,14 +403,15 @@ def create_users(thisuser):
                     CREATE USER '{}'@'{}' IDENTIFIED BY '{}'
                     """.format(thisuser, thishost, CREDENTIALS[thisuser]))
             except Exception:
-                print "Unable to create user {} on {}".format(thisuser, thishost)
+                print "Unable to create user {} on {}".format(thisuser,
+                                                              thishost)
             try:
                 cursor.execute("""
                         GRANT {} TO '{}'@'{}'
                         """.format(thisgrant, thisuser, thishost))
-            except Exception:
-                print "Unable to set permission for {} at {}".format(
-                    thisuser, thishost)
+            except Exception as err:
+                print "Unable to set permission for {} at {}: {}".format(
+                    thisuser, thishost, err)
     if cnx_local:
         cursor.execute("""FLUSH PRIVILEGES""")
         cnx_local.close()
