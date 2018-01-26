@@ -1,9 +1,10 @@
 # == Class: galera_maxscale::lvm
 #
 class galera_maxscale::lvm (
-  $manage_lvm = $::galera_maxscale::params::manage_lvm,
-  $lv_size = $::galera_maxscale::params::lv_size,
-  $vg_name = $::galera_maxscale::params::vg_name,
+  $manage_lvm  = $::galera_maxscale::params::manage_lvm,
+  $lv_size     = $::galera_maxscale::params::lv_size,
+  $vg_name     = $::galera_maxscale::params::vg_name,
+  $galera_pkgs =  $::galera_maxscale::params::galera_pkgs,
   ) inherits galera_maxscale::params {
 
   if ($lv_size and $manage_lvm and $vg_name) {
@@ -24,7 +25,7 @@ class galera_maxscale::lvm (
       mode    => '0755',
       owner   => mysql,
       group   => mysql,
-      require => Package['MariaDB-server'];
+      require => Package[$galera_pkgs];
     }
 
     mount { '/var/lib/mysql':
