@@ -1,6 +1,6 @@
 {
   "name": "maxadamo-galera_maxscale",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "maxadamo",
   "summary": "Galera and MaxScale Cluster",
   "license": "GPL-3.0",
