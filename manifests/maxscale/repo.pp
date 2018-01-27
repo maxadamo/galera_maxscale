@@ -5,7 +5,7 @@ class galera_maxscale::maxscale::repo (
   $http_proxy  = $::galera_maxscale::params::http_proxy,
   ) {
 
-  if ($manage_repo) {
+  unless $manage_repo == false {
 
     case $::operatingsystem {
       'RedHat', 'CentOS': {

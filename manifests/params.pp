@@ -23,8 +23,8 @@ class galera_maxscale::params {
   $logdir = undef
   $lv_size = undef
   $manage_lvm = undef
-  $manage_firewall = undef
-  $manage_repo = undef
+  $manage_firewall = true
+  $manage_repo = true
   $max_connections = 1024
   $maxscale_password = undef
   $monitor_password = undef
