@@ -8,18 +8,18 @@ server_list = server_list.chomp(",")
 [maxscale]
 threads=<%= @processorcount %>
 
-[Splitter Service]
+[Splitter-Service]
 type=service
 router=readwritesplit
 servers=<%= server_list %>
 user=maxscale
 passwd=<%= @maxscale_password %>
 
-[Splitter Listener]
+[Splitter-Listener]
 type=listener
-service=Splitter Service
+service=Splitter-Service
 protocol=MySQLClient
-port=3306
+#port=3306
 #address=<%= @vip_ip %>
 socket=/tmp/ClusterMaster
 
@@ -31,7 +31,7 @@ port=3306
 protocol=MySQLBackend
 <% end %>
 
-[Galera Monitor]
+[Galera-Monitor]
 type=monitor
 module=galeramon
 servers=<%= server_list %>
@@ -42,7 +42,7 @@ passwd=<%= @maxscale_password %>
 type=service
 router=cli
 
-[CLI Listener]
+[CLI-Listener]
 type=listener
 service=CLI
 protocol=maxscaled
