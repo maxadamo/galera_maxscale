@@ -68,6 +68,9 @@
 # [*manage_repo*] <Bool>
 #   default: true => please check repo.pp to understand what repos are neeeded
 #
+# [*mariadb_version*] <String>
+#   default: latest
+#
 # [*max_connections*] <Int>
 #   default: 1024
 #
@@ -106,9 +109,6 @@
 #   default: undef => List of IPv4 and/or IPv6 host and or networks.
 #            It's used by iptables to determine from where to allow access to MySQL
 #
-# [*version*] <String>
-#   default: latest
-#
 # === ToDo
 #
 # - Add root password change
@@ -119,7 +119,7 @@
 #
 class galera_maxscale (
 
-  $all_pkgs                     = $::galera_maxscale::params::all_pkgs,
+  # galera parameters
   $backup_compress              = $::galera_maxscale::params::backup_compress,
   $backup_dir                   = $::galera_maxscale::params::backup_dir,
   $backup_retention             = $::galera_maxscale::params::backup_retention,
@@ -127,7 +127,6 @@ class galera_maxscale (
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
   $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
   $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
-  $http_proxy                   = $::galera_maxscale::params::http_proxy,
   $innodb_buffer_pool_size      = $::galera_maxscale::params::innodb_buffer_pool_size,
   $galera_version               = $::galera_maxscale::params::galera_version,
   $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
@@ -136,13 +135,9 @@ class galera_maxscale (
   $innodb_log_file_size         = $::galera_maxscale::params::innodb_log_file_size,
   $logdir                       = $::galera_maxscale::params::logdir,
   $lv_size                      = $::galera_maxscale::params::lv_size,
-  $manage_firewall              = $::galera_maxscale::params::manage_firewall,
   $manage_lvm                   = $::galera_maxscale::params::manage_lvm,
-  $manage_repo                  = $::galera_maxscale::params::manage_repo,
+  $mariadb_version              = $::galera_maxscale::params::mariadb_version,
   $max_connections              = $::galera_maxscale::params::max_connections,
-  $maxscale_hosts               = $::galera_maxscale::params::maxscale_hosts,
-  $maxscale_vip                 = $::galera_maxscale::params::maxscale_vip,
-  $maxscale_password            = $::galera_maxscale::params::maxscale_password,
   $monitor_password             = $::galera_maxscale::params::monitor_password,
   $monitor_username             = $::galera_maxscale::params::monitor_username,
   $other_pkgs                   = $::galera_maxscale::params::other_pkgs,
@@ -153,8 +148,21 @@ class galera_maxscale (
   $thread_cache_size            = $::galera_maxscale::params::thread_cache_size,
   $tmpdir                       = $::galera_maxscale::params::tmpdir,
   $trusted_networks             = $::galera_maxscale::params::trusted_networks,
-  $version                      = $::galera_maxscale::params::version,
   $vg_name                      = $::galera_maxscale::params::vg_name,
+
+  # maxscale parameters
+  $maxscale_version             = $::galera_maxscale::params::maxscale_version,
+  $maxscale_vip                 = $::galera_maxscale::params::maxscale_vip,
+  $maxscale_password            = $::galera_maxscale::params::maxscale_password,
+
+  # Maxscale Keepalive configuration
+  $network_interface            = ::galera_maxscale::params::network_interface,
+
+  # common parameters
+  $http_proxy                   = $::galera_maxscale::params::http_proxy,
+  $manage_firewall              = $::galera_maxscale::params::manage_firewall,
+  $manage_repo                  = $::galera_maxscale::params::manage_repo,
+  $maxscale_hosts               = $::galera_maxscale::params::maxscale_hosts,
 
 ) inherits galera_maxscale::params {
 

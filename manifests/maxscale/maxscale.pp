@@ -7,7 +7,9 @@ class galera_maxscale::maxscale::maxscale (
   $maxscale_password = $::galera_maxscale::params::maxscale_password,
   $trusted_networks  = $::galera_maxscale::params::trusted_networks,
   $manage_repo       = $::galera_maxscale::params::manage_repo,
-  $http_proxy        = $::galera_maxscale::params::http_proxy
+  $http_proxy        = $::galera_maxscale::params::http_proxy,
+  $network_interface = $::galera_maxscale::params::network_interface,
+  $maxscale_version  = $::galera_maxscale::params::maxscale_version
   ) inherits galera_maxscale::params {
 
   $maxscale_key_first = inline_template('<% @maxscale_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
@@ -24,9 +26,10 @@ class galera_maxscale::maxscale::maxscale (
       http_proxy  => $http_proxy,
       manage_repo => $manage_repo;
     '::galera_maxscale::maxscale::keepalived':
-      manage_ipv6    => $ipv6_true,
-      maxscale_hosts => $maxscale_hosts,
-      maxscale_vip   => $maxscale_vip;
+      manage_ipv6       => $ipv6_true,
+      maxscale_hosts    => $maxscale_hosts,
+      network_interface => $network_interface,
+      maxscale_vip      => $maxscale_vip;
     '::galera_maxscale::firewall':
       manage_ipv6      => $ipv6_true,
       galera_hosts     => $galera_hosts,
@@ -39,13 +42,13 @@ class galera_maxscale::maxscale::maxscale (
     case $::operatingsystem {
       'CentOS', 'RedHat': {
         package { 'maxscale':
-          ensure  => installed,
+          ensure  => $maxscale_version,
           require => Yumrepo['MaxScale'];
         }
       }
       'Ubuntu': {
         package { 'maxscale':
-          ensure  => installed,
+          ensure  => $maxscale_version,
           require => [Exec['apt_update'], Apt::Source['maxscale']];
         }
       }
@@ -54,7 +57,7 @@ class galera_maxscale::maxscale::maxscale (
       }
     }
   } else {
-    package { 'maxscale': ensure => installed; }
+    package { 'maxscale': ensure => $maxscale_version; }
   }
 
   service { 'maxscale':

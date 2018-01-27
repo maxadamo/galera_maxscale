@@ -4,18 +4,19 @@
 #
 class galera_maxscale::params {
 
+  # galera parameters
   $backup_compress = false
   $backup_retention = 3
   $backup_dir = '/mnt/galera'
   $daily_hotbackup = undef
   $galera_cluster_name = "${::environment}_galera"
+  $galera_hosts = undef
   $galera_pkgs = $::osfamily ? {
     'RedHat' => ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server'],
     'Debian' => ['mariadb-client', 'mariadb-common', 'mariadb-server'],
   }
   $innodb_buffer_pool_size = '0.7'
   $galera_version = 'latest'
-  $http_proxy = undef # example: 'http://proxy.example.net:8080'
   $innodb_buffer_pool_instances = 1
   $innodb_flush_method = 'O_DIRECT'
   $innodb_io_capacity = 200
@@ -23,13 +24,10 @@ class galera_maxscale::params {
   $logdir = undef
   $lv_size = undef
   $manage_lvm = undef
-  $manage_firewall = true
-  $manage_repo = true
+  $mariadb_version = 'latest'
   $max_connections = 1024
-  $maxscale_password = undef
   $monitor_password = undef
   $monitor_username = 'monitor'
-  $galera_hosts = undef
   $other_pkgs = $::osfamily ? {
     'RedHat' => [
       'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
@@ -45,11 +43,21 @@ class galera_maxscale::params {
   $thread_cache_size = 16
   $tmpdir = undef
   $trusted_networks = undef
-  $version = 'latest'
   $vg_name = undef
 
   # MaxScale configuration
-  $maxscale_hosts = undef
+  $maxscale_version  = 'latest'
   $maxscale_vip = undef
+  $maxscale_password = undef
+
+  # Maxscale Keepalive configuration
+  $network_interface = 'eth0'
+
+  # Common Parameters
+  $http_proxy = undef # example: 'http://proxy.example.net:8080'
+  $manage_firewall = true
+  $manage_repo = true
+  $maxscale_hosts = undef
+
 
 }

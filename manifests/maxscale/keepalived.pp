@@ -1,9 +1,10 @@
 # == Class: galera_maxscale::maxscale::keepalived
 #
 class galera_maxscale::maxscale::keepalived (
-  $maxscale_hosts = $::galera_maxscale::params::maxscale_hosts,
-  $maxscale_vip   = $::galera_maxscale::params::maxscale_vip,
-  $manage_ipv6    = undef
+  $maxscale_hosts    = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
+  $network_interface = $::galera_maxscale::params::network_interface,
+  $manage_ipv6       = undef
   ) inherits galera_maxscale::params {
 
   $vip_key = inline_template('<% @maxscale_vip.each do |key, value| %><%= key %><% end -%>')
@@ -25,7 +26,7 @@ class galera_maxscale::maxscale::keepalived (
 
   if ($manage_ipv6) {
     keepalived::vrrp::instance { 'MaxScale':
-      interface                  => 'eth0',
+      interface                  => $network_interface,
       state                      => 'BACKUP',
       virtual_router_id          => '50',
       unicast_source_ip          => $::ipaddress,
@@ -39,7 +40,7 @@ class galera_maxscale::maxscale::keepalived (
     }
   } else {
     keepalived::vrrp::instance { 'MaxScale':
-      interface         => 'eth0',
+      interface         => $network_interface,
       state             => 'BACKUP',
       virtual_router_id => '50',
       unicast_source_ip => $::ipaddress,
