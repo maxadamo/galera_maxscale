@@ -14,7 +14,7 @@ class galera_maxscale::maxscale::repo (
           source => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY';
         }
         yumrepo { 'MaxScale':
-          baseurl    => 'https://downloads.mariadb.com/MaxScale/2.1/rhel/$releasever/$basearch',
+          baseurl    => 'https://downloads.mariadb.com/MaxScale/2.2.1/rhel/$releasever/$basearch',
           descr      => 'The MariaDB repository',
           enabled    => '1',
           gpgcheck   => '1',
