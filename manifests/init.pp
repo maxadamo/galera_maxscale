@@ -240,7 +240,7 @@ class galera_maxscale (
     '::galera_maxscale::services':;
   }
 
-  unless $manage_firewall == false {
+  unless any2bool($manage_firewall) == false {
     class { 'galera_maxscale::firewall':
       manage_ipv6      => $ipv6_true,
       galera_hosts     => $galera_hosts,
