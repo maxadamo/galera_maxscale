@@ -26,7 +26,8 @@ The backup provided with this modules is indeed poor, but it can be considered a
 
 **When bootstrapping, avoid running puppet on all the nodes at same time.**
 
-**important:** since the module is at an early stage, for the time being there will be frequent updates.
+**stay tuned:** since the module is at an early stage, for the time being it will receive frequent updates.
+
 Read at (actual) **limitations** in the paragraph below.
 
 
@@ -140,7 +141,6 @@ trusted_networks:
 
 ## Limitations
 
-- added support for Ubuntu, but MaxScale is not yet configured
 - not tested yet on ipv4 only
 - handle major/minor versions properly
 
