@@ -21,7 +21,6 @@ class galera_maxscale::maxscale::repo (
           enabled    => '1',
           gpgcheck   => '1',
           gpgkey     => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY',
-          mirrorlist => '',
           require    => Rpmkey['28C12247'];
         }
       }
