@@ -21,6 +21,7 @@ class galera_maxscale::maxscale::maxscale (
 
   class {
     '::galera_maxscale::maxscale::repo':
+      http_proxy  => $http_proxy,
       manage_repo => $manage_repo;
     '::galera_maxscale::maxscale::keepalived':
       manage_ipv6    => $ipv6_true,
