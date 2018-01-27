@@ -26,7 +26,7 @@ The backup provided with this modules is indeed poor, but it can be considered a
 
 **When bootstrapping, avoid running puppet on all the nodes at same time.**
 
-**stay tuned:** since the module is at an early stage, for the time being it will receive frequent updates.
+**stay tuned:** since the module is at an early stage, for the time being it will receive frequent updates (at same time, the module should be considered as **Beta**).
 
 Read at (actual) **limitations** in the paragraph below.
 
