@@ -17,8 +17,8 @@ The status of the cluster is checked at run time through the fact `galera_status
 If puppet fails to recover a node you can use the script `galera_wizard.py` provided with this module.
 MaxScale Proxy will be set up on 2 nodes (no more, no less) with Keepalived.
 
-    - if you want only the Galera cluster you need _at least_ 3 servers and 4 ipv4 (and optionally 4 ipv6)
-    - if you want the full stack you need _at least_ 5 servers and 6 IPv4 (and optionally 6 IPv6)
+ - if you want only the Galera cluster you need _at least_ 3 servers and 3 ipv4 (and optionally 3 ipv6)
+ - if you want the full stack you need _at least_ 5 servers and 6 IPv4 (and optionally 6 IPv6)
 
 Initial State Snapshot Transfer is supported only through Percona XtraBackup (on average DBs I see no reason to use `mysqldump` and `rsync` since the donor would be unavailable during the transfer: see [Galera Documentation](http://galeracluster.com/documentation-webpages/sst.html)).
 The backup provided with this modules is indeed poor, but it can be considered as an example if you really want to use Percona XtraBackup.
