@@ -5,12 +5,10 @@ class galera_maxscale::repo (
   $manage_repo = $::galera_maxscale::params::manage_repo
   ) inherits galera_maxscale::params {
 
-  if ($manage_repo) {
-
-    if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = undef }
-
+  unless any2bool($manage_repo) == false {
     case $::operatingsystem {
       'RedHat', 'CentOS': {
+        if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = absent }
         rpmkey {
           '1BB943DB':
             ensure => present,
@@ -22,25 +20,25 @@ class galera_maxscale::repo (
             before => Class['::galera_maxscale::install'];
         }
         yumrepo {
+          default:
+            enabled    => '1',
+            gpgcheck   => '1',
+            proxy      => $http_proxy,
+            mirrorlist => absent;
           'MariaDB':
-            baseurl    => 'http://yum.mariadb.org/10.2/centos7-amd64',
-            descr      => 'The MariaDB repository',
-            enabled    => '1',
-            gpgcheck   => '1',
-            gpgkey     => 'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB',
-            mirrorlist => '',
-            require    => Rpmkey['1BB943DB'];
+            baseurl => 'http://yum.mariadb.org/10.2/centos7-amd64',
+            descr   => 'The MariaDB repository',
+            gpgkey  => 'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB',
+            require => Rpmkey['1BB943DB'];
           'percona_release_noarch':
-            baseurl    => 'http://repo.percona.com/release/$releasever/RPMS/noarch',
-            descr      => 'Percona-Release YUM repository',
-            enabled    => '1',
-            gpgcheck   => '1',
-            gpgkey     => 'http://www.percona.com/downloads/RPM-GPG-KEY-percona',
-            mirrorlist => '',
-            require    => Rpmkey['CD2EFD2A'];
+            baseurl => 'http://repo.percona.com/release/$releasever/RPMS/noarch',
+            descr   => 'Percona-Release YUM repository',
+            gpgkey  => 'http://www.percona.com/downloads/RPM-GPG-KEY-percona',
+            require => Rpmkey['CD2EFD2A'];
         }
       }
       'Ubuntu': {
+        if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = undef }
         apt::key {
           default:
             server  => 'hkp://keyserver.ubuntu.com:80',
