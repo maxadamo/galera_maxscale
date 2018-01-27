@@ -13,8 +13,7 @@ class galera_maxscale::maxscale::repo (
       'RedHat', 'CentOS': {
         rpmkey { '28C12247':
           ensure => present,
-          source => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY',
-          before => Class['::galera_maxscale::install'];
+          source => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY';
         }
         yumrepo { 'MaxScale':
           baseurl    => 'https://downloads.mariadb.com/MaxScale/2.1/rhel/$releasever/$basearch',
