@@ -6,7 +6,8 @@ class galera_maxscale::maxscale::maxscale (
   $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
   $maxscale_password = $::galera_maxscale::params::maxscale_password,
   $trusted_networks  = $::galera_maxscale::params::trusted_networks,
-  $manage_repo       = $::galera_maxscale::params::manage_repo
+  $manage_repo       = $::galera_maxscale::params::manage_repo,
+  $http_proxy        = $::galera_maxscale::params::http_proxy
   ) inherits galera_maxscale::params {
 
   $maxscale_key_first = inline_template('<% @maxscale_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
@@ -33,10 +34,24 @@ class galera_maxscale::maxscale::maxscale (
       trusted_networks => $trusted_networks;
   }
 
+
   if ($manage_repo) {
-    package { 'maxscale':
-      ensure  => installed,
-      require => Yumrepo['MaxScale'];
+    case $::operatingsystem {
+      'CentOS', 'RedHat': {
+        package { 'maxscale':
+          ensure  => installed,
+          require => Yumrepo['MaxScale'];
+        }
+      }
+      'Ubuntu': {
+        package { 'maxscale':
+          ensure  => installed,
+          require => [Exec['apt_update'], Apt::Source['maxscale']];
+        }
+      }
+      default: {
+        fail("${::operatingsystem} not supported")
+      }
     }
   } else {
     package { 'maxscale': ensure => installed; }

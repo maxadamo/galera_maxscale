@@ -1,8 +1,13 @@
 # == Class: galera_maxscale::maxscale::repo
 #
-class galera_maxscale::maxscale::repo ($manage_repo) {
+class galera_maxscale::maxscale::repo (
+  $manage_repo = $::galera_maxscale::params::manage_repo,
+  $http_proxy  = $::galera_maxscale::params::http_proxy,
+  ) {
 
   if ($manage_repo) {
+
+    if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = undef }
 
     case $::operatingsystem {
       'RedHat', 'CentOS': {
@@ -21,13 +26,26 @@ class galera_maxscale::maxscale::repo ($manage_repo) {
           require    => Rpmkey['28C12247'];
         }
       }
-
-      /^(Debian|Ubuntu)$/: {
-        fail('Debian/Ubuntu not yet supported')
+      'Ubuntu': {
+        apt::key { 'maxscale':
+          id      => '7B963F525AD3AE6259058D30135659E928C12247',
+          server  => 'hkp://keyserver.ubuntu.com:80',
+          options => $options;
+        }
+        apt::source { 'maxscale':
+          location     => 'https://downloads.mariadb.com/MaxScale/2.2.1/ubuntu',
+          architecture => 'amd64,i386',
+          repos        => 'main',
+          include      => {
+            'deb' => true,
+          },
+          notify       => Exec['apt_update'],
+          release      => $::lsbdistcodename,
+          require      => Apt::Key['maxscale'];
+        }
       }
-
       default: {
-        fail("${::osfamily} not yet supported")
+        fail("${::operatingsystem} not supported")
       }
     }
   }
