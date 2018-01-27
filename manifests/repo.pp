@@ -10,14 +10,13 @@ class galera_maxscale::repo (
       'RedHat', 'CentOS': {
         if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = absent }
         rpmkey {
+          default:
+            ensure => present,
+            before => Class['::galera_maxscale::install'];
           '1BB943DB':
-            ensure => present,
-            source => 'http://yum.mariadb.org/RPM-GPG-KEY-MariaDB',
-            before => Class['::galera_maxscale::install'];
+            source => 'http://yum.mariadb.org/RPM-GPG-KEY-MariaDB';
           'CD2EFD2A':
-            ensure => present,
-            source => 'http://www.percona.com/downloads/RPM-GPG-KEY-percona',
-            before => Class['::galera_maxscale::install'];
+            source => 'http://www.percona.com/downloads/RPM-GPG-KEY-percona';
         }
         yumrepo {
           default:
