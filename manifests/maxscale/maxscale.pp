@@ -35,8 +35,7 @@ class galera_maxscale::maxscale::maxscale (
       trusted_networks => $trusted_networks;
   }
 
-
-  if ($manage_repo) {
+  unless any2bool($manage_repo) == false {
     case $::operatingsystem {
       'CentOS', 'RedHat': {
         package { 'maxscale':

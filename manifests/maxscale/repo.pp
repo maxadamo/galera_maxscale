@@ -6,7 +6,6 @@ class galera_maxscale::maxscale::repo (
   ) {
 
   unless any2bool($manage_repo) == false {
-
     case $::operatingsystem {
       'RedHat', 'CentOS': {
         if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = absent }
