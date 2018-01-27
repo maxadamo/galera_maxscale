@@ -14,7 +14,7 @@
 
 This module sets up and bootstrap Galera cluster and MaxScale Proxy.
 The status of the cluster is checked at run time through the facter `galera_status` and puppet will attempt to re-join the node in case of disconnection.
-If puppet fails to recover a node you can use the script `galera_wizard.yp` provided with this module.
+If puppet fails to recover a node you can use the script `galera_wizard.py` provided with this module.
 MaxScale Proxy will be set up on 2 nodes (no more, no less) with Keepalived.
 
 Therefore:
@@ -26,7 +26,7 @@ The backup provided with this modules is indeed poor, but it can be considered a
 
 **When bootstrapping, avoid running puppet on all the nodes at same time.**
 
-**stay tuned:** since the module is at an early stage, for the time being it will receive frequent updates.
+**stay tuned:** since the module is at an early stage, for the time being it will receive frequent updates (at same time, the module should be considered as **Beta**).
 
 Read at (actual) **limitations** in the paragraph below.
 

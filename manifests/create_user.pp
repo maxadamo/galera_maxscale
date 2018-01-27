@@ -10,7 +10,11 @@ define galera_maxscale::create_user (
   ) {
 
   if $dbuser == 'maxscale' {
-    $host_hash = deep_merge($galera_hosts, $maxscale_hosts, $maxscale_vip)
+    if ($maxscale_hosts) {
+      $host_hash = deep_merge($galera_hosts, $maxscale_hosts, $maxscale_vip)
+    } else {
+      $host_hash = $galera_hosts
+    }
     $privileges = ['SELECT', 'SHOW DATABASES', 'REPLICATION CLIENT']
     $table = '*.*'
   } elsif $dbuser == 'sstuser' {
@@ -23,7 +27,7 @@ define galera_maxscale::create_user (
     $table = 'test.monitor'
   }
 
-  $galera_hosts.each | $host_name, $host_ips | {
+  $host_hash.each | $host_name, $host_ips | {
     mysql_user {
       "${dbuser}@${host_ips['ipv4']}":
         ensure        => present,
