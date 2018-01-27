@@ -7,10 +7,9 @@ class galera_maxscale::maxscale::repo (
 
   if ($manage_repo) {
 
-    if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = undef }
-
     case $::operatingsystem {
       'RedHat', 'CentOS': {
+        if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = absent }
         rpmkey { '28C12247':
           ensure => present,
           source => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY';
@@ -22,10 +21,12 @@ class galera_maxscale::maxscale::repo (
           gpgcheck   => '1',
           gpgkey     => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY',
           mirrorlist => absent,
+          proxy      => $http_proxy,
           require    => Rpmkey['28C12247'];
         }
       }
       'Ubuntu': {
+        if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = undef }
         apt::key { 'maxscale':
           id      => '7B963F525AD3AE6259058D30135659E928C12247',
           server  => 'hkp://keyserver.ubuntu.com:80',
