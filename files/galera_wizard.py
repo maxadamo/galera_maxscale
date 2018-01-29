@@ -4,23 +4,12 @@
 1. This script will either:
   - bootstrap a new or an existing cluster
   - join/rejoin an existing cluster
-2. Requirements (normally installed thru puppet):
+2. Requirements (normally installed through puppet):
   - yum install python-argparse MySQL-python
 3. Avoid joining all nodes at once
 4. The paramter file contains credentials and will be stored inside /root/
 
-Bugs & Workarounds:
-1.  We have a bug in Innobackupex:
-      - https://bugs.launchpad.net/percona-xtrabackup/+bug/1272329
-    A possible solution can come here:
-      - https://bugs.launchpad.net/percona-xtrabackup/2.2/+bug/688717
-    I prefear using the default directory rather than moving to a subdirectory.
-    Therefore we workaround the issue by letting puppet install an incron
-    entry that immediately reassign the directory ownership to mysql:mysql
-
-TODO: (see TODO.txt)
-
-Author: Massimiliano Adamo <massimiliano.adamo@gant.org>
+Author: Massimiliano Adamo <maxadamo@gmail.com>
 '''
 import subprocess
 import argparse
