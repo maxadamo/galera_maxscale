@@ -29,16 +29,16 @@
 #
 #
 class galera_maxscale::maxscale::maxscale (
-  $galera_major_version = $::galera_maxscale::params::galera_major_version,
-  $galera_hosts         = $::galera_maxscale::params::galera_hosts,
-  $manage_repo          = $::galera_maxscale::params::manage_repo,
-  $maxscale_hosts       = $::galera_maxscale::params::maxscale_hosts,
-  $maxscale_vip         = $::galera_maxscale::params::maxscale_vip,
-  $maxscale_password    = $::galera_maxscale::params::maxscale_password,
-  $trusted_networks     = $::galera_maxscale::params::trusted_networks,
-  $http_proxy           = $::galera_maxscale::params::http_proxy,
-  $network_interface    = $::galera_maxscale::params::network_interface,
-  $maxscale_version     = $::galera_maxscale::params::maxscale_version
+  $maxscale_major_version = $::galera_maxscale::params::maxscale_major_version,
+  $galera_hosts           = $::galera_maxscale::params::galera_hosts,
+  $manage_repo            = $::galera_maxscale::params::manage_repo,
+  $maxscale_hosts         = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip           = $::galera_maxscale::params::maxscale_vip,
+  $maxscale_password      = $::galera_maxscale::params::maxscale_password,
+  $trusted_networks       = $::galera_maxscale::params::trusted_networks,
+  $http_proxy             = $::galera_maxscale::params::http_proxy,
+  $network_interface      = $::galera_maxscale::params::network_interface,
+  $maxscale_version       = $::galera_maxscale::params::maxscale_version
   ) inherits galera_maxscale::params {
 
   $maxscale_key_first = inline_template('<% @maxscale_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
@@ -52,7 +52,7 @@ class galera_maxscale::maxscale::maxscale (
 
   class {
     '::galera_maxscale::maxscale::repo':
-      galera_major_version => $galera_major_version,
+      galera_major_version => $maxscale_major_version,
       http_proxy           => $http_proxy,
       manage_repo          => $manage_repo;
     '::galera_maxscale::maxscale::keepalived':
