@@ -141,7 +141,7 @@ trusted_networks:
 
 ## Limitations
 
-- not tested yet on ipv4 only
+- not tested yet on ipv4 only (it should work)
 - handle major/minor versions properly
 
 

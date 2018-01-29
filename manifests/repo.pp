@@ -8,7 +8,7 @@ class galera_maxscale::repo (
   unless any2bool($manage_repo) == false {
     case $::operatingsystem {
       'RedHat', 'CentOS': {
-        if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = absent }
+        if ($http_proxy) { $proxy = $http_proxy } else { $proxy = absent }
         rpmkey {
           default:
             ensure => present,
@@ -22,7 +22,7 @@ class galera_maxscale::repo (
           default:
             enabled    => '1',
             gpgcheck   => '1',
-            proxy      => $http_proxy,
+            proxy      => $proxy,
             mirrorlist => absent;
           'MariaDB':
             baseurl => 'http://yum.mariadb.org/10.2/centos7-amd64',

@@ -8,7 +8,7 @@ class galera_maxscale::maxscale::repo (
   unless any2bool($manage_repo) == false {
     case $::operatingsystem {
       'RedHat', 'CentOS': {
-        if ($http_proxy) { $options = "http-proxy=\"${http_proxy}\"" } else { $options = absent }
+        if ($http_proxy) { $proxy = $http_proxy } else { $proxy = absent }
         rpmkey { '28C12247':
           ensure => present,
           source => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY';
@@ -20,7 +20,7 @@ class galera_maxscale::maxscale::repo (
           gpgcheck   => '1',
           gpgkey     => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY',
           mirrorlist => absent,
-          proxy      => $http_proxy,
+          proxy      => $proxy,
           require    => Rpmkey['28C12247'];
         }
       }
