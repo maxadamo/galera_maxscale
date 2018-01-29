@@ -32,11 +32,11 @@ class galera_maxscale::params {
   $other_pkgs = $::osfamily ? {
     'RedHat' => [
       'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-      'MySQL-python', 'xinetd', 'qpress', 'nc', 'socat'
+      'MySQL-python', 'qpress', 'nc', 'socat'
     ],
     'Debian' => [
       'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-      'python-mysqldb', 'xinetd', 'qpress', 'netcat-openbsd', 'socat'
+      'python-mysqldb', 'qpress', 'netcat-openbsd', 'socat'
     ],
   }
   $root_password = undef

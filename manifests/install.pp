@@ -8,6 +8,25 @@ class galera_maxscale::install (
   $mariadb_version = $::galera_maxscale::mariadb_version,
   ) inherits galera_maxscale::params {
 
+  $config_dir = $::osfamily ? {
+    'RedHat' => '/etc/sysconfig',
+    'Debian' => '/etc/default',
+  }
+
+  xinetd::service { 'galerachk':
+    server         => '/usr/bin/clustercheck',
+    port           => '9200',
+    user           => 'root',
+    group          => 'root',
+    groups         => 'yes',
+    flags          => 'REUSE',
+    log_on_success => '',
+    log_on_failure => 'HOST',
+    require        => File[
+      '/usr/bin/clustercheck', '/root/.my.cnf', "${config_dir}/clustercheck"
+    ];
+  }
+
   case $::operatingsystem {
     'RedHat', 'CentOS': {
       package {

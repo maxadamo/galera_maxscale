@@ -58,20 +58,16 @@ class galera_maxscale::files (
       notify  => Service['xinetd'];
     '/root/.my.cnf':
       mode    => '0660',
-      content => template("${module_name}/root_my.cnf.erb"),
-      notify  => Service['xinetd'],
-      require => Package[$galera_pkgs];
+      notify  => Xinetd::Service['galerachk'],
+      require => Package[$galera_pkgs],
+      content => template("${module_name}/root_my.cnf.erb");
     "${config_dir}/clustercheck":
-      notify  => Service['xinetd'],
+      notify  => Xinetd::Service['galerachk'],
       content => template("${module_name}/clustercheck_config.erb");
     '/usr/bin/clustercheck':
       mode    => '0755',
-      content => template("${module_name}/clustercheck_script.erb"),
-      notify  => Service['xinetd'];
-    '/etc/xinetd.d/galerachk':
-      source  => "puppet:///modules/${module_name}/galerachk",
-      require => Package['xinetd'],
-      notify  => Service['xinetd'];
+      notify  => Xinetd::Service['galerachk'],
+      content => template("${module_name}/clustercheck_script.erb");
   }
 
   case $::osfamily {
