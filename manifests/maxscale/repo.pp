@@ -1,8 +1,9 @@
 # == Class: galera_maxscale::maxscale::repo
 #
 class galera_maxscale::maxscale::repo (
-  $manage_repo = $::galera_maxscale::params::manage_repo,
-  $http_proxy  = $::galera_maxscale::params::http_proxy,
+  $galera_major_version = $::galera_maxscale::params::galera_major_version,
+  $manage_repo          = $::galera_maxscale::params::manage_repo,
+  $http_proxy           = $::galera_maxscale::params::http_proxy,
   ) {
 
   unless any2bool($manage_repo) == false {
@@ -14,7 +15,7 @@ class galera_maxscale::maxscale::repo (
           source => 'https://downloads.mariadb.com/MaxScale/MariaDB-MaxScale-GPG-KEY';
         }
         yumrepo { 'MaxScale':
-          baseurl    => 'https://downloads.mariadb.com/MaxScale/2.2.1/rhel/$releasever/$basearch',
+          baseurl    => "https://downloads.mariadb.com/MaxScale/${galera_major_version}/rhel/\$releasever/\$basearch",
           descr      => 'The MariaDB repository',
           enabled    => '1',
           gpgcheck   => '1',
@@ -32,7 +33,7 @@ class galera_maxscale::maxscale::repo (
           options => $options;
         }
         apt::source { 'maxscale':
-          location     => 'https://downloads.mariadb.com/MaxScale/2.2.1/ubuntu',
+          location     => "https://downloads.mariadb.com/MaxScale/${galera_major_version}/ubuntu",
           architecture => 'amd64,i386',
           repos        => 'main',
           include      => {

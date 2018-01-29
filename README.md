@@ -25,7 +25,7 @@ The backup provided with this modules is indeed poor, but it can be considered a
 
 **When bootstrapping, avoid running puppet on all the nodes at same time.** You need to bootstrap one node first.
 
-**stay tuned:** since the module is at an early stage, for the time being it will receive frequent updates. 
+**stay tuned:** since the module is at an early stage, for the time being it will receive frequent updates.
 
 
 Read at (actual) **limitations** in the paragraph below.
@@ -142,7 +142,7 @@ trusted_networks:
 ## Limitations
 
 - not tested yet on ipv4 only (it should work)
-- handle major/minor versions properly
+- minor version, within the same major, supports only latest and installed
 
 
 ## Development

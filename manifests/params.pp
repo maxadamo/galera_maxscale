@@ -23,6 +23,7 @@ class galera_maxscale::params {
   $innodb_log_file_size = '512M'
   $logdir = undef
   $lv_size = undef
+  $mariadb_major_version = '10.2'
   $manage_lvm = undef
   $mariadb_version = 'latest'
   $max_connections = 1024
@@ -49,6 +50,7 @@ class galera_maxscale::params {
   $maxscale_version  = 'latest'
   $maxscale_vip = undef
   $maxscale_password = undef
+  $maxscale_major_version = '2.2.1'
 
   # Maxscale Keepalive configuration
   $network_interface = 'eth0'

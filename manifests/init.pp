@@ -77,6 +77,8 @@
 # [*maxscale_hosts*] <Hash>
 #   list of hosts, ipv4 (optionally ipv6) belonging to MaxScale cluster.
 #   Currently only 2 hosts are supported. Check examples on README.md
+#   This parameter is needed in the Galera cluster as well, to setup The
+#   users privileges in the database and the firewall rules
 #
 # [*maxscale_vip*] <Hash>
 #   host, ipv4 (optionally ipv6) for the VIP
@@ -135,6 +137,7 @@ class galera_maxscale (
   $innodb_log_file_size         = $::galera_maxscale::params::innodb_log_file_size,
   $logdir                       = $::galera_maxscale::params::logdir,
   $lv_size                      = $::galera_maxscale::params::lv_size,
+  $mariadb_major_version        = $::galera_maxscale::params::mariadb_major_version,
   $manage_lvm                   = $::galera_maxscale::params::manage_lvm,
   $mariadb_version              = $::galera_maxscale::params::mariadb_version,
   $max_connections              = $::galera_maxscale::params::max_connections,
@@ -154,6 +157,7 @@ class galera_maxscale (
   $maxscale_version             = $::galera_maxscale::params::maxscale_version,
   $maxscale_vip                 = $::galera_maxscale::params::maxscale_vip,
   $maxscale_password            = $::galera_maxscale::params::maxscale_password,
+  $maxscale_major_version       = $::galera_maxscale::params::maxscale_major_version,
 
   # Maxscale Keepalive configuration
   $network_interface            = ::galera_maxscale::params::network_interface,
@@ -238,8 +242,9 @@ class galera_maxscale (
       galera_cluster_name => $galera_cluster_name,
       backup_dir          => $backup_dir;
     '::galera_maxscale::repo':
-      http_proxy  => $http_proxy,
-      manage_repo => $manage_repo;
+      mariadb_major_version => $mariadb_major_version,
+      http_proxy            => $http_proxy,
+      manage_repo           => $manage_repo;
     '::galera_maxscale::lvm':
       manage_lvm  => $manage_lvm,
       galera_pkgs => $galera_pkgs,

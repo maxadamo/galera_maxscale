@@ -1,8 +1,9 @@
 # == Class: galera_maxscale::repo inherits galera
 #
 class galera_maxscale::repo (
-  $http_proxy  = $::galera_maxscale::params::http_proxy,
-  $manage_repo = $::galera_maxscale::params::manage_repo
+  $mariadb_major_version = $::galera_maxscale::params::mariadb_major_version,
+  $http_proxy            = $::galera_maxscale::params::http_proxy,
+  $manage_repo           = $::galera_maxscale::params::manage_repo
   ) inherits galera_maxscale::params {
 
   unless any2bool($manage_repo) == false {
@@ -25,7 +26,7 @@ class galera_maxscale::repo (
             proxy      => $proxy,
             mirrorlist => absent;
           'MariaDB':
-            baseurl => 'http://yum.mariadb.org/10.2/centos7-amd64',
+            baseurl => "http://yum.mariadb.org/${mariadb_major_version}/centos7-amd64",
             descr   => 'The MariaDB repository',
             gpgkey  => 'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB',
             require => Rpmkey['1BB943DB'];
@@ -67,7 +68,7 @@ class galera_maxscale::repo (
             location => 'http://repo.percona.com/apt',
             release  => $::lsbdistcodename;
           'mariadb_10_2':
-            location     => 'http://mirrors.supportex.net/mariadb/repo/10.2/ubuntu',
+            location     => "http://mirrors.supportex.net/mariadb/repo/${mariadb_major_version}/ubuntu",
             architecture => 'amd64,i386',
             release      => $::lsbdistcodename;
         }
