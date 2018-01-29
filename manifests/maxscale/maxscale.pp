@@ -52,9 +52,9 @@ class galera_maxscale::maxscale::maxscale (
 
   class {
     '::galera_maxscale::maxscale::repo':
-      galera_major_version => $maxscale_major_version,
-      http_proxy           => $http_proxy,
-      manage_repo          => $manage_repo;
+      maxscale_major_version => $maxscale_major_version,
+      http_proxy             => $http_proxy,
+      manage_repo            => $manage_repo;
     '::galera_maxscale::maxscale::keepalived':
       manage_ipv6       => $ipv6_true,
       maxscale_hosts    => $maxscale_hosts,
