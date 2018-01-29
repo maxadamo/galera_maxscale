@@ -141,9 +141,8 @@ trusted_networks:
 
 ## Limitations
 
-- not tested yet on ipv4 only (it should work)
-- minor version, within the same major, supports only latest and installed
-
+- minor version supports only latest and installed (in other words, only major versions are supported)
+- not yet tested on ipv4 only (it should work)
 
 ## Development
 
