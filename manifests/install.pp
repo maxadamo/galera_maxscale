@@ -5,6 +5,7 @@
 class galera_maxscale::install (
   $galera_pkgs     = $::galera_maxscale::galera_pkgs,
   $other_pkgs      = $::galera_maxscale::other_pkgs,
+  $galera_version  = $::galera_maxscale::galera_version,
   $mariadb_version = $::galera_maxscale::mariadb_version,
   ) inherits galera_maxscale::params {
 
@@ -33,12 +34,12 @@ class galera_maxscale::install (
         $other_pkgs:
           ensure => latest;
         'MariaDB-shared':
-          ensure  => $mariadb_version;
+          ensure => $mariadb_version,
+          before => Package[$galera_pkgs];
         $galera_pkgs:
-          ensure  => $mariadb_version,
-          require => Package['MariaDB-shared'];
+          ensure  => $mariadb_version;
         'galera':
-          ensure  => $galera_maxscale::galera_version;
+          ensure  => $galera_version;
       }
     }
     'Ubuntu': {
@@ -50,7 +51,7 @@ class galera_maxscale::install (
         $galera_pkgs:
           ensure  => $mariadb_version;
         'galera-3':
-          ensure  => $galera_maxscale::galera_version;
+          ensure  => $galera_version;
       }
     }
     default: {
