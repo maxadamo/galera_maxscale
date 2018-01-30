@@ -50,7 +50,7 @@ class galera_maxscale::params {
   $maxscale_version  = 'latest'
   $maxscale_vip = undef
   $maxscale_password = undef
-  $maxscale_major_version = '2.2.1'
+  $maxscale_major_version = '2.1.13'
 
   # Maxscale Keepalive configuration
   $network_interface = 'eth0'
