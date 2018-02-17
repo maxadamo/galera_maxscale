@@ -106,15 +106,24 @@ class galera_maxscale::files (
           source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
         '/etc/rc.d/mysql':
           mode   => '0755',
+          notify => Exec['galera_systemctl_daemon_reload'],
           source => "puppet:///modules/${module_name}/mysql";
         '/etc/init.d/mysql':
           mode   => '0755',
+          notify => Exec['galera_systemctl_daemon_reload'],
           source => "puppet:///modules/${module_name}/mysql";
       }
     }
     default: {
       fail("${::operatingsystem} not yet supported")
     }
+  }
+
+  exec { 'galera_systemctl_daemon_reload':
+    command     => 'systemctl daemon-reload',
+    path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+    onlyif      => 'which systemctl',
+    refreshonly => true;
   }
 
 }
