@@ -229,7 +229,8 @@ def checkhost(sqlhost):
                 unix_socket='/var/lib/mysql/mysql.sock',
                 host=sqlhost)
         except MySQLdb.Error:
-            print "{}Skipping {}: socket is down{}".format(YELLOW, sqlhost, WHITE)
+            print "{}Skipping {}: socket is down{}".format(
+                YELLOW, sqlhost, WHITE)
             OTHER_WSREP.remove(sqlhost)
         else:
             print "{}Socket on {} is up{}".format(GREEN, sqlhost, WHITE)
@@ -251,10 +252,12 @@ def checkwsrep(sqlhost):
         cnx_sqlhost = None
         wsrep_status = 0
         try:
-            cnx_sqlhost = MySQLdb.connect(user='sstuser',
-                                          passwd=CREDENTIALS["sstuser"],
-                                          unix_socket='/var/lib/mysql/mysql.sock',
-                                          host=sqlhost)
+            cnx_sqlhost = MySQLdb.connect(
+                user='sstuser',
+                passwd=CREDENTIALS["sstuser"],
+                unix_socket='/var/lib/mysql/mysql.sock',
+                host=sqlhost
+                )
             cursor = cnx_sqlhost.cursor()
             wsrep_status = cursor.execute("""
                                 SELECT VARIABLE_VALUE
@@ -298,7 +301,7 @@ def try_joining(how, datadirectory):
         if how == "new":
             print "Gently trying {} to join the cluster".format(LASTCHECK_NODES[0])
         else:
-            print "Tminorrying {} to join the cluster".format(LASTCHECK_NODES[0])
+            print "Trying {} to join the cluster".format(LASTCHECK_NODES[0])
         try:
             subprocess.call([
                 init_script, "start",
