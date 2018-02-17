@@ -104,6 +104,9 @@ class galera_maxscale::files (
         '/etc/rc.d/mysql':
           mode   => '0755',
           source => "puppet:///modules/${module_name}/mysql";
+        '/etc/init.d/mysql':
+          mode   => '0755',
+          source => "puppet:///modules/${module_name}/mysql";
         '/etc/mysql/mariadb.conf.d/mysql-clients.cnf':
           source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
       }
