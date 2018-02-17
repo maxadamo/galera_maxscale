@@ -563,9 +563,8 @@ def parse():
         action='store_true', dest='Cluster(None, "existing").createcluster()',
         required=False)
     parser.add_argument(
-        '-jn', '--join-new', help='join existing Cluster',
-        action='store_true', dest='Cluster("new", "new").joincluster()',
-        required=False)
+        '-jn', '--join-new', help='join new Cluster', action='store_true',
+        dest='Cluster("new", "new").joincluster()', required=False)
     parser.add_argument(
         '-bn', '--bootstrap-new', action='store_true',
         help='bootstrap new Cluster',
