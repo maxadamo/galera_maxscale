@@ -480,6 +480,9 @@ class Cluster(object):
             for wsrephost in OTHER_WSREP:
                 checkwsrep(wsrephost)
         if LASTCHECK_NODES:
+            if self.mode == 'new':
+                if os.path.isfile(os.path.join(self.datadir, "grastate.dat")):
+                    os.unlink(os.path.join(self.datadir, "grastate.dat"))
             if self.mode == "new" and not self.force:
                 ask('\nThis operation will destroy the local data')
                 print "\ninitializing mysql tables ...\n"
