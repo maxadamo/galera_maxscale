@@ -295,7 +295,10 @@ def try_joining(how, datadirectory):
         print "- None of the host is running the MySQL process\n"
         sys.exit(1)
     else:
-        print "Gently trying {} to join the cluster".format(LASTCHECK_NODES[0])
+        if how == "new":
+            print "Gently trying {} to join the cluster".format(LASTCHECK_NODES[0])
+        else:
+            print "Tminorrying {} to join the cluster".format(LASTCHECK_NODES[0])
         try:
             subprocess.call([
                 init_script, "start",
