@@ -94,21 +94,22 @@ class galera_maxscale::files (
     'Debian': {
       file {
         default:
-          ensure  => file,
-          mode    => '0644',
-          owner   => 'root',
-          group   => 'root',
-          require => Package[$galera_pkgs];
+          ensure => file,
+          mode   => '0644',
+          owner  => 'root',
+          group  => 'root';
         '/etc/mysql/my.cnf':
+          require => Package[$galera_pkgs],
           content => template("${module_name}/server.cnf.erb");
+        '/etc/mysql/mariadb.conf.d/mysql-clients.cnf':
+          require => Package[$galera_pkgs],
+          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
         '/etc/rc.d/mysql':
           mode   => '0755',
           source => "puppet:///modules/${module_name}/mysql";
         '/etc/init.d/mysql':
           mode   => '0755',
           source => "puppet:///modules/${module_name}/mysql";
-        '/etc/mysql/mariadb.conf.d/mysql-clients.cnf':
-          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
       }
     }
     default: {
