@@ -337,7 +337,7 @@ def create_monitor_table():
                                      host='localhost',
                                      unix_socket='/var/lib/mysql/mysql.sock')
     cursor = cnx_local_test.cursor()
-
+    cursor.execute("SET sql_notes = 0;")
     try:
         cursor.execute("""
                     CREATE DATABASE IF NOT EXISTS `test`
