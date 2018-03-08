@@ -331,7 +331,7 @@ def try_joining(how, datadirectory):
 
 def create_monitor_table():
     """create test table for monitor"""
-    print "\nCreating DB test is not exist\n"
+    print "\nCreating DB test if not exist\n"
     cnx_local_test = MySQLdb.connect(user='root',
                                      passwd=CREDENTIALS["root"],
                                      host='localhost',
