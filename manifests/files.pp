@@ -89,6 +89,9 @@ class galera_maxscale::files (
           mode    => '0640',
           content => template("${module_name}/server.cnf.erb"),
           require => Package[$galera_pkgs];
+        '/usr/bin/wsrep_sst_xtrabackup':
+          mode   => '0755',
+          source => "puppet:///modules/${module_name}/wsrep_sst_xtrabackup",
       }
     }
     'Debian': {
