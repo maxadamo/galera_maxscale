@@ -3,10 +3,8 @@
 # This Class installs all the packages
 #
 class galera_maxscale::install (
-  $galera_pkgs     = $::galera_maxscale::galera_pkgs,
-  $other_pkgs      = $::galera_maxscale::other_pkgs,
-  $galera_version  = $::galera_maxscale::galera_version,
-  $mariadb_version = $::galera_maxscale::mariadb_version,
+  $other_pkgs            = $::galera_maxscale::other_pkgs,
+  $percona_major_version = $::galera_maxscale::percona_major_version,
   ) inherits galera_maxscale::params {
 
   $config_dir = $::osfamily ? {
@@ -27,19 +25,16 @@ class galera_maxscale::install (
       '/usr/bin/clustercheck', '/root/.my.cnf', "${config_dir}/clustercheck"
     ];
   }
-
   case $::operatingsystem {
     'RedHat', 'CentOS': {
       package {
         $other_pkgs:
           ensure => latest;
-        'MariaDB-shared':
-          ensure => $mariadb_version,
-          before => Package[$galera_pkgs];
-        $galera_pkgs:
-          ensure  => $mariadb_version;
-        'galera':
-          ensure  => $galera_version;
+        "Percona-Server-shared-compat-${percona_major_version}":
+          ensure => installed,
+          before => Package["Percona-XtraDB-Cluster-full-${percona_major_version}"];
+        "Percona-XtraDB-Cluster-full-${percona_major_version}":
+          ensure => installed;
       }
     }
     'Ubuntu': {
@@ -48,10 +43,6 @@ class galera_maxscale::install (
           require => Exec['apt_update'];
         $other_pkgs:
           ensure => latest;
-        $galera_pkgs:
-          ensure  => $mariadb_version;
-        'galera-3':
-          ensure  => $galera_version;
       }
     }
     default: {

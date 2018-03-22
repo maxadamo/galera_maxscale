@@ -12,10 +12,7 @@ class galera_maxscale::repo (
         if ($http_proxy) { $proxy = $http_proxy } else { $proxy = absent }
         rpmkey {
           default:
-            ensure => present,
-            before => Class['::galera_maxscale::install'];
-          '1BB943DB':
-            source => 'http://yum.mariadb.org/RPM-GPG-KEY-MariaDB';
+            ensure => present;
           'CD2EFD2A':
             source => 'http://www.percona.com/downloads/RPM-GPG-KEY-percona';
         }
@@ -25,14 +22,9 @@ class galera_maxscale::repo (
             gpgcheck   => '1',
             proxy      => $proxy,
             mirrorlist => absent;
-          'MariaDB':
-            baseurl => "http://yum.mariadb.org/${mariadb_major_version}/centos7-amd64",
-            descr   => 'The MariaDB repository',
-            gpgkey  => 'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB',
-            require => Rpmkey['1BB943DB'];
-          'percona_release_noarch':
-            baseurl => 'http://repo.percona.com/release/$releasever/RPMS/noarch',
-            descr   => 'Percona-Release YUM repository',
+          'Percona':
+            baseurl => "http://repo.percona.com/release/\$releasever/RPMS/\$basearch",
+            descr   => 'Percona',
             gpgkey  => 'http://www.percona.com/downloads/RPM-GPG-KEY-percona',
             require => Rpmkey['CD2EFD2A'];
         }
