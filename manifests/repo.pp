@@ -1,7 +1,7 @@
 # == Class: galera_maxscale::repo inherits galera
 #
 class galera_maxscale::repo (
-  $mariadb_major_version = $::galera_maxscale::params::mariadb_major_version,
+  $percona_major_version = $::galera_maxscale::params::percona_major_version,
   $http_proxy            = $::galera_maxscale::params::http_proxy,
   $manage_repo           = $::galera_maxscale::params::manage_repo
   ) inherits galera_maxscale::params {
@@ -60,7 +60,7 @@ class galera_maxscale::repo (
             location => 'http://repo.percona.com/apt',
             release  => $::lsbdistcodename;
           'mariadb_10_2':
-            location     => "http://mirrors.supportex.net/mariadb/repo/${mariadb_major_version}/ubuntu",
+            location     => "http://mirrors.supportex.net/mariadb/repo/${percona_major_version}/ubuntu",
             architecture => 'amd64,i386',
             release      => $::lsbdistcodename;
         }
