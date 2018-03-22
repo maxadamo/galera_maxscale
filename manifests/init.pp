@@ -222,14 +222,15 @@ class galera_maxscale (
       other_pkgs            => $other_pkgs,
       percona_major_version => $percona_major_version;
     '::galera_maxscale::join':
-      monitor_password  => $monitor_password,
-      root_password     => $root_password,
-      sst_password      => $sst_password,
-      maxscale_password => $maxscale_password,
-      galera_hosts      => $galera_hosts,
-      maxscale_hosts    => $maxscale_hosts,
-      maxscale_vip      => $maxscale_vip,
-      manage_lvm        => $manage_lvm;
+      percona_major_version => $percona_major_version,
+      monitor_password      => $monitor_password,
+      root_password         => $root_password,
+      sst_password          => $sst_password,
+      maxscale_password     => $maxscale_password,
+      galera_hosts          => $galera_hosts,
+      maxscale_hosts        => $maxscale_hosts,
+      maxscale_vip          => $maxscale_vip,
+      manage_lvm            => $manage_lvm;
     '::galera_maxscale::backup':
       galera_hosts        => $galera_hosts,
       daily_hotbackup     => $daily_hotbackup,
