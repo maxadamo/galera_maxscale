@@ -3,8 +3,8 @@
 # This Class installs all the packages
 #
 class galera_maxscale::install (
-  $other_pkgs            = $::galera_maxscale::other_pkgs,
-  $percona_major_version = $::galera_maxscale::percona_major_version,
+  $other_pkgs            = $::galera_maxscale::params::other_pkgs,
+  $percona_major_version = $::galera_maxscale::params::percona_major_version,
   ) inherits galera_maxscale::params {
 
   $config_dir = $::osfamily ? {
