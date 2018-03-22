@@ -17,11 +17,6 @@ class galera_maxscale::join (
 
   $joined_file = '/var/lib/mysql/gvwstate.dat'
 
-  $galera_package = $::osfamily ? {
-    'RedHat' => 'galera',
-    'Debian' => 'galera-3',
-  }
-
   $file_list = $::osfamily ? {
     'RedHat' => [
       '/usr/bin/galera_wizard.py', '/root/galera_params.py',
@@ -35,8 +30,8 @@ class galera_maxscale::join (
   }
 
   if ($manage_lvm) {
-    $require_list =
-      [File[$file_list],
+    $require_list = [
+      File[$file_list],
       Package["Percona-XtraDB-Cluster-full-${percona_major_version}"],
       Mount['/var/lib/mysql']
     ]
