@@ -4,6 +4,7 @@
 # This Class provides files
 #
 class galera_maxscale::files (
+  $percona_major_version        = $::galera_maxscale::params::percona_major_version,
   $backup_compress              = $::galera_maxscale::params::backup_compress,
   $backup_dir                   = $::galera_maxscale::params::backup_dir,
   $backup_retention             = $::galera_maxscale::params::backup_retention,
