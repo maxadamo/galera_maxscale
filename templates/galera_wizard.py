@@ -131,17 +131,16 @@ def check_install():
             logger.setLevel(__NO_LOGGING)
 
         yumbase = yum.YumBase()
-        galera_pkgs = ['galera', 'MariaDB-server']
-        for pkg in galera_pkgs:
-            if yumbase.rpmdb.searchNevra(name=pkg):
-                pkg_list = yumbase.rpmdb.searchNevra(name=pkg)
-                print '{} installed ...'.format(pkg_list[0])
-            else:
-                print "{}{} not installed{}".format(RED, pkg, WHITE)
-                sys.exit(1)
+        pkg = 'Percona-XtraDB-Cluster-server-<%= @galera_major_version %>'
+        if yumbase.rpmdb.searchNevra(name=pkg):
+            pkg_list = yumbase.rpmdb.searchNevra(name=pkg)
+            print '{} installed ...'.format(pkg_list[0])
+        else:
+            print "{}{} not installed{}".format(RED, pkg, WHITE)
+            sys.exit(1)
         return 'mariadb'
 
-
+#Percona-XtraDB-Cluster-server-57
 def initialize_mysql(datadirectory):
     """initialize mysql default schemas"""
     fnull = open(os.devnull, 'wb')

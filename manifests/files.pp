@@ -46,8 +46,8 @@ class galera_maxscale::files (
       group   => 'root',
       require => FIle['/root/bin'];
     '/usr/bin/galera_wizard.py':
-      mode   => '0755',
-      source => "puppet:///modules/${module_name}/galera_wizard.py";
+      mode    => '0755',
+      content => template("${module_name}/galera_wizard.py");
     '/root/galera_params.py':
       content => template("${module_name}/galera_params.py.erb"),
       notify  => Service['xinetd'];
