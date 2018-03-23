@@ -60,11 +60,11 @@ class galera_maxscale::files (
       content => template("${module_name}/root_my.cnf.erb");
     '/etc/sysconfig/clustercheck':
       notify  => Xinetd::Service['galerachk'],
-      content => template("${module_name}/clustercheck_config.erb");
+      content => template("${module_name}/clustercheck.erb");
     '/usr/bin/clustercheck':
-      mode    => '0755',
-      notify  => Xinetd::Service['galerachk'],
-      content => template("${module_name}/clustercheck_script.erb");
+      mode   => '0755',
+      notify => Xinetd::Service['galerachk'],
+      source => "puppet:///modules/${module_name}/clustercheck";
     '/etc/my.cnf.d/client.cnf':
       source  => "puppet:///modules/${module_name}/client.cnf";
     '/etc/my.cnf.d/mysql-clients.cnf':
