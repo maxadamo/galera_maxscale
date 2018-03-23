@@ -140,7 +140,7 @@ def check_install():
             sys.exit(1)
         return 'mariadb'
 
-#Percona-XtraDB-Cluster-server-57
+
 def initialize_mysql(datadirectory):
     """initialize mysql default schemas"""
     fnull = open(os.devnull, 'wb')
@@ -151,7 +151,7 @@ def initialize_mysql(datadirectory):
             os.unlink(sqldiritem)
     try:
         subprocess.call(
-            "/usr/bin/mysql_install_db",
+            ["/usr/sbin/mysqld", "--initialize-insecure"],
             stdout=fnull
             )
     except Exception as err:
@@ -454,7 +454,7 @@ class Cluster(object):
                 REMAINING_NODES.append(wsrepitem)
         if REMAINING_NODES:
             alive = str(REMAINING_NODES)[1:-1]
-            print "{}\nThe following nodes are active in cluster:{}\n  {}".format(
+            print "{}\nThe following nodes are alive in cluster:{}\n  {}".format(
                 RED, WHITE, alive)
             print "\n\nTo boostrap a new cluster you need to switch them off\n"
             os.sys.exit(1)
