@@ -466,7 +466,10 @@ class Cluster(object):
                 ask('\nThis operation will destroy the local data')
             filelist = glob.glob(os.path.join(self.datadir, '*'))
             for fileitem in filelist:
-                shutil.rmtree(fileitem)
+                if os.path.isdir(fileitem):
+                    shutil.rmtree(fileitem)
+                else:
+                    os.unlink(fileitem)
             bootstrap_mysql(self.mode)
             if self.mode == "new":
                 create_monitor_table()
