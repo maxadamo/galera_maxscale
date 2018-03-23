@@ -111,7 +111,7 @@ def check_install():
         cache = apt.Cache()
         if 'galera-3' in cache.keys():
             if cache['galera-3'].is_installed:
-                return "mariadb"
+                return 'percona'
         else:
             print "galera-3 is not installed on {}".format(socket.getfqdn())
             sys.exit(1)
@@ -138,7 +138,7 @@ def check_install():
         else:
             print "{}{} not installed{}".format(RED, pkg, WHITE)
             sys.exit(1)
-        return 'mariadb'
+        return 'percona'
 
 
 def initialize_mysql(datadirectory):

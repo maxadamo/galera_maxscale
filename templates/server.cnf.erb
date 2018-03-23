@@ -10,51 +10,41 @@
 
 # this is only for the mysqld standalone daemon
 [mysqld]
-#ignore_db_dirs=.ssh
-#ignore_db_dirs=lost+found
-default_storage_engine=InnoDB
-#innodb_autoinc_lock_mode=2
-#innodb_locks_unsafe_for_binlog=0
-#innodb_lock_schedule_algorithm=fcfs
-
-user=mysql
-basedir=/usr/
-datadir=/var/lib/mysql
-socket=/var/lib/mysql/mysql.sock
-pid-file=/var/run/mysqld/mysqld.pid
-log-error=/var/log/mysqld.log
-port=3306
-#log-output=FILE
-#relay-log=relay-bin
-## INNODB OPTIONS
-innodb-buffer-pool-size=<%= (@memorysize_mb.to_f * @innodb_buffer_pool_size.to_f ).floor %>M
-innodb-flush-log-at-trx-commit=2
-innodb-file-per-table=1
-innodb-data-file-path = ibdata1:100M:autoextend
+default_storage_engine         = InnoDB
+user                           = mysql
+basedir                        = /usr/
+datadir                        = /var/lib/mysql
+socket                         = /var/lib/mysql/mysql.sock
+pid-file                       = /var/run/mysqld/mysqld.pid
+log-error                      = /var/log/mysqld.log
+port                           = 3306
+innodb-buffer-pool-size        = <%= (@memorysize_mb.to_f * @innodb_buffer_pool_size.to_f ).floor %>M
+innodb-flush-log-at-trx-commit = 2
+innodb-file-per-table          = 1
+innodb-data-file-path          = ibdata1:100M:autoextend
 ## You may want to tune the below depending on number of cores and disk sub
-innodb-read-io-threads=4
-innodb-write-io-threads=4
-#skip-innodb_doublewrite # DANGEROUS unless we use ZFS
-innodb-doublewrite=1
-innodb-log-file-size=<%= @innodb_log_file_size %>
-innodb-log-buffer-size=8M
-innodb-buffer-pool-instances=<%= @innodb_buffer_pool_instances %>
-innodb-log-files-in-group=2
-innodb-thread-concurrency=0
-innodb-flush-method = O_DIRECT
-innodb-locks-unsafe-for-binlog=1
-innodb-autoinc-lock-mode=2
-innodb-stats-on-metadata=0  # avoid statistics update when doing e.g show tables
-binlog_format=ROW
-key_buffer_size = 24M
-tmp_table_size = 64M
-max_heap_table_size = 64M
-max-allowed-packet = 512M
-memlock=0
-sysdate-is-now=1
-max-connections=<%= @max_connections %>
-thread-cache-size=<%= @thread_cache_size %>
-query-cache-type = 0
-query-cache-size = 0
-table-open_cache=1024
-lower-case-table-names=0
+innodb-read-io-threads         = 4
+innodb-write-io-threads        = 4
+innodb-doublewrite             = 1 #skip-innodb_doublewrite: DANGEROUS unless we use ZFS
+innodb-log-file-size           = <%= @innodb_log_file_size %>
+innodb-log-buffer-size         = 8M
+innodb-buffer-pool-instances   = <%= @innodb_buffer_pool_instances %>
+innodb-log-files-in-group      = 2
+innodb-thread-concurrency      = 0
+innodb-flush-method            = O_DIRECT
+innodb-locks-unsafe-for-binlog = 1
+innodb-autoinc-lock-mode       = 2
+innodb-stats-on-metadata       = 0 # avoid statistics update when doing e.g show tables
+binlog_format                  = ROW
+key_buffer_size                = 24M
+tmp_table_size                 = 64M
+max_heap_table_size            = 64M
+max-allowed-packet             = 512M
+memlock                        = 0
+sysdate-is-now                 = 1
+max-connections                = <%= @max_connections %>
+thread-cache-size              = <%= @thread_cache_size %>
+query-cache-type               = 0
+query-cache-size               = 0
+table-open_cache               = 1024
+lower-case-table-names         = 0
