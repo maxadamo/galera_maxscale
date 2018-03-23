@@ -28,9 +28,6 @@
 #   list of hosts, ipv4 (optionally ipv6) belonging to the cluster: not less than 3, not even.
 #   check examples on README.md
 #
-# [*galera_pkgs*] <Array>
-#   Galera packages list
-#
 # [*innodb_buffer_pool_size*] <String-number>
 #   default: 0.7 => 70% of memory is assigned to this MySQL parameter
 #
@@ -164,6 +161,8 @@ class galera_maxscale (
   $maxscale_hosts               = $::galera_maxscale::params::maxscale_hosts,
 
 ) inherits galera_maxscale::params {
+
+  if $::osfamily != 'RedHat' { fail("${::operatingsystem} not yet supported") }
 
   # checking cluster status through the facter galera_status
   if $::galera_status == '200' {

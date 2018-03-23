@@ -10,7 +10,6 @@ class galera_maxscale::files (
   $backup_retention             = $::galera_maxscale::params::backup_retention,
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
   $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
-  $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
   $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
   $innodb_flush_method          = $::galera_maxscale::params::innodb_flush_method,
   $innodb_io_capacity           = $::galera_maxscale::params::innodb_io_capacity,
@@ -34,18 +33,16 @@ class galera_maxscale::files (
     }
   }
 
-  $config_dir = $::osfamily ? {
-    'RedHat' => '/etc/sysconfig',
-    'Debian' => '/etc/default',
-  }
-
   file {
     default:
       ensure  => file,
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
-      require => FIle['/root/bin'];
+      require => [
+        FIle['/root/bin'],
+        Package["Percona-XtraDB-Cluster-full-${percona_major_version}"]
+      ];
     '/usr/bin/galera_wizard.py':
       mode    => '0755',
       content => template("${module_name}/galera_wizard.py");
@@ -60,67 +57,27 @@ class galera_maxscale::files (
     '/root/.my.cnf':
       mode    => '0660',
       notify  => Xinetd::Service['galerachk'],
-      require => Package[$galera_pkgs],
       content => template("${module_name}/root_my.cnf.erb");
-    "${config_dir}/clustercheck":
+    '/etc/sysconfig/clustercheck':
       notify  => Xinetd::Service['galerachk'],
       content => template("${module_name}/clustercheck_config.erb");
     '/usr/bin/clustercheck':
       mode    => '0755',
       notify  => Xinetd::Service['galerachk'],
       content => template("${module_name}/clustercheck_script.erb");
-  }
-
-  case $::osfamily {
-    'RedHat': {
-      file {
-        default:
-          ensure  => file,
-          mode    => '0644',
-          owner   => 'root',
-          group   => 'root',
-          require => Package[$galera_pkgs];
-        '/etc/my.cnf.d/client.cnf':
-          source  => "puppet:///modules/${module_name}/client.cnf";
-        '/etc/my.cnf.d/mysql-clients.cnf':
-          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
-        '/etc/my.cnf.d/server.cnf':
-          mode    => '0640',
-          content => template("${module_name}/server.cnf.erb");
-        '/etc/my.cnf.d/wsrep.cnf':
-          mode    => '0640',
-          content => template("${module_name}/wsrep.cnf.erb");
-        '/etc/my.cnf.d/mysqld_safe.cnf':
-          mode   => '0644',
-          source => "puppet:///modules/${module_name}/mysqld_safe.cnf";
-      }
-    }
-    'Debian': {
-      file {
-        default:
-          ensure => file,
-          mode   => '0644',
-          owner  => 'root',
-          group  => 'root';
-        '/etc/mysql/my.cnf':
-          require => Package[$galera_pkgs],
-          content => template("${module_name}/server.cnf.erb");
-        '/etc/mysql/mariadb.conf.d/mysql-clients.cnf':
-          require => Package[$galera_pkgs],
-          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
-        '/etc/rc.d/mysql':
-          mode   => '0755',
-          notify => Exec['galera_systemctl_daemon_reload'],
-          source => "puppet:///modules/${module_name}/mysql";
-        '/etc/init.d/mysql':
-          mode   => '0755',
-          notify => Exec['galera_systemctl_daemon_reload'],
-          source => "puppet:///modules/${module_name}/mysql";
-      }
-    }
-    default: {
-      fail("${::operatingsystem} not yet supported")
-    }
+    '/etc/my.cnf.d/client.cnf':
+      source  => "puppet:///modules/${module_name}/client.cnf";
+    '/etc/my.cnf.d/mysql-clients.cnf':
+      source  => "puppet:///modules/${module_name}/mysql-clients.cnf";
+    '/etc/my.cnf.d/server.cnf':
+      mode    => '0640',
+      content => template("${module_name}/server.cnf.erb");
+    '/etc/my.cnf.d/wsrep.cnf':
+      mode    => '0640',
+      content => template("${module_name}/wsrep.cnf.erb");
+    '/etc/my.cnf.d/mysqld_safe.cnf':
+      mode   => '0644',
+      source => "puppet:///modules/${module_name}/mysqld_safe.cnf";
   }
 
   exec { 'galera_systemctl_daemon_reload':
