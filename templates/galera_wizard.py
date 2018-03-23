@@ -131,7 +131,7 @@ def check_install():
             logger.setLevel(__NO_LOGGING)
 
         yumbase = yum.YumBase()
-        pkg = 'Percona-XtraDB-Cluster-server-<%= @galera_major_version %>'
+        pkg = 'Percona-XtraDB-Cluster-server-<%= @percona_major_version %>'
         if yumbase.rpmdb.searchNevra(name=pkg):
             pkg_list = yumbase.rpmdb.searchNevra(name=pkg)
             print '{} installed ...'.format(pkg_list[0])
