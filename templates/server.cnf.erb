@@ -21,9 +21,9 @@ user=mysql
 basedir=/usr/
 datadir=/var/lib/mysql
 socket=/var/lib/mysql/mysql.sock
-pid-file=mysqld.pid
+pid-file=/var/run/mysqld/mysqld.pid
 port=3306
-log-error=error.log
+log-error=/var/log/mysqld.log
 #log-output=FILE
 #relay-log=relay-bin
 ## INNODB OPTIONS
