@@ -81,15 +81,15 @@ class galera_maxscale::files (
           group   => 'root',
           require => Package[$galera_pkgs];
         '/etc/my.cnf.d/client.cnf':
-          source  => "puppet:///modules/${module_name}/client.cnf",
-          require => Package[$galera_pkgs];
+          source  => "puppet:///modules/${module_name}/client.cnf";
         '/etc/my.cnf.d/mysql-clients.cnf':
-          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}",
-          require => Package[$galera_pkgs];
+          source  => "puppet:///modules/${module_name}/mysql-clients.cnf.${::osfamily}";
         '/etc/my.cnf.d/server.cnf':
           mode    => '0640',
-          content => template("${module_name}/server.cnf.erb"),
-          require => Package[$galera_pkgs];
+          content => template("${module_name}/server.cnf.erb");
+        '/etc/my.cnf.d/mysqld_safe.cnf':
+          mode   => '0640',
+          source => "puppet:///modules/${module_name}/mysqld_safe.cnf";
       }
     }
     'Debian': {
