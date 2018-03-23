@@ -404,7 +404,7 @@ def create_users(thisuser):
     if thisuser == "root":
         for onthishost in ["localhost", "127.0.0.1", "::1"]:
             cursor.execute("""
-                set PASSWORD for 'root'@'{}' = PASSWORD('{}')
+                set PASSWORD for 'root'@'{}' = '{}'
                 """.format(onthishost, CREDENTIALS[thisuser]))
     for thishost in ALL_NODES:
         if thisuser == "sstuser":
@@ -529,7 +529,7 @@ class Cluster(object):
             print "\n# define user {}".format(thisuser)
             if thisuser == "root":
                 for onthishost in ["localhost", "127.0.0.1", "::1"]:
-                    print "set PASSWORD for 'root'@'{}' = PASSWORD('{}')".format(
+                    print "set PASSWORD for 'root'@'{}' = '{}'".format(
                         onthishost, CREDENTIALS[thisuser])
             for thishost in ALL_NODES:
                 if thisuser != "root":
