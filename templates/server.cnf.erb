@@ -1,5 +1,5 @@
 #
-# These groups are read by MariaDB server.
+# These groups are read by Percona server.
 # Use it for options that only the server (but not clients) should see
 #
 # See the examples of server my.cnf files in /usr/share/mysql/
@@ -145,25 +145,6 @@ wsrep_sst_auth=sstuser:<%= @sst_password %>
 
 # this is only for embedded server
 [embedded]
-
-# This group is only read by MariaDB-10.2
-[mysqld-10.2]
-
-# This group is only read by MariaDB servers, not by MySQL.
-# If you use the same .cnf file for MySQL and MariaDB,
-# you can put MariaDB-only options here
-[mariadb]
-
-# This group is only read by MariaDB-10.2 servers.
-# If you use the same .cnf file for MariaDB of different versions,
-# use this group for options that older servers don't understand
-[mariadb-10.2]
-
-[mysqld_safe]
-pid-file=mysqld.pid
-log-error=error.log
-basedir=/usr/
-datadir=/var/lib/mysql
 
 <% if @osfamily == 'Debian' -%>
 [client-server]
