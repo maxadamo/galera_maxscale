@@ -150,8 +150,12 @@ def initialize_mysql(datadirectory):
         else:
             os.unlink(sqldiritem)
     try:
-        subprocess.call(
-            ["/usr/sbin/mysqld", "--initialize-insecure"],
+        subprocess.call([
+            '/usr/sbin/mysqld',
+            '--initialize-insecure',
+            '--datadir={}'.format(datadirectory),
+            '--user=mysql'
+            ],
             stdout=fnull
             )
     except Exception as err:
@@ -184,13 +188,12 @@ def bootstrap_mysql(boot):
     else:
         check_leader()
 
-    if platform.dist()[0] in ['fedora', 'redhat', 'centos']:
-        init_script = "/etc/rc.d/init.d/mysql"
-    elif platform.dist()[0] in ['debian', 'Ubuntu', 'LinuxMint']:
-        init_script = "/etc/rc.d/mysql"
-
     try:
-        subprocess.call([init_script, "bootstrap"])
+        subprocess.call([
+            '/usr/bin/systemctl',
+            'start',
+            'mysql@bootstrap.service'
+        ])
     except Exception as err:
         print "Error bootstrapping the cluster: {}".format(err)
         sys.exit(1)
@@ -461,11 +464,9 @@ class Cluster(object):
         else:
             if self.mode == "new" and not self.force:
                 ask('\nThis operation will destroy the local data')
-                print "\ninitializing mysql tables ...\n"
-                initialize_mysql(self.datadir)
-            elif self.mode == "new" and self.force:
-                print "\ninitializing mysql tables ...\n"
-                initialize_mysql(self.datadir)
+            filelist = glob.glob(os.path.join(self.datadir, '*'))
+            for fileitem in filelist:
+                shutil.rmtree(fileitem)
             bootstrap_mysql(self.mode)
             if self.mode == "new":
                 create_monitor_table()
