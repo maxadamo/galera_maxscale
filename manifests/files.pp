@@ -87,8 +87,11 @@ class galera_maxscale::files (
         '/etc/my.cnf.d/server.cnf':
           mode    => '0640',
           content => template("${module_name}/server.cnf.erb");
+        '/etc/my.cnf.d/wsrep.cnf':
+          mode    => '0640',
+          content => template("${module_name}/wsrep.cnf.erb");
         '/etc/my.cnf.d/mysqld_safe.cnf':
-          mode   => '0640',
+          mode   => '0644',
           source => "puppet:///modules/${module_name}/mysqld_safe.cnf";
       }
     }
