@@ -19,14 +19,16 @@ gcomm_list = gcomm_list.chomp(",")
 wsrep_cluster_address="<%= gcomm_list -%>"
 
 # Full path to wsrep provider library or 'none'
-<% if @osfamily == 'Debian' -%>
-wsrep_provider=/usr/lib/galera/libgalera_smm.so
-<% else -%>
-wsrep_provider=/usr/lib64/galera/libgalera_smm.so
-<% end -%>
+wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
 
-# node name
+#pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
+pxc_strict_mode=ENFORCING
+
+# node IP address
 wsrep_node_address="<%= @ipaddress %>"
+
+#If wsrep_node_name is not specified,  then system hostname will be used
+wsrep_node_name=<%= @hostname %>
 
 # Provider specific configuration options
 wsrep_provider_options="gcache.size=<%= (@memorysize_mb.to_f * 0.15).floor %>M"
@@ -57,7 +59,7 @@ wsrep_retry_autocommit=5
 wsrep_auto_increment_control=1
 
 # replicate myisam (it is NOT safe, we use it ONLY for the system tables)
-wsrep_replicate_myisam=1
+#wsrep_replicate_myisam=1 # Not working with Percona
 # retry autoinc insert, which failed for duplicate key error
 wsrep_drupal_282555_workaround=0
 
