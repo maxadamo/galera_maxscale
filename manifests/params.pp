@@ -25,16 +25,10 @@ class galera_maxscale::params {
   $max_connections = 1024
   $monitor_password = undef
   $monitor_username = 'monitor'
-  $other_pkgs = $::osfamily ? {
-    'RedHat' => [
-      'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-      'MySQL-python', 'qpress', 'nc', 'socat'
-    ],
-    'Debian' => [
-      'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-      'python-mysqldb', 'qpress', 'netcat-openbsd', 'socat'
-    ],
-  }
+  $other_pkgs = [
+    'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
+    'MySQL-python', 'qpress', 'nc', 'socat'
+  ]
   $root_password = undef
   $sst_password = undef
   $thread_cache_size = 16
