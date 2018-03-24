@@ -87,6 +87,15 @@ class galera_maxscale::files (
       source => "puppet:///modules/${module_name}/mysqld_safe.cnf";
   }
 
+  file_line { 'mysql_systemd':
+    ensure             => present,
+    path               => '/usr/bin/mysql-systemd',
+    line               => 'export HTTP_PROXY=http://squid.puppetlabs.vm:3128',
+    match              => '/usr/sbin/mysqld --initialize --datadir',
+    append_on_no_match => false,
+    require            => Package["Percona-XtraDB-Cluster-full-${percona_major_version}"];
+  }
+
   exec { 'galera_systemctl_daemon_reload':
     command     => 'systemctl daemon-reload',
     path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',

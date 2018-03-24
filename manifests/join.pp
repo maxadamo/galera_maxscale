@@ -26,12 +26,14 @@ class galera_maxscale::join (
   if ($manage_lvm) {
     $require_list = [
       File[$file_list],
+      File_line['mysql_systemd'],
       Package["Percona-XtraDB-Cluster-full-${percona_major_version}"],
       Mount['/var/lib/mysql']
     ]
   } else {
     $require_list = [
       File[$file_list],
+      File_line['mysql_systemd'],
       Package["Percona-XtraDB-Cluster-full-${percona_major_version}"]
     ]
   }
