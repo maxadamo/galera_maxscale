@@ -385,7 +385,7 @@ def create_monitor_table():
 
 
 def create_users(thisuser):
-    """create users root, monitor and SST and delete anonymous"""
+    """create users root, monitor and sst and delete anonymous"""
     cnx_local = MySQLdb.connect(user='root',
                                 passwd=CREDENTIALS["root"],
                                 unix_socket='/var/lib/mysql/mysql.sock',
