@@ -305,7 +305,7 @@ def try_joining(how, datadirectory):
                 sys.exit(1)
         else:
             restore_mycnf()
-        print 'successfully joined the cluster\n'
+        print '\nsuccessfully joined the cluster\n'
 
 
 def create_monitor_table():
