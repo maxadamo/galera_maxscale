@@ -5,10 +5,6 @@
 # See the examples of server my.cnf files in /usr/share/mysql/
 #
 
-# this is read by the standalone daemon and embedded servers
-[server]
-
-# this is only for the mysqld standalone daemon
 [mysqld]
 default_storage_engine         = InnoDB
 user                           = mysql
@@ -25,7 +21,7 @@ innodb-data-file-path          = ibdata1:100M:autoextend
 ## You may want to tune the below depending on number of cores and disk sub
 innodb-read-io-threads         = 4
 innodb-write-io-threads        = 4
-innodb-doublewrite             = 1 #skip-innodb_doublewrite: DANGEROUS unless we use ZFS
+innodb-doublewrite             = 1 # skip-innodb_doublewrite: DANGEROUS unless we use ZFS
 innodb-log-file-size           = <%= @innodb_log_file_size %>
 innodb-log-buffer-size         = 8M
 innodb-buffer-pool-instances   = <%= @innodb_buffer_pool_instances %>

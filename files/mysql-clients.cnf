@@ -3,7 +3,7 @@
 # Use it for options that affect only one utility
 #
 [mysql]
-prompt="\u@\h [DB: \d]> "
+prompt = "\u@\h [DB: \d]> "
 
 [mysql_upgrade]
 
