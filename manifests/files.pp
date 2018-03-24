@@ -43,6 +43,13 @@ class galera_maxscale::files (
         FIle['/root/bin'],
         Package["Percona-XtraDB-Cluster-full-${percona_major_version}"]
       ];
+    '/etc/my.cnf':
+      source => "puppet:///modules/${module_name}/my.cnf";
+    '/etc/my.cnf.d':
+      ensure  => directory,
+      purge   => true,
+      recurse => true,
+      force   => true;
     '/usr/bin/galera_wizard.py':
       mode    => '0755',
       content => template("${module_name}/galera_wizard.py");

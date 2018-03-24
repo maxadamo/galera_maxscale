@@ -18,7 +18,7 @@ class galera_maxscale::join (
   $joined_file = '/var/lib/mysql/gvwstate.dat'
 
   $file_list = [
-    '/usr/bin/galera_wizard.py', '/root/galera_params.py',
+    '/usr/bin/galera_wizard.py', '/root/galera_params.py', '/etc/my.cnf',
     '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf'
   ]
 
