@@ -19,7 +19,8 @@ class galera_maxscale::join (
 
   $file_list = [
     '/usr/bin/galera_wizard.py', '/root/galera_params.py', '/etc/my.cnf',
-    '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf'
+    '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf',
+    '/etc/my.cnf.d/wsrep.cnf', '/etc/my.cnf'
   ]
 
   if ($manage_lvm) {
