@@ -80,6 +80,8 @@ def ask(msg):
 def kill_mysql():
     """kill mysql"""
     print "\nKilling any running instance of MySQL ..."
+    init_script_1 = ['systemctl', 'stop', 'mysql.service']
+    init_script_2 = ['systemctl', 'stop', 'mysql@bootstrap.service']
     mysqlproc = subprocess.Popen(
         ['pgrep', '-f', 'mysqld'],
         stdout=subprocess.PIPE)
@@ -88,6 +90,11 @@ def kill_mysql():
         os.kill(int(pid), signal.SIGKILL)
     if os.path.isfile("/var/lock/subsys/mysql"):
         os.unlink("/var/lock/subsys/mysql")
+    for stop_script in [init_script_1, init_script_2]:
+        try:
+            subprocess.call(stop_script)
+        except Exception:
+            pass
 
 
 def restore_mycnf():
@@ -173,7 +180,6 @@ def bootstrap_mysql(boot):
     """bootstrap the cluster"""
     fnull = open(os.devnull, 'wb')
     kill_mysql()
-
     if boot == "new":
         if os.path.isfile('/root/.my.cnf'):
             os.rename('/root/.my.cnf', '/root/.my.cnf.bak')
