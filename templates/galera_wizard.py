@@ -401,16 +401,41 @@ def create_users(thisuser):
     except Exception:
         pass
     print "Creating user: {}".format(thisuser)
+    if thisuser == 'sstuser':
+        thisgrant = 'PROCESS, SELECT, RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.*'
+    elif thisuser == 'monitor':
+        thisgrant = 'UPDATE ON test.monitor'
+    elif thisuser == 'root':
+        thisgrant = 'ALL PRIVILEGES ON *.*'
+
     if thisuser == "root":
         for onthishost in ["localhost", "127.0.0.1", "::1"]:
-            cursor.execute("""
-                set PASSWORD for 'root'@'{}' = '{}'
-                """.format(onthishost, CREDENTIALS[thisuser]))
+            try:
+                cursor.execute("""
+                    CREATE USER '{}'@'{}' IDENTIFIED BY '{}'
+                    """.format(thisuser, onthishost, CREDENTIALS[thisuser]))
+            except Exception:
+                print "Unable to create user {} on {}".format(thisuser,
+                                                              onthishost)
+            try:
+                cursor.execute("""
+                        GRANT {} TO '{}'@'{}' WITH GRANT OPTION
+                        """.format(thisgrant, thisuser, onthishost))
+            except Exception as err:
+                print "Unable to set permission for {} at {}: {}".format(
+                    thisuser,
+                    onthishost,
+                    err)
+                os.sys.exit()
+            try:
+                cursor.execute("""
+                    set PASSWORD for 'root'@'{}' = '{}'
+                    """.format(onthishost, CREDENTIALS[thisuser]))
+            except Exception as err:
+                print "Unable to set password for root on {}".format(thishost)
+                os.sys.exit()
+
     for thishost in ALL_NODES:
-        if thisuser == "sstuser":
-            thisgrant = "PROCESS, SELECT, RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.*"
-        elif thisuser == "monitor":
-            thisgrant = "UPDATE ON test.monitor"
         if thisuser != "root":
             try:
                 cursor.execute("""
