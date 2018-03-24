@@ -17,17 +17,10 @@ class galera_maxscale::join (
 
   $joined_file = '/var/lib/mysql/gvwstate.dat'
 
-  $file_list = $::osfamily ? {
-    'RedHat' => [
-      '/usr/bin/galera_wizard.py', '/root/galera_params.py',
-      '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf'
-    ],
-    'Debian' => [
-      '/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf',
-      '/etc/mysql/my.cnf', '/etc/mysql/mariadb.conf.d/mysql-clients.cnf',
-      '/etc/rc.d/mysql'
-    ],
-  }
+  $file_list = [
+    '/usr/bin/galera_wizard.py', '/root/galera_params.py',
+    '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf'
+  ]
 
   if ($manage_lvm) {
     $require_list = [
