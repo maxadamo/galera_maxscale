@@ -4,39 +4,38 @@
 # This Class manages services
 #
 class galera_maxscale::join (
-  $monitor_password  = $::galera_maxscale::params::monitor_password,
-  $root_password     = $::galera_maxscale::params::root_password,
-  $sst_password      = $::galera_maxscale::params::sst_password,
-  $maxscale_password = $::galera_maxscale::params::maxscale_password,
-  $galera_hosts      = $::galera_maxscale::params::galera_hosts,
-  $maxscale_hosts    = $::galera_maxscale::params::maxscale_hosts,
-  $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
-  $manage_lvm        = $::galera_maxscale::params::manage_lvm,
+  $percona_major_version = $::galera_maxscale::params::percona_major_version,
+  $monitor_password      = $::galera_maxscale::params::monitor_password,
+  $root_password         = $::galera_maxscale::params::root_password,
+  $sst_password          = $::galera_maxscale::params::sst_password,
+  $maxscale_password     = $::galera_maxscale::params::maxscale_password,
+  $galera_hosts          = $::galera_maxscale::params::galera_hosts,
+  $maxscale_hosts        = $::galera_maxscale::params::maxscale_hosts,
+  $maxscale_vip          = $::galera_maxscale::params::maxscale_vip,
+  $manage_lvm            = $::galera_maxscale::params::manage_lvm,
   ) inherits galera_maxscale::params {
 
   $joined_file = '/var/lib/mysql/gvwstate.dat'
 
-  $galera_package = $::osfamily ? {
-    'RedHat' => 'galera',
-    'Debian' => 'galera-3',
-  }
-
-  $file_list = $::osfamily ? {
-    'RedHat' => [
-      '/usr/bin/galera_wizard.py', '/root/galera_params.py',
-      '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf'
-    ],
-    'Debian' => [
-      '/usr/bin/galera_wizard.py', '/root/galera_params.py', '/root/.my.cnf',
-      '/etc/mysql/my.cnf', '/etc/mysql/mariadb.conf.d/mysql-clients.cnf',
-      '/etc/rc.d/mysql'
-    ],
-  }
+  $file_list = [
+    '/usr/bin/galera_wizard.py', '/root/galera_params.py', '/etc/my.cnf',
+    '/root/.my.cnf', '/etc/my.cnf.d/server.cnf', '/etc/my.cnf.d/client.cnf',
+    '/etc/my.cnf.d/wsrep.cnf', '/etc/my.cnf'
+  ]
 
   if ($manage_lvm) {
-    $require_list = [File[$file_list], Package[$galera_package], Mount['/var/lib/mysql']]
+    $require_list = [
+      File[$file_list],
+      File_line['mysql_systemd'],
+      Package["Percona-XtraDB-Cluster-full-${percona_major_version}"],
+      Mount['/var/lib/mysql']
+    ]
   } else {
-    $require_list = [File[$file_list], Package[$galera_package]]
+    $require_list = [
+      File[$file_list],
+      File_line['mysql_systemd'],
+      Package["Percona-XtraDB-Cluster-full-${percona_major_version}"]
+    ]
   }
 
   unless defined(Exec['bootstrap_or_join']) {

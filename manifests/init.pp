@@ -28,14 +28,8 @@
 #   list of hosts, ipv4 (optionally ipv6) belonging to the cluster: not less than 3, not even.
 #   check examples on README.md
 #
-# [*galera_pkgs*] <Array>
-#   Galera packages list
-#
 # [*innodb_buffer_pool_size*] <String-number>
 #   default: 0.7 => 70% of memory is assigned to this MySQL parameter
-#
-# [*galera_version*] <String>
-#   default: latest
 #
 # [*http_proxy*] <String>
 #   default: undef  http proxy used for instance by gpg key
@@ -68,7 +62,7 @@
 # [*manage_repo*] <Bool>
 #   default: true => please check repo.pp to understand what repos are neeeded
 #
-# [*mariadb_version*] <String>
+# [*galera_version*] <String>
 #   default: latest
 #
 # [*max_connections*] <Int>
@@ -128,18 +122,16 @@ class galera_maxscale (
   $daily_hotbackup              = $::galera_maxscale::params::daily_hotbackup,
   $galera_cluster_name          = $::galera_maxscale::params::galera_cluster_name,
   $galera_hosts                 = $::galera_maxscale::params::galera_hosts,
-  $galera_pkgs                  = $::galera_maxscale::params::galera_pkgs,
   $innodb_buffer_pool_size      = $::galera_maxscale::params::innodb_buffer_pool_size,
-  $galera_version               = $::galera_maxscale::params::galera_version,
   $innodb_buffer_pool_instances = $::galera_maxscale::params::innodb_buffer_pool_instances,
   $innodb_flush_method          = $::galera_maxscale::params::innodb_flush_method,
   $innodb_io_capacity           = $::galera_maxscale::params::innodb_io_capacity,
   $innodb_log_file_size         = $::galera_maxscale::params::innodb_log_file_size,
   $logdir                       = $::galera_maxscale::params::logdir,
   $lv_size                      = $::galera_maxscale::params::lv_size,
-  $mariadb_major_version        = $::galera_maxscale::params::mariadb_major_version,
+  $percona_major_version        = $::galera_maxscale::params::mariadb_major_version,
   $manage_lvm                   = $::galera_maxscale::params::manage_lvm,
-  $mariadb_version              = $::galera_maxscale::params::mariadb_version,
+  $galera_version              = $::galera_maxscale::params::galera_version,
   $max_connections              = $::galera_maxscale::params::max_connections,
   $monitor_password             = $::galera_maxscale::params::monitor_password,
   $monitor_username             = $::galera_maxscale::params::monitor_username,
@@ -169,6 +161,8 @@ class galera_maxscale (
   $maxscale_hosts               = $::galera_maxscale::params::maxscale_hosts,
 
 ) inherits galera_maxscale::params {
+
+  if $::osfamily != 'RedHat' { fail("${::operatingsystem} not yet supported") }
 
   # checking cluster status through the facter galera_status
   if $::galera_status == '200' {
@@ -209,7 +203,6 @@ class galera_maxscale (
       backup_retention             => $backup_retention,
       galera_cluster_name          => $galera_cluster_name,
       galera_hosts                 => $galera_hosts,
-      galera_pkgs                  => $galera_pkgs,
       innodb_buffer_pool_instances => $innodb_buffer_pool_instances,
       innodb_flush_method          => $innodb_flush_method,
       innodb_io_capacity           => $innodb_io_capacity,
@@ -225,31 +218,31 @@ class galera_maxscale (
       thread_cache_size            => $thread_cache_size,
       slow_query_time              => $slow_query_time;
     '::galera_maxscale::install':
-      galera_pkgs => $galera_pkgs,
-      other_pkgs  => $other_pkgs;
+      other_pkgs            => $other_pkgs,
+      percona_major_version => $percona_major_version;
     '::galera_maxscale::join':
-      monitor_password  => $monitor_password,
-      root_password     => $root_password,
-      sst_password      => $sst_password,
-      maxscale_password => $maxscale_password,
-      galera_hosts      => $galera_hosts,
-      maxscale_hosts    => $maxscale_hosts,
-      maxscale_vip      => $maxscale_vip,
-      manage_lvm        => $manage_lvm;
+      percona_major_version => $percona_major_version,
+      monitor_password      => $monitor_password,
+      root_password         => $root_password,
+      sst_password          => $sst_password,
+      maxscale_password     => $maxscale_password,
+      galera_hosts          => $galera_hosts,
+      maxscale_hosts        => $maxscale_hosts,
+      maxscale_vip          => $maxscale_vip,
+      manage_lvm            => $manage_lvm;
     '::galera_maxscale::backup':
       galera_hosts        => $galera_hosts,
       daily_hotbackup     => $daily_hotbackup,
       galera_cluster_name => $galera_cluster_name,
       backup_dir          => $backup_dir;
     '::galera_maxscale::repo':
-      mariadb_major_version => $mariadb_major_version,
+      percona_major_version => $percona_major_version,
       http_proxy            => $http_proxy,
       manage_repo           => $manage_repo;
     '::galera_maxscale::lvm':
-      manage_lvm  => $manage_lvm,
-      galera_pkgs => $galera_pkgs,
-      vg_name     => $vg_name,
-      lv_size     => $lv_size;
+      manage_lvm => $manage_lvm,
+      vg_name    => $vg_name,
+      lv_size    => $lv_size;
     '::galera_maxscale::services':;
   }
 

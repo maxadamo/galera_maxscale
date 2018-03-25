@@ -4,11 +4,6 @@
 #
 
 [client]
-socket=/var/lib/mysql/mysql.sock
+socket = /var/lib/mysql/mysql.sock
 # commenting out prompt as it cause mysqladmin failure
 # and script status will not work
-
-# This group is not read by mysql client library,
-# If you use the same .cnf file for MySQL and MariaDB,
-# use it for MariaDB-only client options
-[client-mariadb]

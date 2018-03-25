@@ -2,11 +2,8 @@
 # These groups are read by MariaDB command-line tools
 # Use it for options that affect only one utility
 #
-[client]
-socket=/var/lib/mysql/mysql.sock
-
 [mysql]
-prompt="\u@\h [DB: \d]> "
+prompt = "\u@\h [DB: \d]> "
 
 [mysql_upgrade]
 

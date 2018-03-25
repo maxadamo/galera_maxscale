@@ -11,10 +11,6 @@ class galera_maxscale::params {
   $daily_hotbackup = undef
   $galera_cluster_name = "${::environment}_galera"
   $galera_hosts = undef
-  $galera_pkgs = $::osfamily ? {
-    'RedHat' => ['MariaDB-client', 'MariaDB-common', 'MariaDB-compat', 'MariaDB-server'],
-    'Debian' => ['mariadb-client', 'mariadb-common', 'mariadb-server'],
-  }
   $innodb_buffer_pool_size = '0.7'
   $galera_version = 'latest'
   $innodb_buffer_pool_instances = 1
@@ -23,22 +19,16 @@ class galera_maxscale::params {
   $innodb_log_file_size = '512M'
   $logdir = undef
   $lv_size = undef
-  $mariadb_major_version = '10.2'
+  $percona_major_version = '57'
   $manage_lvm = undef
   $mariadb_version = 'latest'
   $max_connections = 1024
   $monitor_password = undef
   $monitor_username = 'monitor'
-  $other_pkgs = $::osfamily ? {
-    'RedHat' => [
-      'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-      'MySQL-python', 'qpress', 'nc', 'socat'
-    ],
-    'Debian' => [
-      'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
-      'python-mysqldb', 'qpress', 'netcat-openbsd', 'socat'
-    ],
-  }
+  $other_pkgs = [
+    'percona-xtrabackup-24', 'percona-toolkit', 'python-paramiko',
+    'MySQL-python', 'qpress', 'nc', 'socat'
+  ]
   $root_password = undef
   $sst_password = undef
   $thread_cache_size = 16
