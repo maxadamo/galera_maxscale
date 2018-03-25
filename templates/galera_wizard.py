@@ -104,7 +104,7 @@ def restore_mycnf():
 
 
 def check_install():
-    """check if MariaDB is installed"""
+    """check if Percona is installed"""
     if platform.dist()[0] not in ['fedora', 'redhat', 'centos']:
         print "{} not supported".format(platform.dist()[0])
         sys.exit(1)
@@ -367,6 +367,28 @@ def create_monitor_table():
             cnx_local_test.close()
 
 
+def drop_anonymous():
+    """drop anonymous user"""
+    all_hosts = [
+        "localhost", "127.0.0.1", "::1",
+        socket.gethostbyname(socket.gethostname())
+    ]
+    cnx_local = MySQLdb.connect(
+        user='root',
+        passwd=CREDENTIALS["root"],
+        unix_socket='/var/lib/mysql/mysql.sock',
+        host='localhost')
+    cursor = cnx_local.cursor()
+    for onthishost in all_hosts:
+        try:
+            cursor.execute("""DROP USER ''@'{}'""".format(onthishost))
+        except Exception:
+            pass
+    if cnx_local:
+        cursor.execute("""FLUSH PRIVILEGES""")
+        cnx_local.close()
+
+
 def create_users(thisuser):
     """create users root, monitor and sst and delete anonymous"""
     cnx_local = MySQLdb.connect(user='root',
@@ -374,15 +396,6 @@ def create_users(thisuser):
                                 unix_socket='/var/lib/mysql/mysql.sock',
                                 host='localhost')
     cursor = cnx_local.cursor()
-    try:
-        cursor.execute("""DROP USER ''@'localhost'""")
-    except Exception:
-        pass
-    try:
-        cursor.execute("""DROP USER ''@'{}'""".format(
-            socket.gethostbyname(socket.gethostname())))
-    except Exception:
-        pass
     print "Creating user: {}".format(thisuser)
     if thisuser == 'sstuser':
         thisgrant = 'PROCESS, SELECT, RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.*'
@@ -486,6 +499,7 @@ class Cluster(object):
                 for creditem in CREDENTIALS:
                     create_users(creditem)
                 print ""
+                drop_anonymous()
 
     def joincluster(self):
         """join a cluster"""

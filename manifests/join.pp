@@ -40,7 +40,7 @@ class galera_maxscale::join (
 
   unless defined(Exec['bootstrap_or_join']) {
     exec { 'bootstrap_or_join':
-      command => 'galera_wizard.py -bn -f || galera_wizard.py -je || galera_wizard.py -jn -f',
+      command => 'galera_wizard.py -bn -f || galera_wizard.py -jn -f',
       path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
       creates => $joined_file,
       returns => [0,1],
