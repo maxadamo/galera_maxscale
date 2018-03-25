@@ -35,8 +35,8 @@ import sys
 import pwd
 import grp
 import os
-import MySQLdb
 from warnings import filterwarnings
+import MySQLdb
 
 FORCE = False
 ALL_NODES = []
@@ -369,7 +369,7 @@ def create_monitor_table():
 
 def drop_anonymous():
     """drop anonymous user"""
-    all_hosts = [
+    all_localhosts = [
         "localhost", "127.0.0.1", "::1",
         socket.gethostbyname(socket.gethostname())
     ]
@@ -379,7 +379,7 @@ def drop_anonymous():
         unix_socket='/var/lib/mysql/mysql.sock',
         host='localhost')
     cursor = cnx_local.cursor()
-    for onthishost in all_hosts:
+    for onthishost in all_localhosts:
         try:
             cursor.execute("""DROP USER ''@'{}'""".format(onthishost))
         except Exception:
@@ -401,8 +401,6 @@ def create_users(thisuser):
         thisgrant = 'PROCESS, SELECT, RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.*'
     elif thisuser == 'monitor':
         thisgrant = 'UPDATE ON test.monitor'
-    elif thisuser == 'root':
-        thisgrant = 'ALL PRIVILEGES ON *.*'
 
     if thisuser == "root":
         for onthishost in ["localhost", "127.0.0.1", "::1"]:
@@ -417,8 +415,8 @@ def create_users(thisuser):
                     err)
             try:
                 cursor.execute("""
-                        GRANT {} TO '{}'@'{}' WITH GRANT OPTION
-                        """.format(thisgrant, thisuser, onthishost))
+                    GRANT ALL PRIVILEGES ON *.* TO '{}'@'{}' WITH GRANT OPTION
+                    """.format(thisuser, onthishost))
             except Exception as err:
                 print "Unable to set permission for {} at {}: {}".format(
                     thisuser,
@@ -433,8 +431,7 @@ def create_users(thisuser):
                 print "Unable to set password for {} on {}: {}".format(
                     thisuser,
                     onthishost,
-                    err
-                    )
+                    err)
                 os.sys.exit()
     else:
         for thishost in ALL_NODES:
@@ -443,8 +440,9 @@ def create_users(thisuser):
                     CREATE USER '{}'@'{}' IDENTIFIED BY '{}'
                     """.format(thisuser, thishost, CREDENTIALS[thisuser]))
             except Exception:
-                print "Unable to create user {} on {}".format(thisuser,
-                                                              thishost)
+                print "Unable to create user {} on {}".format(
+                    thisuser,
+                    thishost)
             try:
                 cursor.execute("""
                         GRANT {} TO '{}'@'{}'
