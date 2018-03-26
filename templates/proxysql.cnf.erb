@@ -25,10 +25,10 @@ datadir="/var/lib/proxysql"
 
 admin_variables=
 {
-    admin_credentials="admin:admin"
-    mysql_ifaces="0.0.0.0:3307"
-#   refresh_interval=2000
-#   debug=true
+  admin_credentials="admin:admin"
+  mysql_ifaces="127.0.0.1:3307;/var/lib/mysql/mysql_admin.sock"
+  # refresh_interval=2000
+  # debug=true
 }
 
 mysql_variables=
