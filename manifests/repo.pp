@@ -1,7 +1,6 @@
 # == Class: galera_maxscale::repo inherits galera
 #
 class galera_maxscale::repo (
-  $percona_major_version = $::galera_maxscale::params::percona_major_version,
   $http_proxy            = $::galera_maxscale::params::http_proxy,
   $manage_repo           = $::galera_maxscale::params::manage_repo
   ) inherits galera_maxscale::params {

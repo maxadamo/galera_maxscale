@@ -53,9 +53,8 @@ class galera_maxscale::proxysql::proxysql (
 
   class {
     '::galera_maxscale::repo':
-      maxscale_major_version => $maxscale_major_version,
-      http_proxy             => $http_proxy,
-      manage_repo            => $manage_repo;
+      http_proxy  => $http_proxy,
+      manage_repo => $manage_repo;
     '::galera_maxscale::proxysql::keepalived':
       manage_ipv6       => $ipv6_true,
       maxscale_hosts    => $maxscale_hosts,
