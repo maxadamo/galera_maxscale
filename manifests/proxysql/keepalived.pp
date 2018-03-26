@@ -1,6 +1,6 @@
-# == Class: galera_maxscale::maxscale::keepalived
+# == Class: galera_maxscale::proxysql::keepalived
 #
-class galera_maxscale::maxscale::keepalived (
+class galera_maxscale::proxysql::keepalived (
   $maxscale_hosts    = $::galera_maxscale::params::maxscale_hosts,
   $maxscale_vip      = $::galera_maxscale::params::maxscale_vip,
   $network_interface = $::galera_maxscale::params::network_interface,
@@ -16,16 +16,16 @@ class galera_maxscale::maxscale::keepalived (
   }
 
   include ::keepalived
-  class { '::galera_maxscale::maxscale::firewall': peer_ip => $peer_ip; }
+  class { '::galera_maxscale::proxysql::firewall': peer_ip => $peer_ip; }
 
-  keepalived::vrrp::script { 'check_maxscale':
-    script   => 'killall -0 maxscale',
+  keepalived::vrrp::script { 'check_proxysql':
+    script   => 'killall -0 proxysql',
     interval => '2',
     weight   => '2';
   }
 
   if ($manage_ipv6) {
-    keepalived::vrrp::instance { 'MaxScale':
+    keepalived::vrrp::instance { 'ProxySQL':
       interface                  => $network_interface,
       state                      => 'BACKUP',
       virtual_router_id          => '50',
@@ -36,10 +36,10 @@ class galera_maxscale::maxscale::keepalived (
       auth_pass                  => 'secret',
       virtual_ipaddress          => "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
       virtual_ipaddress_excluded => ["${maxscale_vip[$vip_key]['ipv6']}/${maxscale_vip[$vip_key]['ipv6_subnet']}"],
-      track_script               => 'check_maxscale';
+      track_script               => 'check_proxysql';
     }
   } else {
-    keepalived::vrrp::instance { 'MaxScale':
+    keepalived::vrrp::instance { 'ProxySQL':
       interface         => $network_interface,
       state             => 'BACKUP',
       virtual_router_id => '50',
@@ -49,7 +49,7 @@ class galera_maxscale::maxscale::keepalived (
       auth_type         => 'PASS',
       auth_pass         => 'secret',
       virtual_ipaddress => "${maxscale_vip[$vip_key]['ipv4']}/${maxscale_vip[$vip_key]['ipv4_subnet']}",
-      track_script      => 'check_maxscale';
+      track_script      => 'check_proxysql';
     }
   }
 
