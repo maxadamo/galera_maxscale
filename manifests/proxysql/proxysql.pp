@@ -123,7 +123,7 @@ class galera_maxscale::proxysql::proxysql (
     '/root/.my.cnf':
       owner   => root,
       group   => root,
-      content => "[client]\nuser=proxysql\npassword=${proxysql_password}\n"
+      content => "[client]\nuser=proxysql\npassword=${proxysql_password}\nprompt = \"\\u@\\h [DB: \\d]> \"\n"
   }
 
   # we need a fake exec in common with galera nodes to let
