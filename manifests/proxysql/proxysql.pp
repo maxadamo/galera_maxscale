@@ -6,15 +6,15 @@
 #   list of hosts, ipv4 (optionally ipv6) belonging to the cluster: not less than 3, not even.
 #   check examples on README.md
 #
-# [*maxscale_hosts*] <Hash>
-#   list of hosts, ipv4 (optionally ipv6) belonging to MaxScale cluster.
+# [*proxysql_hosts*] <Hash>
+#   list of hosts, ipv4 (optionally ipv6) belonging to ProxySQL cluster.
 #   Currently only 2 hosts are supported. Check examples on README.md
 #
-# [*maxscale_vip*] <Hash>
+# [*proxysql_vip*] <Hash>
 #   host, ipv4 (optionally ipv6) for the VIP
 #
-# [*maxscale_password*] <String>
-#   maxscale user password
+# [*proxysql_password*] <String>
+#   proxysql user password
 #
 # [*trusted_networks*] <Array>
 #   default: undef => List of IPv4 and/or IPv6 host and or networks.
@@ -30,22 +30,22 @@
 #
 class galera_maxscale::proxysql::proxysql (
   $percona_major_version  = $::galera_maxscale::params::percona_major_version,
-  $maxscale_major_version = $::galera_maxscale::params::maxscale_major_version,
+  $proxysql_major_version = $::galera_maxscale::params::proxysql_major_version,
   $galera_hosts           = $::galera_maxscale::params::galera_hosts,
   $manage_repo            = $::galera_maxscale::params::manage_repo,
-  $maxscale_hosts         = $::galera_maxscale::params::maxscale_hosts,
-  $maxscale_vip           = $::galera_maxscale::params::maxscale_vip,
-  $maxscale_password      = $::galera_maxscale::params::maxscale_password,
+  $proxysql_hosts         = $::galera_maxscale::params::proxysql_hosts,
+  $proxysql_vip           = $::galera_maxscale::params::proxysql_vip,
+  $proxysql_password      = $::galera_maxscale::params::proxysql_password,
   $trusted_networks       = $::galera_maxscale::params::trusted_networks,
   $http_proxy             = $::galera_maxscale::params::http_proxy,
   $network_interface      = $::galera_maxscale::params::network_interface,
-  $maxscale_version       = $::galera_maxscale::params::maxscale_version
+  $proxysql_version       = $::galera_maxscale::params::proxysql_version
   ) inherits galera_maxscale::params {
 
-  $maxscale_key_first = inline_template('<% @maxscale_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
-  $vip_key = inline_template('<% @maxscale_vip.each do |key, value| %><%= key %><% end -%>')
-  $vip_ip = $maxscale_vip[$vip_key]['ipv4']
-  if has_key($maxscale_hosts[$maxscale_key_first], 'ipv6') {
+  $proxysql_key_first = inline_template('<% @proxysql_hosts.each_with_index do |(key, value), index| %><% if index == 0 %><%= key %><% end -%><% end -%>')
+  $vip_key = inline_template('<% @proxysql_vip.each do |key, value| %><%= key %><% end -%>')
+  $vip_ip = $proxysql_vip[$vip_key]['ipv4']
+  if has_key($proxysql_hosts[$proxysql_key_first], 'ipv6') {
     $ipv6_true = true
   } else {
     $ipv6_true = undef
@@ -57,14 +57,14 @@ class galera_maxscale::proxysql::proxysql (
       manage_repo => $manage_repo;
     '::galera_maxscale::proxysql::keepalived':
       manage_ipv6       => $ipv6_true,
-      maxscale_hosts    => $maxscale_hosts,
+      proxysql_hosts    => $proxysql_hosts,
       network_interface => $network_interface,
-      maxscale_vip      => $maxscale_vip;
+      proxysql_vip      => $proxysql_vip;
     '::galera_maxscale::firewall':
       manage_ipv6      => $ipv6_true,
       galera_hosts     => $galera_hosts,
-      maxscale_hosts   => $maxscale_hosts,
-      maxscale_vip     => $maxscale_vip,
+      proxysql_hosts   => $proxysql_hosts,
+      proxysql_vip     => $proxysql_vip,
       trusted_networks => $trusted_networks;
   }
 
@@ -88,7 +88,7 @@ class galera_maxscale::proxysql::proxysql (
         ensure => installed,
         before => Package['proxysql'];
       'proxysql':
-        ensure  => $maxscale_version;
+        ensure  => $proxysql_version;
     }
   } else {
     package {
@@ -99,7 +99,7 @@ class galera_maxscale::proxysql::proxysql (
         ensure => installed,
         before => Package['proxysql'];
       'proxysql':
-        ensure  => $maxscale_version;
+        ensure  => $proxysql_version;
     }
   }
 
@@ -120,6 +120,10 @@ class galera_maxscale::proxysql::proxysql (
       source => "puppet:///modules/${module_name}/proxysql";
     '/var/lib/mysql':
       ensure => directory;
+    '/root/.my.cnf':
+      owner   => root,
+      group   => root,
+      content => "[client]\nuser=proxysql\npassword=${proxysql_password}\n"
   }
 
   # we need a fake exec in common with galera nodes to let

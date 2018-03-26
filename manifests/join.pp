@@ -8,10 +8,10 @@ class galera_maxscale::join (
   $monitor_password      = $::galera_maxscale::params::monitor_password,
   $root_password         = $::galera_maxscale::params::root_password,
   $sst_password          = $::galera_maxscale::params::sst_password,
-  $maxscale_password     = $::galera_maxscale::params::maxscale_password,
+  $proxysql_password     = $::galera_maxscale::params::proxysql_password,
   $galera_hosts          = $::galera_maxscale::params::galera_hosts,
-  $maxscale_hosts        = $::galera_maxscale::params::maxscale_hosts,
-  $maxscale_vip          = $::galera_maxscale::params::maxscale_vip,
+  $proxysql_hosts        = $::galera_maxscale::params::proxysql_hosts,
+  $proxysql_vip          = $::galera_maxscale::params::proxysql_vip,
   $manage_lvm            = $::galera_maxscale::params::manage_lvm,
   ) inherits galera_maxscale::params {
 
@@ -71,21 +71,21 @@ class galera_maxscale::join (
     galera_maxscale::create_user {
       'sstuser':
         galera_hosts   => $galera_hosts,
-        maxscale_hosts => $maxscale_hosts,
-        maxscale_vip   => $maxscale_vip,
+        proxysql_hosts => $proxysql_hosts,
+        proxysql_vip   => $proxysql_vip,
         dbpass         => $sst_password;
       'monitor':
         galera_hosts   => $galera_hosts,
-        maxscale_hosts => $maxscale_hosts,
-        maxscale_vip   => $maxscale_vip,
+        proxysql_hosts => $proxysql_hosts,
+        proxysql_vip   => $proxysql_vip,
         dbpass         => $monitor_password;
     }
-    if $maxscale_password {
-      galera_maxscale::create_user { 'maxscale':
+    if $proxysql_password {
+      galera_maxscale::create_user { 'proxysql':
         galera_hosts   => $galera_hosts,
-        maxscale_hosts => $maxscale_hosts,
-        maxscale_vip   => $maxscale_vip,
-        dbpass         => $maxscale_password;
+        proxysql_hosts => $proxysql_hosts,
+        proxysql_vip   => $proxysql_vip,
+        dbpass         => $proxysql_password;
       }
     }
   }

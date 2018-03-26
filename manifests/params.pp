@@ -12,7 +12,6 @@ class galera_maxscale::params {
   $galera_cluster_name = "${::environment}_galera"
   $galera_hosts = undef
   $innodb_buffer_pool_size = '0.7'
-  $galera_version = 'latest'
   $innodb_buffer_pool_instances = 1
   $innodb_flush_method = 'O_DIRECT'
   $innodb_io_capacity = 200
@@ -35,20 +34,20 @@ class galera_maxscale::params {
   $trusted_networks = undef
   $vg_name = undef
 
-  # MaxScale configuration
-  $maxscale_version  = 'latest'
-  $maxscale_vip = undef
-  $maxscale_password = undef
-  $maxscale_major_version = '2.1.13'
+  # proxysql configuration
+  $proxysql_version  = 'latest'
+  $proxysql_vip = undef
+  $proxysql_password = undef
+  $proxysql_major_version = '2.1.13'
 
-  # Maxscale Keepalive configuration
+  # proxysql Keepalive configuration
   $network_interface = 'eth0'
 
   # Common Parameters
   $http_proxy = undef # example: 'http://proxy.example.net:8080'
   $manage_firewall = true
   $manage_repo = true
-  $maxscale_hosts = undef
+  $proxysql_hosts = undef
 
 
 }

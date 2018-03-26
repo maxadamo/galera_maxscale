@@ -1,6 +1,6 @@
 # == Class: galera
 #
-# Setup Galera MariaDB Cluster and MaxScale
+# Setup Galera Percona Cluster and ProxySQL
 #
 # == Quick Overview
 #
@@ -68,20 +68,20 @@
 # [*max_connections*] <Int>
 #   default: 1024
 #
-# [*maxscale_hosts*] <Hash>
-#   list of hosts, ipv4 (optionally ipv6) belonging to MaxScale cluster.
+# [*proxysql_hosts*] <Hash>
+#   list of hosts, ipv4 (optionally ipv6) belonging to proxysql cluster.
 #   Currently only 2 hosts are supported. Check examples on README.md
 #   This parameter is needed in the Galera cluster as well, to setup The
 #   users privileges in the database and the firewall rules
 #
-# [*maxscale_vip*] <Hash>
+# [*proxysql_vip*] <Hash>
 #   host, ipv4 (optionally ipv6) for the VIP
 #
-# [*maxscale_password*] <String>
-#   maxscale user password
+# [*proxysql_password*] <String>
+#   proxysql user password
 #
 # [*monitor_password*] <String>
-#   maxscale monitor password
+#   proxysql monitor password
 #
 # [*monitor_username*] <String>
 #   default: monitor
@@ -131,7 +131,6 @@ class galera_maxscale (
   $lv_size                      = $::galera_maxscale::params::lv_size,
   $percona_major_version        = $::galera_maxscale::params::percona_major_version,
   $manage_lvm                   = $::galera_maxscale::params::manage_lvm,
-  $galera_version              = $::galera_maxscale::params::galera_version,
   $max_connections              = $::galera_maxscale::params::max_connections,
   $monitor_password             = $::galera_maxscale::params::monitor_password,
   $monitor_username             = $::galera_maxscale::params::monitor_username,
@@ -145,20 +144,20 @@ class galera_maxscale (
   $trusted_networks             = $::galera_maxscale::params::trusted_networks,
   $vg_name                      = $::galera_maxscale::params::vg_name,
 
-  # maxscale parameters
-  $maxscale_version             = $::galera_maxscale::params::maxscale_version,
-  $maxscale_vip                 = $::galera_maxscale::params::maxscale_vip,
-  $maxscale_password            = $::galera_maxscale::params::maxscale_password,
-  $maxscale_major_version       = $::galera_maxscale::params::maxscale_major_version,
+  # proxysql parameters
+  $proxysql_version             = $::galera_maxscale::params::proxysql_version,
+  $proxysql_vip                 = $::galera_maxscale::params::proxysql_vip,
+  $proxysql_password            = $::galera_maxscale::params::proxysql_password,
+  $proxysql_major_version       = $::galera_maxscale::params::proxysql_major_version,
 
-  # Maxscale Keepalive configuration
+  # proxysql Keepalive configuration
   $network_interface            = ::galera_maxscale::params::network_interface,
 
   # common parameters
   $http_proxy                   = $::galera_maxscale::params::http_proxy,
   $manage_firewall              = $::galera_maxscale::params::manage_firewall,
   $manage_repo                  = $::galera_maxscale::params::manage_repo,
-  $maxscale_hosts               = $::galera_maxscale::params::maxscale_hosts,
+  $proxysql_hosts               = $::galera_maxscale::params::proxysql_hosts,
 
 ) inherits galera_maxscale::params {
 
@@ -225,10 +224,10 @@ class galera_maxscale (
       monitor_password      => $monitor_password,
       root_password         => $root_password,
       sst_password          => $sst_password,
-      maxscale_password     => $maxscale_password,
+      proxysql_password     => $proxysql_password,
       galera_hosts          => $galera_hosts,
-      maxscale_hosts        => $maxscale_hosts,
-      maxscale_vip          => $maxscale_vip,
+      proxysql_hosts        => $proxysql_hosts,
+      proxysql_vip          => $proxysql_vip,
       manage_lvm            => $manage_lvm;
     '::galera_maxscale::backup':
       galera_hosts        => $galera_hosts,
