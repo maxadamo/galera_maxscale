@@ -21,7 +21,6 @@ class galera_maxscale::params {
   $lv_size = undef
   $percona_major_version = '57'
   $manage_lvm = undef
-  $mariadb_version = 'latest'
   $max_connections = 1024
   $monitor_password = undef
   $monitor_username = 'monitor'

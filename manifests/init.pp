@@ -129,7 +129,7 @@ class galera_maxscale (
   $innodb_log_file_size         = $::galera_maxscale::params::innodb_log_file_size,
   $logdir                       = $::galera_maxscale::params::logdir,
   $lv_size                      = $::galera_maxscale::params::lv_size,
-  $percona_major_version        = $::galera_maxscale::params::mariadb_major_version,
+  $percona_major_version        = $::galera_maxscale::params::percona_major_version,
   $manage_lvm                   = $::galera_maxscale::params::manage_lvm,
   $galera_version              = $::galera_maxscale::params::galera_version,
   $max_connections              = $::galera_maxscale::params::max_connections,
@@ -236,8 +236,8 @@ class galera_maxscale (
       galera_cluster_name => $galera_cluster_name,
       backup_dir          => $backup_dir;
     '::galera_maxscale::repo':
-      http_proxy            => $http_proxy,
-      manage_repo           => $manage_repo;
+      http_proxy  => $http_proxy,
+      manage_repo => $manage_repo;
     '::galera_maxscale::lvm':
       manage_lvm => $manage_lvm,
       vg_name    => $vg_name,

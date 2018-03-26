@@ -29,7 +29,7 @@
 #
 #
 class galera_maxscale::proxysql::proxysql (
-  $percona_major_version  = $::galera_maxscale::params::mariadb_major_version,
+  $percona_major_version  = $::galera_maxscale::params::percona_major_version,
   $maxscale_major_version = $::galera_maxscale::params::maxscale_major_version,
   $galera_hosts           = $::galera_maxscale::params::galera_hosts,
   $manage_repo            = $::galera_maxscale::params::manage_repo,
