@@ -105,7 +105,7 @@ class galera_maxscale::proxysql::proxysql (
 
   file {
     default:
-      default => '0755',
+      mode    => '0755',
       owner   => proxysql,
       group   => proxysql,
       require => Package['proxysql'],
