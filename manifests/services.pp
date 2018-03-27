@@ -19,12 +19,12 @@ class galera_maxscale::services {
     ];
   }
 
-  if $::lsbmajdistrelease == '7' {
-    service { 'mariadb':
-      ensure   => stopped,
-      provider => 'systemd',
-      enable   => false;
-    }
-  }
+  # mysql and mysql@bootstrap are mutual exclusives.
+  # A proper way to deal with both services must be found. 
+  # service { 'mysql':
+  #   ensure   => running,
+  #   provider => 'systemd',
+  #   enable   => false;
+  # }
 
 }
