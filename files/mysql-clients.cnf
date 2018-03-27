@@ -1,5 +1,5 @@
 #
-# These groups are read by MariaDB command-line tools
+# These groups are read by Percona command-line tools
 # Use it for options that affect only one utility
 #
 [mysql]

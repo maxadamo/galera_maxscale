@@ -30,7 +30,6 @@
 #
 class galera_maxscale::proxysql::proxysql (
   $percona_major_version  = $::galera_maxscale::params::percona_major_version,
-  $proxysql_major_version = $::galera_maxscale::params::proxysql_major_version,
   $galera_hosts           = $::galera_maxscale::params::galera_hosts,
   $manage_repo            = $::galera_maxscale::params::manage_repo,
   $proxysql_hosts         = $::galera_maxscale::params::proxysql_hosts,

@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 #
 # chkconfig: 345 99 01
 # description: High Performance and Advanced Proxy for MySQL and forks. \
@@ -47,7 +47,6 @@ getpid() {
 	fi
   fi
 }
-
 
 testpid() {
 	pid=`ps -p $pid | grep $pid | grep -v grep | awk '{print $1}' | tail -1`
@@ -161,7 +160,6 @@ stop() {
 	fi
 }
 
-
 status() {
   getpid
   if [ "X$pid" = "X" ]
@@ -200,4 +198,3 @@ case "$1" in
 	;;
 esac
 exit $?
-

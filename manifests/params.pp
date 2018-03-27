@@ -38,7 +38,6 @@ class galera_maxscale::params {
   $proxysql_version  = 'latest'
   $proxysql_vip = undef
   $proxysql_password = undef
-  $proxysql_major_version = '2.1.13'
 
   # proxysql Keepalive configuration
   $network_interface = 'eth0'
@@ -48,6 +47,5 @@ class galera_maxscale::params {
   $manage_firewall = true
   $manage_repo = true
   $proxysql_hosts = undef
-
 
 }

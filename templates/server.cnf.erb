@@ -18,16 +18,15 @@ innodb-buffer-pool-size        = <%= (@memorysize_mb.to_f * @innodb_buffer_pool_
 innodb-flush-log-at-trx-commit = 2
 innodb-file-per-table          = 1
 innodb-data-file-path          = ibdata1:100M:autoextend
-## You may want to tune the below depending on number of cores and disk sub
 innodb-read-io-threads         = 4
 innodb-write-io-threads        = 4
-innodb-doublewrite             = 1 # skip-innodb_doublewrite: DANGEROUS unless we use ZFS
+innodb-doublewrite             = 1 # enabled innodb_doublewrite unless we use ZFS
 innodb-log-file-size           = <%= @innodb_log_file_size %>
 innodb-log-buffer-size         = 8M
 innodb-buffer-pool-instances   = <%= @innodb_buffer_pool_instances %>
 innodb-log-files-in-group      = 2
 innodb-thread-concurrency      = 0
-innodb-flush-method            = O_DIRECT
+innodb-flush-method            = <%= @innodb_flush_method %>
 innodb-locks-unsafe-for-binlog = 1
 innodb-autoinc-lock-mode       = 2
 innodb-stats-on-metadata       = 0 # avoid statistics update when doing e.g show tables

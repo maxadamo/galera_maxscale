@@ -87,7 +87,7 @@
 #   default: monitor
 #
 # [*other_pkgs*] <Array>
-#   list of packages needed by MariaDB Galera
+#   list of packages needed by Percona Cluster
 #
 # [*root_password*]
 #   MySQL root password
@@ -148,7 +148,6 @@ class galera_maxscale (
   $proxysql_version             = $::galera_maxscale::params::proxysql_version,
   $proxysql_vip                 = $::galera_maxscale::params::proxysql_vip,
   $proxysql_password            = $::galera_maxscale::params::proxysql_password,
-  $proxysql_major_version       = $::galera_maxscale::params::proxysql_major_version,
 
   # proxysql Keepalive configuration
   $network_interface            = ::galera_maxscale::params::network_interface,
