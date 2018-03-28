@@ -109,6 +109,10 @@ class galera_maxscale::proxysql::proxysql (
       group   => proxysql,
       require => Package['proxysql'],
       notify  => Service['proxysql'];
+    '/etc/maxscale.cnf':
+      ensure  => file,
+      mode    => '0640',
+      content => template("${module_name}/maxscale.cnf.erb");
     '/etc/proxysql.cnf':
       ensure  => file,
       mode    => '0640',
