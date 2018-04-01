@@ -1,6 +1,4 @@
-# galera_maxscale
-
-#### Module Deprecation Notice
+# Module Deprecation Notice
 
 Please consider using the new module [galera_proxysql](https://forge.puppet.com/maxadamo/galera_proxysql).
 
