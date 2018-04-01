@@ -6,8 +6,8 @@
 class galera_maxscale::firewall (
   $manage_ipv6      = undef,
   $galera_hosts     = $::galera_maxscale::params::galera_hosts,
-  $maxscale_hosts   = $::galera_maxscale::params::maxscale_hosts,
-  $maxscale_vip     = $::galera_maxscale::params::maxscale_vip,
+  $proxysql_hosts   = $::galera_maxscale::params::proxysql_hosts,
+  $proxysql_vip     = $::galera_maxscale::params::proxysql_vip,
   $trusted_networks = $::galera_maxscale::params::trusted_networks
   ) inherits galera_maxscale::params {
 
@@ -72,9 +72,9 @@ class galera_maxscale::firewall (
     }
   }
 
-  # MaxScale rules: let's open all the ports across Keepalived hosts
-  $maxscale_cluster = deep_merge($maxscale_hosts, $maxscale_vip)
-  $maxscale_cluster.each | $name, $node | {
+  # ProxySQL rules: let's open all the ports across Keepalived hosts
+  $proxysql_cluster = deep_merge($proxysql_hosts, $proxysql_vip)
+  $proxysql_cluster.each | $name, $node | {
     firewall {
       default:
         action => accept,
@@ -103,7 +103,7 @@ class galera_maxscale::firewall (
   }
 
   if $manage_ipv6 {
-    $maxscale_cluster.each | $name, $node | {
+    $proxysql_cluster.each | $name, $node | {
       firewall {
         default:
           action => accept,

@@ -1,6 +1,6 @@
-# == Class: galera_maxscale::maxscale::firewall
+# == Class: galera_maxscale::proxysql::firewall
 #
-class galera_maxscale::maxscale::firewall ($peer_ip) {
+class galera_maxscale::proxysql::firewall ($peer_ip) {
 
   firewall {
     default:

@@ -13,13 +13,13 @@ type=service
 router=readwritesplit
 servers=<%= server_list %>
 user=maxscale
-passwd=<%= @maxscale_password %>
+passwd=<%= @proxysql_password %>
 
 [Splitter-Listener]
 type=listener
 service=Splitter-Service
-protocol=MySQLClient
-#port=3306
+protocol=MariaDBBackend
+port=3306
 #address=<%= @vip_ip %>
 socket=/tmp/ClusterMaster
 
@@ -28,7 +28,7 @@ socket=/tmp/ClusterMaster
 type=server
 address=<%= value['ipv4'] %>
 port=3306
-protocol=MySQLBackend
+protocol=MariaDBBackend
 <% end %>
 
 [Galera-Monitor]
@@ -36,7 +36,7 @@ type=monitor
 module=galeramon
 servers=<%= server_list %>
 user=maxscale
-passwd=<%= @maxscale_password %>
+passwd=<%= @proxysql_password %>
 
 [CLI]
 type=service

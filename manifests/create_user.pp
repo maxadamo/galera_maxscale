@@ -4,14 +4,14 @@
 define galera_maxscale::create_user (
   $dbpass,
   $galera_hosts,
-  $maxscale_hosts,
-  $maxscale_vip,
+  $proxysql_hosts,
+  $proxysql_vip,
   $dbuser = $name
   ) {
 
-  if $dbuser == 'maxscale' {
-    if ($maxscale_hosts) {
-      $host_hash = deep_merge($galera_hosts, $maxscale_hosts, $maxscale_vip)
+  if $dbuser == 'proxysql' {
+    if ($proxysql_hosts) {
+      $host_hash = deep_merge($galera_hosts, $proxysql_hosts, $proxysql_vip)
     } else {
       $host_hash = $galera_hosts
     }
